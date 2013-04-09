@@ -1,10 +1,13 @@
 package com.dmillerw.wac.block;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 
 import com.dmillerw.wac.WACMain;
@@ -13,8 +16,10 @@ import com.dmillerw.wac.lib.ModInfo;
 
 public class BlockOre extends Block {
 
-	//TODO Make array
-	public Icon texture;
+	public Icon[] textures;
+	
+	public static String[] blockSubNames = new String[] {"oreGreenstone"};
+	public static String[] blockNames = new String[] {"Greenstone Ore"};
 	
 	public BlockOre(int id) {
 		super(id, Material.rock);
@@ -26,7 +31,7 @@ public class BlockOre extends Block {
 	
 	@Override
 	public Icon getBlockTextureFromSideAndMetadata(int side, int meta) {
-		return texture;
+		return textures[meta];
 	}
 	
 	public int quantityDropped(Random random) {
@@ -37,9 +42,20 @@ public class BlockOre extends Block {
         return ItemIDs.getShiftedID("itemDust");
     }
 	
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void getSubBlocks(int id, CreativeTabs tab, List list) {
+		for (int i=0; i<blockSubNames.length; i++) {
+			list.add(new ItemStack(id, 1, i));
+		}
+	}
+    
     public void registerIcons(IconRegister register) {
-    	texture = register.registerIcon(ModInfo.MOD_ID.toLowerCase()+":ore/oreGreenstone");
-    	System.out.println(texture.getIconName());
+    	textures = new Icon[blockSubNames.length];
+    	
+    	for (int i=0; i<blockSubNames.length; i++) {
+    		textures[i] = register.registerIcon(ModInfo.MOD_ID.toLowerCase()+":ore/"+blockSubNames[i]);
+    	}
     }
     
 }
