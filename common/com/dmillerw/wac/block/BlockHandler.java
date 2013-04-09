@@ -3,6 +3,7 @@ package com.dmillerw.wac.block;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraftforge.oredict.OreDictionary;
 
 import com.dmillerw.wac.item.ItemHandler;
 import com.dmillerw.wac.item.block.ItemBlockOre;
@@ -19,6 +20,14 @@ public class BlockHandler {
 		GameRegistry.registerBlock(blockOre, ItemBlockOre.class, "blockOre");
 		for (int i=0; i<BlockOre.blockNames.length; i++) {
 			LanguageRegistry.addName(new ItemStack(blockOre, 1, i), BlockOre.blockNames[i]);
+		}
+		
+		addOreDictionarySupport();
+	}
+	
+	public static void addOreDictionarySupport() {
+		for (int i=0; i<BlockOre.blockSubNames.length; i++) {
+			OreDictionary.registerOre(BlockOre.blockSubNames[i], new ItemStack(blockOre, 1, i));
 		}
 	}
 	
