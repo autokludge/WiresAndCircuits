@@ -31,8 +31,6 @@ public class WACMain {
 	@SidedProxy(serverSide=ModInfo.MOD_COMMON_PROXY, clientSide=ModInfo.MOD_CLIENT_PROXY)
 	public static CommonProxy proxy;
 	
-	public static CreativeTabs wacCreativeTabMaterials = new CreativeTabWAC("materials", "blockOre");
-	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent e) {
 		LogHelper.init();
@@ -51,6 +49,10 @@ public class WACMain {
 		
 		//Temp
 		LanguageRegistry.instance().addStringLocalization("itemGroup.gswm.materials", "WaC Materials");
+		LanguageRegistry.instance().addStringLocalization("itemGroup.gswm.items", "WaC Items");
 	}
+
+	public static CreativeTabs wacCreativeTabMaterials = new CreativeTabWAC("materials", "block", "blockOre");
+	public static CreativeTabs wacCreativeTabItems = new CreativeTabWAC("items", "item", "cleanroomHat");
 	
 }

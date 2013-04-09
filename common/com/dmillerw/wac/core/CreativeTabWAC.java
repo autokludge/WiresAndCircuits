@@ -10,19 +10,21 @@ import net.minecraft.creativetab.CreativeTabs;
 public class CreativeTabWAC extends CreativeTabs {
 
 	private String subName;
+	private String configType;
 	private String tabIconID;
 	
-	public CreativeTabWAC(String subName, String tabIconID) {
+	public CreativeTabWAC(String subName, String configType, String tabIconID) {
 		super("gswm."+subName);
 		this.subName = subName;
+		this.configType = configType;
 		this.tabIconID = tabIconID;
 	}
 
 	@Override
 	public int getTabIconItemIndex() {
-		if (BlockIDs.getID(tabIconID) != 0) {
+		if (configType.equals("block")) {
 			return BlockIDs.getID(tabIconID);
-		} else if (ItemIDs.getID(tabIconID) != 0) {
+		} else if (configType.equals("item")) {
 			return ItemIDs.getShiftedID(tabIconID);
 		} else {
 			LogHelper.warn("Creative Tab for "+subName+" asked for ID "+tabIconID+", but it doesn't exist! Report this to me!");
