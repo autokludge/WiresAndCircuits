@@ -1,0 +1,67 @@
+<?xml version="1.0" ?> 
+<project name="Foundry">
+	
+	<property file="build.properties" />
+	
+	<target name="clean">
+		<delete file="${dir.forge}\mcp\src\minecraft\mcmod.info" />
+		<delete dir="${dir.forge}\mcp\src\minecraft\com" />
+		<delete dir="${dir.forge}\mcp\reobf\minecraft" />
+	</target>
+	
+	<target name="build">
+		<copy todir="${dir.forge}\mcp\src\minecraft">
+			<fileset dir="${dir.source}\tp_common\" />
+		</copy>
+	</target>
+	
+	<target name="recompile">
+		<exec dir="${dir.forge}\mcp" executable="cmd" os="Windows 7">
+			<arg line="/c recompile.bat" />
+		</exec>
+		<exec dir="${dir.forge}\mcp" executable="cmd" os="Windows 8">
+			<arg line="/c recompile.bat" />
+		</exec>
+		<exec dir="${dir.forge}\mcp" executable="bash" os="Linux">
+			<arg line="recompile.sh" />
+		</exec>
+		<exec dir="${dir.forge}\mcp" executable="bash" os="Mac OS X">
+			<arg line="recompile.sh" />
+		</exec>
+	</target>
+
+	<target name="reobfuscate_srg">
+		<exec dir="${dir.forge}\mcp" executable="cmd" os="Windows 7">
+			<arg line="/c reobfuscate_srg.bat" />
+		</exec>
+		<exec dir="${dir.forge}\mcp" executable="cmd" os="Windows 8">
+			<arg line="/c reobfuscate_srg.bat" />
+		</exec>
+		<exec dir="${dir.forge}\mcp" executable="bash" os="Linux">
+			<arg line="reobfuscate_srg.sh" />
+		</exec>
+		<exec dir="${dir.forge}\mcp" executable="bash" os="Mac OS X">
+			<arg line="reobfuscate_srg.sh" />
+		</exec>
+	</target>
+	
+	<target name="release_srg">
+		<!-- Prep for the release -->
+		<antcall target="clean" />
+		<antcall target="build" />
+		<antcall target="recompile" />		
+		<antcall target="reobfuscate_srg" />
+		
+		<!-- Build the jar -->
+		<mkdir dir="${dir.share}\${release.minecraft.version}\${release.mod.version}" />
+		<jar destfile="${dir.share}\${release.minecraft.version}\${release.mod.version}\${release.mod.name}-universal-${release.mod.version}.jar">
+			<fileset dir="${dir.forge}\mcp\src\minecraft\com\"	includes="mcmod.info" />
+			<fileset dir="${dir.forge}\mcp\reobf\minecraft" />
+			<fileset dir="${dir.source}\tp_resources" />
+		</jar>
+		
+		<!-- Clean up the MCP source now that we are done -->
+		<antcall target="clean" />
+	</target>
+
+</project>
