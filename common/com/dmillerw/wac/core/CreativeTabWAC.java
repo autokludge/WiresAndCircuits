@@ -1,12 +1,12 @@
-package com.dmillerw.gswm.core;
+package com.dmillerw.wac.core;
 
-import com.dmillerw.gswm.item.ItemIDs;
+import com.dmillerw.wac.item.ItemIDs;
 
 import net.minecraft.creativetab.CreativeTabs;
 
-public class CreativeTabGSWM extends CreativeTabs {
+public class CreativeTabWAC extends CreativeTabs {
 
-	public CreativeTabGSWM() {
+	public CreativeTabWAC() {
 		super("gswm");
 	}
 

@@ -1,4 +1,4 @@
-package com.dmillerw.gswm.network;
+package com.dmillerw.wac.network;
 
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;

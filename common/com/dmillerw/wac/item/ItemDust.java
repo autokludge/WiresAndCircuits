@@ -1,11 +1,11 @@
-package com.dmillerw.gswm.item;
+package com.dmillerw.wac.item;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
 
-import com.dmillerw.gswm.GSWMMain;
-import com.dmillerw.gswm.lib.ModInfo;
+import com.dmillerw.wac.WACMain;
+import com.dmillerw.wac.lib.ModInfo;
 
 public class ItemDust extends Item {
 
@@ -16,7 +16,7 @@ public class ItemDust extends Item {
 		super(id);
 		setMaxDamage(0);
 		setHasSubtypes(true);
-		setCreativeTab(GSWMMain.gwsmCreativeTab);
+		setCreativeTab(WACMain.wacCreativeTab);
 	}
 	
 	@Override

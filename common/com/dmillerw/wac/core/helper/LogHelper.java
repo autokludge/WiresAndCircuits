@@ -1,9 +1,9 @@
-package com.dmillerw.gswm.core.helper;
+package com.dmillerw.wac.core.helper;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.dmillerw.gswm.lib.ModInfo;
+import com.dmillerw.wac.lib.ModInfo;
 
 import cpw.mods.fml.common.FMLLog;
 

@@ -1,18 +1,18 @@
-package com.dmillerw.gswm;
+package com.dmillerw.wac;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.Configuration;
 
-import com.dmillerw.gswm.block.BlockHandler;
-import com.dmillerw.gswm.block.BlockIDs;
-import com.dmillerw.gswm.core.CommonProxy;
-import com.dmillerw.gswm.core.CreativeTabGSWM;
-import com.dmillerw.gswm.core.helper.LogHelper;
-import com.dmillerw.gswm.item.ItemHandler;
-import com.dmillerw.gswm.item.ItemIDs;
-import com.dmillerw.gswm.lib.ModInfo;
-import com.dmillerw.gswm.network.PacketHandler;
-import com.dmillerw.gswm.world.OreGenerator;
+import com.dmillerw.wac.block.BlockHandler;
+import com.dmillerw.wac.block.BlockIDs;
+import com.dmillerw.wac.core.CommonProxy;
+import com.dmillerw.wac.core.CreativeTabWAC;
+import com.dmillerw.wac.core.helper.LogHelper;
+import com.dmillerw.wac.item.ItemHandler;
+import com.dmillerw.wac.item.ItemIDs;
+import com.dmillerw.wac.lib.ModInfo;
+import com.dmillerw.wac.network.PacketHandler;
+import com.dmillerw.wac.world.OreGenerator;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -26,14 +26,14 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid=ModInfo.MOD_ID, name=ModInfo.MOD_NAME, version=ModInfo.MOD_VERSION)
-@NetworkMod(channels = {ModInfo.MOD_ID}, serverSideRequired=false, clientSideRequired=true, packetHandler=PacketHandler.class)
-public class GSWMMain {
+@NetworkMod(channels = {ModInfo.MOD_CHANNEL}, serverSideRequired=false, clientSideRequired=true, packetHandler=PacketHandler.class)
+public class WACMain {
 	@Instance(ModInfo.MOD_ID)
-	public static GSWMMain instance;
+	public static WACMain instance;
 	@SidedProxy(serverSide=ModInfo.MOD_COMMON_PROXY, clientSide=ModInfo.MOD_CLIENT_PROXY)
 	public static CommonProxy proxy;
 	
-	public static CreativeTabs gwsmCreativeTab = new CreativeTabGSWM();
+	public static CreativeTabs wacCreativeTab = new CreativeTabWAC();
 	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent e) {

@@ -1,4 +1,4 @@
-package com.dmillerw.gswm.item;
+package com.dmillerw.wac.block;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,14 +6,14 @@ import java.util.Map.Entry;
 
 import net.minecraftforge.common.Configuration;
 
-import com.dmillerw.gswm.core.helper.LogHelper;
+import com.dmillerw.wac.core.helper.LogHelper;
 
-public class ItemIDs {
+public class BlockIDs {
 
 	public static Map<String, Integer> idMapping = new HashMap<String, Integer>();
 	
 	public static void initializeDefaults() {
-		idMapping.put("itemDust", 10000);
+		idMapping.put("blockOre", 3760);
 	}
 
 	public static void handleConfig(Configuration config) {
@@ -27,10 +27,10 @@ public class ItemIDs {
 			config.load();
 			
 			for (Entry<String, Integer> entry : idMapping.entrySet()) {
-				idMapping.put(entry.getKey(), config.getItem(entry.getKey(), entry.getValue()).getInt());
+				idMapping.put(entry.getKey(), config.getBlock(entry.getKey(), entry.getValue()).getInt());
 			}
 		} catch(Exception e) {
-			LogHelper.warn("Failed to load item ids! Assuming defaults!");
+			LogHelper.warn("Failed to load block ids! Assuming defaults!");
 			
 			//If one or more fails, simply use defaults to avoid complications
 			initializeDefaults();
@@ -45,8 +45,4 @@ public class ItemIDs {
 		return idMapping.get(name);
 	}
 
-	public static int getShiftedID(String name) {
-		return idMapping.get(name) == 0 ? 0 : idMapping.get(name) + 256;
-	}
-	
 }

@@ -1,4 +1,4 @@
-package com.dmillerw.gswm.world;
+package com.dmillerw.wac.world;
 
 import java.util.Random;
 
@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
-import com.dmillerw.gswm.block.BlockHandler;
+import com.dmillerw.wac.block.BlockHandler;
 
 import cpw.mods.fml.common.IWorldGenerator;
 

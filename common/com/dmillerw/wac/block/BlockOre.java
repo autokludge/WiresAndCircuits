@@ -1,4 +1,4 @@
-package com.dmillerw.gswm.block;
+package com.dmillerw.wac.block;
 
 import java.util.Random;
 
@@ -7,9 +7,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 
-import com.dmillerw.gswm.GSWMMain;
-import com.dmillerw.gswm.item.ItemIDs;
-import com.dmillerw.gswm.lib.ModInfo;
+import com.dmillerw.wac.WACMain;
+import com.dmillerw.wac.item.ItemIDs;
+import com.dmillerw.wac.lib.ModInfo;
 
 public class BlockOre extends Block {
 
@@ -21,7 +21,7 @@ public class BlockOre extends Block {
 		setHardness(2F);
 		setResistance(1F);
 		setStepSound(soundStoneFootstep);
-		setCreativeTab(GSWMMain.gwsmCreativeTab);
+		setCreativeTab(WACMain.wacCreativeTab);
 	}
 	
 	@Override

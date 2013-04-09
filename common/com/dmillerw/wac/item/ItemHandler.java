@@ -1,4 +1,4 @@
-package com.dmillerw.gswm.item;
+package com.dmillerw.wac.item;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;

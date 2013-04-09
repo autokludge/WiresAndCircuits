@@ -1,4 +1,4 @@
-package com.dmillerw.gswm.block;
+package com.dmillerw.wac.block;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
