@@ -11,23 +11,28 @@ import net.minecraft.util.Icon;
 import com.dmillerw.wac.WACMain;
 import com.dmillerw.wac.lib.ModInfo;
 
-public class ItemDust extends Item {
+public class ItemIngot extends Item {
 
 	public Icon[] textures;
 	
-	public static String[] itemSubNames = new String[] {"dustGreenstone"};
-	public static String[] itemNames = new String[] {"Greenstone Dust"};
+	public static String[] itemSubNames = new String[] {"ingotCopper", "ingotTin", "ingotSilver"};
+	public static String[] itemNames = new String[] {"Copper Ingot", "Tin Ingot", "Silver Ingot"};
 	
-	public ItemDust(int id) {
+	public ItemIngot(int id) {
 		super(id);
 		setMaxDamage(0);
 		setHasSubtypes(true);
-		setCreativeTab(WACMain.wacCreativeTab);
+		setCreativeTab(WACMain.wacCreativeTabMaterials);
 	}
 	
 	@Override
 	public Icon getIconFromDamage(int damage) {
 		return textures[damage];
+	}
+	
+	@Override
+	public String getUnlocalizedName(ItemStack itemstack) {
+		return getUnlocalizedName() + "." + ItemIngot.itemSubNames[itemstack.getItemDamage()];
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -42,7 +47,7 @@ public class ItemDust extends Item {
 		textures = new Icon[itemSubNames.length];
 		
 		for (int i=0; i<itemSubNames.length; i++) {
-			textures[i] = register.registerIcon(ModInfo.MOD_ID.toLowerCase()+":dust/"+itemSubNames[i]);
+			textures[i] = register.registerIcon(ModInfo.MOD_ID.toLowerCase()+":ingot/"+itemSubNames[i]);
 		}
 	}
 	

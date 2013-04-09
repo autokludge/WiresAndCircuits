@@ -12,7 +12,6 @@ import com.dmillerw.wac.item.ItemHandler;
 import com.dmillerw.wac.item.ItemIDs;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.network.PacketHandler;
-import com.dmillerw.wac.world.OreGenerator;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -22,7 +21,6 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid=ModInfo.MOD_ID, name=ModInfo.MOD_NAME, version=ModInfo.MOD_VERSION)
@@ -33,7 +31,7 @@ public class WACMain {
 	@SidedProxy(serverSide=ModInfo.MOD_COMMON_PROXY, clientSide=ModInfo.MOD_CLIENT_PROXY)
 	public static CommonProxy proxy;
 	
-	public static CreativeTabs wacCreativeTab = new CreativeTabWAC();
+	public static CreativeTabs wacCreativeTabMaterials = new CreativeTabWAC("materials", "blockOre");
 	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent e) {
@@ -50,8 +48,7 @@ public class WACMain {
 		ItemHandler.init();
 		
 		//Temp
-		GameRegistry.registerWorldGenerator(new OreGenerator(BlockHandler.blockOre.blockID, 0, 8, 42));
-		LanguageRegistry.instance().addStringLocalization("itemGroup.gswm", "Greenstone Wire Mod");
+		LanguageRegistry.instance().addStringLocalization("itemGroup.gswm.materials", "WaC Materials");
 	}
 	
 }

@@ -13,7 +13,7 @@ public class ItemIDs {
 	public static Map<String, Integer> idMapping = new HashMap<String, Integer>();
 	
 	public static void initializeDefaults() {
-		idMapping.put("itemDust", 10000);
+		idMapping.put("itemIngot", 10000);
 	}
 
 	public static void handleConfig(Configuration config) {

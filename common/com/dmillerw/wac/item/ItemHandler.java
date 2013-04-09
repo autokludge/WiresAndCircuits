@@ -7,13 +7,14 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class ItemHandler {
 
-	public static Item itemDust;
+	public static Item itemIngot;
 	
 	public static void init() {
-		itemDust = new ItemDust(ItemIDs.getID("itemDust")).setUnlocalizedName("itemDust");
-		GameRegistry.registerItem(itemDust, "itemDust");
-		for (int i=0; i<ItemDust.itemNames.length; i++) {
-			LanguageRegistry.addName(new ItemStack(itemDust, 1, i), ItemDust.itemNames[i]);
+		itemIngot = new ItemIngot(ItemIDs.getID("itemIngot")).setUnlocalizedName("itemIngot");
+		GameRegistry.registerItem(itemIngot, "itemIngot");
+		for (int i=0; i<ItemIngot.itemNames.length; i++) {
+			LanguageRegistry.addName(new ItemStack(itemIngot, 1, i), ItemIngot.itemNames[i]);
+			System.out.println(i+":"+ItemIngot.itemNames[i]+":"+ItemIngot.itemSubNames[i]);
 		}
 	}
 	

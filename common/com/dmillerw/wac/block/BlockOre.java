@@ -11,22 +11,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 
 import com.dmillerw.wac.WACMain;
-import com.dmillerw.wac.item.ItemIDs;
 import com.dmillerw.wac.lib.ModInfo;
 
 public class BlockOre extends Block {
 
 	public Icon[] textures;
 	
-	public static String[] blockSubNames = new String[] {"oreGreenstone"};
-	public static String[] blockNames = new String[] {"Greenstone Ore"};
+	public static String[] blockSubNames = new String[] {"oreCopper", "oreTin", "oreSilver"};
+	public static String[] blockNames = new String[] {"Copper Ore", "Tin Ore", "Silver Ore"};
 	
 	public BlockOre(int id) {
 		super(id, Material.rock);
 		setHardness(2F);
 		setResistance(1F);
 		setStepSound(soundStoneFootstep);
-		setCreativeTab(WACMain.wacCreativeTab);
+		setCreativeTab(WACMain.wacCreativeTabMaterials);
 	}
 	
 	@Override
@@ -34,12 +33,12 @@ public class BlockOre extends Block {
 		return textures[meta];
 	}
 	
-	public int quantityDropped(Random random) {
-        return random.nextInt(5);
+	public int damageDropped(int meta) {
+        return meta;
     }
 
     public int idDropped(int id, Random random, int par3) {
-        return ItemIDs.getShiftedID("itemDust");
+        return BlockIDs.getID("blockOre");
     }
 	
     @SuppressWarnings({ "unchecked", "rawtypes" })
