@@ -50,7 +50,7 @@ public class WACMain {
 		ItemHandler.init();
 		
 		//Temp
-		GameRegistry.registerWorldGenerator(new OreGenerator());
+		GameRegistry.registerWorldGenerator(new OreGenerator(BlockHandler.blockOre.blockID, 0, 8, 42));
 		LanguageRegistry.instance().addStringLocalization("itemGroup.gswm", "Greenstone Wire Mod");
 	}
 	
