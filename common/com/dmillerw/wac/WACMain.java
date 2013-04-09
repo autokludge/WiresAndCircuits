@@ -47,6 +47,8 @@ public class WACMain {
 		BlockHandler.init();
 		ItemHandler.init();
 		
+		BlockHandler.addSmeltingRecipes();
+		
 		//Temp
 		LanguageRegistry.instance().addStringLocalization("itemGroup.gswm.materials", "WaC Materials");
 	}
