@@ -59,8 +59,7 @@ public class BlockCleanroom extends Block {
 		return textures[meta];
 	}
 	
-	public boolean isOpaqueCube()
-    {
+	public boolean isOpaqueCube() {
         return false;
     }
 	
