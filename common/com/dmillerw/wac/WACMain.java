@@ -22,7 +22,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
-@Mod(modid=ModInfo.MOD_ID, name=ModInfo.MOD_NAME, version=ModInfo.MOD_VERSION)
+@Mod(modid=ModInfo.MOD_ID, name=ModInfo.MOD_NAME, version=ModInfo.MOD_VERSION, dependencies="required-after:BuildCraft|Core")
 @NetworkMod(channels = {ModInfo.MOD_CHANNEL}, serverSideRequired=false, clientSideRequired=true, packetHandler=PacketHandler.class)
 public class WACMain {
 	@Instance(ModInfo.MOD_ID)
