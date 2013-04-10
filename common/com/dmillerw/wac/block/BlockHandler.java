@@ -16,8 +16,6 @@ public class BlockHandler {
 
 	public static Block blockOre;
 	public static Block blockCleanroom;
-	public static Block blockPurifiedAir;
-	public static Block blockBCTest;
 	
 	public static void init() {
 		blockOre = new BlockOre(BlockIDs.getID("blockOre")).setUnlocalizedName("blockOre");
