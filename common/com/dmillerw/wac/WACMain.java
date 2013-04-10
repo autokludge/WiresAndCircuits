@@ -50,9 +50,11 @@ public class WACMain {
 		//Temp
 		LanguageRegistry.instance().addStringLocalization("itemGroup.gswm.materials", "WaC Materials");
 		LanguageRegistry.instance().addStringLocalization("itemGroup.gswm.items", "WaC Items");
+		LanguageRegistry.instance().addStringLocalization("itemGroup.gswm.blocks", "WaC Blocks");
 	}
 
 	public static CreativeTabs wacCreativeTabMaterials = new CreativeTabWAC("materials", "block", "blockOre");
 	public static CreativeTabs wacCreativeTabItems = new CreativeTabWAC("items", "item", "cleanroomHat");
+	public static CreativeTabs wacCreativeTabBlocks = new CreativeTabWAC("blocks", "block", "blockCleanroom");
 	
 }

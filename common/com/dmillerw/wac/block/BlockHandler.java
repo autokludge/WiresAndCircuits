@@ -6,6 +6,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 
 import com.dmillerw.wac.item.ItemHandler;
+import com.dmillerw.wac.item.block.ItemBlockCleanroom;
 import com.dmillerw.wac.item.block.ItemBlockOre;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -14,12 +15,19 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 public class BlockHandler {
 
 	public static Block blockOre;
+	public static Block blockCleanroom;
 	
 	public static void init() {
 		blockOre = new BlockOre(BlockIDs.getID("blockOre")).setUnlocalizedName("blockOre");
 		GameRegistry.registerBlock(blockOre, ItemBlockOre.class, "blockOre");
 		for (int i=0; i<BlockOre.blockNames.length; i++) {
 			LanguageRegistry.addName(new ItemStack(blockOre, 1, i), BlockOre.blockNames[i]);
+		}
+		
+		blockCleanroom = new BlockCleanroom(BlockIDs.getID("blockCleanroom")).setUnlocalizedName("blockCleanroom");
+		GameRegistry.registerBlock(blockCleanroom, ItemBlockCleanroom.class, "blockCleanroom");
+		for (int i=0; i<BlockCleanroom.blockNames.length; i++) {
+			LanguageRegistry.addName(new ItemStack(blockCleanroom, 1, i), BlockCleanroom.blockNames[i]);
 		}
 		
 		addOreDictionarySupport();

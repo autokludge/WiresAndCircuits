@@ -14,6 +14,7 @@ public class BlockIDs {
 	
 	public static void initializeDefaults() {
 		idMapping.put("blockOre", 3760);
+		idMapping.put("blockCleanroom", 3761);
 	}
 
 	public static void handleConfig(Configuration config) {
