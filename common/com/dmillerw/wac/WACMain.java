@@ -21,7 +21,6 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid=ModInfo.MOD_ID, name=ModInfo.MOD_NAME, version=ModInfo.MOD_VERSION)
 @NetworkMod(channels = {ModInfo.MOD_CHANNEL}, serverSideRequired=false, clientSideRequired=true, packetHandler=PacketHandler.class)
@@ -30,6 +29,10 @@ public class WACMain {
 	public static WACMain instance;
 	@SidedProxy(serverSide=ModInfo.MOD_COMMON_PROXY, clientSide=ModInfo.MOD_CLIENT_PROXY)
 	public static CommonProxy proxy;
+	
+	public static CreativeTabs wacCreativeTabMaterials = new CreativeTabWAC("materials", "block", "blockOre", "WaC Materials");
+	public static CreativeTabs wacCreativeTabItems = new CreativeTabWAC("items", "item", "cleanroomHat", "WaC Items");
+	public static CreativeTabs wacCreativeTabBlocks = new CreativeTabWAC("blocks", "block", "blockCleanroom", "WaC Blocks");
 	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent e) {
@@ -46,15 +49,6 @@ public class WACMain {
 		ItemHandler.init();
 		
 		BlockHandler.addSmeltingRecipes();
-		
-		//Temp
-		LanguageRegistry.instance().addStringLocalization("itemGroup.gswm.materials", "WaC Materials");
-		LanguageRegistry.instance().addStringLocalization("itemGroup.gswm.items", "WaC Items");
-		LanguageRegistry.instance().addStringLocalization("itemGroup.gswm.blocks", "WaC Blocks");
 	}
 
-	public static CreativeTabs wacCreativeTabMaterials = new CreativeTabWAC("materials", "block", "blockOre");
-	public static CreativeTabs wacCreativeTabItems = new CreativeTabWAC("items", "item", "cleanroomHat");
-	public static CreativeTabs wacCreativeTabBlocks = new CreativeTabWAC("blocks", "block", "blockCleanroom");
-	
 }

@@ -4,6 +4,8 @@ import com.dmillerw.wac.block.BlockIDs;
 import com.dmillerw.wac.core.helper.LogHelper;
 import com.dmillerw.wac.item.ItemIDs;
 
+import cpw.mods.fml.common.registry.LanguageRegistry;
+
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 
@@ -13,11 +15,13 @@ public class CreativeTabWAC extends CreativeTabs {
 	private String configType;
 	private String tabIconID;
 	
-	public CreativeTabWAC(String subName, String configType, String tabIconID) {
-		super("gswm."+subName);
+	public CreativeTabWAC(String subName, String configType, String tabIconID, String localizedName) {
+		super("wac."+subName);
 		this.subName = subName;
 		this.configType = configType;
 		this.tabIconID = tabIconID;
+		
+		LanguageRegistry.instance().addStringLocalization("itemGroup.wac."+subName, localizedName);
 	}
 
 	@Override
