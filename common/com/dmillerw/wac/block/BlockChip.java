@@ -3,6 +3,7 @@ package com.dmillerw.wac.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
@@ -12,11 +13,14 @@ import net.minecraftforge.common.ForgeDirection;
 
 import com.dmillerw.wac.WACMain;
 import com.dmillerw.wac.interfaces.IAttachedToSide;
+import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.tileentity.TileEntityChip;
 
 public class BlockChip extends BlockContainer {
 
 	public static float CHIP_THICKNESS = 0.10F;
+	
+	private Icon[] textures;
 	
 	public BlockChip(int id) {
 		super(id, Material.iron);
@@ -57,30 +61,50 @@ public class BlockChip extends BlockContainer {
 		}
 	}
 	
+	@Override
+	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
+		IAttachedToSide attached = (IAttachedToSide) world.getBlockTileEntity(x, y, z);
+		
+		if (ForgeDirection.getOrientation(side) == attached.getSideAttached().getOpposite()) {
+			return textures[1];
+		}
+		
+		return textures[0];
+	}
+	
+	@Override
 	public Icon getIcon(int side, int meta) {
-		return Block.blockIron.getIcon(side, meta);
+		return side == 1 ? textures[1] : textures[0];
+	}
+	
+	@Override
+	public void registerIcons(IconRegister register) {
+		textures = new Icon[2];
+		
+		textures[0] = register.registerIcon(ModInfo.MOD_ID.toLowerCase()+":chip/side");
+		textures[1] = register.registerIcon(ModInfo.MOD_ID.toLowerCase()+":chip/front");
 	}
 	
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 		IAttachedToSide attached = (IAttachedToSide) world.getBlockTileEntity(x, y, z);
 		
 		if (attached.getSideAttached() == ForgeDirection.UP) {
-			setBlockBounds(0.10F, 0.90F, 0.10F, 0.90F, 0.90F + CHIP_THICKNESS, 0.90F);
+			setBlockBounds(0.30F, 0.90F, 0.30F, 0.70F, 0.90F + CHIP_THICKNESS, 0.70F);
 		} else if (attached.getSideAttached() == ForgeDirection.DOWN) {
-			setBlockBounds(0.10F, 0F, 0.10F, 0.90F, 0F + CHIP_THICKNESS, 0.90F);
+			setBlockBounds(0.30F, 0F, 0.30F, 0.70F, 0F + CHIP_THICKNESS, 0.70F);
 		} else if (attached.getSideAttached() == ForgeDirection.WEST) {
-			setBlockBounds(0F, 0.10F, 0.10F, 0F + CHIP_THICKNESS, 0.90F, 0.90F);
+			setBlockBounds(0F, 0.30F, 0.30F, 0F + CHIP_THICKNESS, 0.70F, 0.70F);
 		} else if (attached.getSideAttached() == ForgeDirection.EAST) {
-			setBlockBounds(0.90F, 0.10F, 0.10F, 0.90F + CHIP_THICKNESS, 0.90F, 0.90F);
+			setBlockBounds(0.90F, 0.30F, 0.30F, 0.90F + CHIP_THICKNESS, 0.70F, 0.70F);
 		} else if (attached.getSideAttached() == ForgeDirection.SOUTH) {
-			setBlockBounds(0.10F, 0.10F, 0.90F, 0.90F, 0.90F, 0.90F + CHIP_THICKNESS);
+			setBlockBounds(0.30F, 0.30F, 0.90F, 0.70F, 0.70F, 0.90F + CHIP_THICKNESS);
 		} else if (attached.getSideAttached() == ForgeDirection.NORTH) {
-			setBlockBounds(0.10F, 0.10F, 0F, 0.90F, 0.90F, 0F + CHIP_THICKNESS);
+			setBlockBounds(0.30F, 0.30F, 0F, 0.70F, 0.70F, 0F + CHIP_THICKNESS);
 		}
 	}
 	
 	public void setBlockBoundsForItemRender() {
-		setBlockBounds(0.10F, 0F, 0.10F, 0.90F, 0.10F, 0.90F);
+		setBlockBounds(0.30F, 0F, 0.30F, 0.70F, 0F + CHIP_THICKNESS, 0.70F);
 	}
 	
 	@Override
