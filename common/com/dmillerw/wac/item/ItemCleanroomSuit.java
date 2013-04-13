@@ -35,7 +35,7 @@ public class ItemCleanroomSuit extends ItemArmor {
 //	}
 	
 	@Override
-	public void updateIcons(IconRegister register) {
+	public void registerIcons(IconRegister register) {
 		texture = register.registerIcon(ModInfo.MOD_ID.toLowerCase()+":cleanroomSuit/"+armorTypes[index]);
 	}
 	
