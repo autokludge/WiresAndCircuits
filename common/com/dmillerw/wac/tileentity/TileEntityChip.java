@@ -94,10 +94,10 @@ public class TileEntityChip extends TileEntity implements IAttachedToSide, IGate
 		gateID = id;
 		gate = GateManager.createGate(id);
 		if (gate.getInputDataTypes() != null) {
-			inputs = new Object[gate.getInputDataTypes().length];
+			inputs = GateManager.generateBlankInputArray(gate);
 		}
 		if (gate.getOutputDataTypes() != null) {
-			outputs = new Object[gate.getOutputDataTypes().length];
+			outputs = GateManager.generateBlankOutputArray(gate);
 		}
 	}
 	

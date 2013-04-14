@@ -49,6 +49,43 @@ public class GateManager {
 		}
 	}
 	
+	public static Object[] generateBlankInputArray(Gate gate) {
+		Object[] objArray = new Object[gate.getInputDataTypes().length];
+		
+		for (int i=0; i<objArray.length; i++) {
+			objArray[i] = generateObject(gate.getInputDataTypes()[i]);
+		}
+		
+		return objArray;
+	}
+	
+	public static Object[] generateBlankOutputArray(Gate gate) {
+		Object[] objArray = new Object[gate.getOutputDataTypes().length];
+		
+		for (int i=0; i<objArray.length; i++) {
+			objArray[i] = generateObject(gate.getOutputDataTypes()[i]);
+		}
+		
+		return objArray;
+	}
+	
+	private static Object generateObject(GateDataType type) {
+		switch(type) {
+			case NUMBER: return (double) 0;
+//			case VECTOR: return new Vector();
+//			case VECTOR2D: return new Vector2D();
+//			case VECTOR4D: return new Vector4D();
+//			case ANGLE: return new Angle();
+//			case RANGER: return new Ranger();
+//			case MATRIX: return new Matrix();
+//			case MATRIX2D: return new Matrix2D();
+//			case MATRIX4D: return new Matrix4D();
+			case ENTITY: return null;
+			case STRING: return "";
+			default: return null;
+		}
+	}
+	
 	public static void initializeDefaultGates() {
 		//Any commented gates still need to be implemented
 		
