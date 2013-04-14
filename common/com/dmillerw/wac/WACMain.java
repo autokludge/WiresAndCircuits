@@ -13,6 +13,7 @@ import com.dmillerw.wac.item.ItemHandler;
 import com.dmillerw.wac.item.ItemIDs;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.network.PacketHandler;
+import com.dmillerw.wac.recipe.RecipeManager;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -56,6 +57,8 @@ public class WACMain {
 		
 		proxy.registerTileEntities();
 		proxy.registerRenders();
+		
+		RecipeManager.initializeAmalgamRecipes();
 	}
 
 }
