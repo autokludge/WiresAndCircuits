@@ -2,7 +2,7 @@ package com.dmillerw.wac.interfaces;
 
 import net.minecraftforge.common.ForgeDirection;
 
-public interface IAttachedToSide {
+public interface ISideAttachment {
 
 	public void setSideAttached(ForgeDirection side);
 	

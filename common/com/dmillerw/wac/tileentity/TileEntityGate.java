@@ -9,12 +9,12 @@ import net.minecraftforge.common.ForgeDirection;
 
 import com.dmillerw.wac.gates.Gate;
 import com.dmillerw.wac.gates.GateManager;
-import com.dmillerw.wac.interfaces.IAttachedToSide;
+import com.dmillerw.wac.interfaces.ISideAttachment;
 import com.dmillerw.wac.interfaces.IGateContainer;
 import com.dmillerw.wac.interfaces.IRotatable;
 import com.dmillerw.wac.interfaces.ISavableGate;
 
-public class TileEntityGate extends TileEntity implements IAttachedToSide, IGateContainer, IRotatable {
+public class TileEntityGate extends TileEntity implements ISideAttachment, IGateContainer, IRotatable {
 	
 	private ForgeDirection attached;
 	private ForgeDirection rotation;
