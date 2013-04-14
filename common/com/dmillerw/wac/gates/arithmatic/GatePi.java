@@ -21,7 +21,7 @@ public class GatePi extends Gate {
 
 	@Override
 	public GateDataType[] getInputDataTypes() {
-		return null;
+		return new GateDataType[0];
 	}
 
 	@Override
