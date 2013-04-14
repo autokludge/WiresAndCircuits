@@ -10,6 +10,11 @@ import com.dmillerw.wac.tileentity.TileEntityChip;
 public class GateAverage extends Gate {
 
 	@Override
+	public String getName() {
+		return "Average";
+	}
+	
+	@Override
 	public GateCategory getCategory() {
 		return GateCategory.ARITHMETIC;
 	}

@@ -1,9 +1,13 @@
 package com.dmillerw.wac.block;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
@@ -12,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
 import com.dmillerw.wac.WACMain;
+import com.dmillerw.wac.gates.GateManager;
 import com.dmillerw.wac.interfaces.IAttachedToSide;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.tileentity.TileEntityChip;
@@ -105,6 +110,14 @@ public class BlockChip extends BlockContainer {
 	
 	public void setBlockBoundsForItemRender() {
 		setBlockBounds(0.30F, 0F, 0.30F, 0.70F, 0F + CHIP_THICKNESS, 0.70F);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void getSubBlocks(int id, CreativeTabs tab, List list) {
+		for (int i=0; i<GateManager.gates.size(); i++) {
+			list.add(new ItemStack(id, 1, i));
+		}
 	}
 	
 	@Override

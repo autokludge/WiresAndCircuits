@@ -9,6 +9,11 @@ import com.dmillerw.wac.tileentity.TileEntityChip;
 public class GateAndAdd extends Gate {
 
 	@Override
+	public String getName() {
+		return "And/Add";
+	}
+	
+	@Override
 	public GateCategory getCategory() {
 		return GateCategory.ARITHMETIC;
 	}

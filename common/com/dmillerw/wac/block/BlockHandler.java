@@ -5,6 +5,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 
+import com.dmillerw.wac.gates.Gate;
+import com.dmillerw.wac.gates.GateManager;
 import com.dmillerw.wac.item.ItemHandler;
 import com.dmillerw.wac.item.block.ItemBlockChip;
 import com.dmillerw.wac.item.block.ItemBlockCleanroom;
@@ -34,7 +36,10 @@ public class BlockHandler {
 		
 		blockChip = new BlockChip(BlockIDs.getID("blockChip")).setUnlocalizedName("blockChip");
 		GameRegistry.registerBlock(blockChip, ItemBlockChip.class, "blockChip");
-		LanguageRegistry.addName(blockChip, "Chip [WIP]");
+		for (int i=0; i<GateManager.gates.size(); i++) {
+			Gate gate = GateManager.createGate(i);
+			LanguageRegistry.addName(new ItemStack(blockChip, 1, i), gate.getCategory()+": "+gate.getName());
+		}
 		
 		addOreDictionarySupport();
 	}

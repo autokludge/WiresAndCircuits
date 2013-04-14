@@ -10,6 +10,11 @@ import com.dmillerw.wac.tileentity.TileEntityChip;
 public class GateDivide extends Gate {
 
 	@Override
+	public String getName() {
+		return "Divide";
+	}
+	
+	@Override
 	public GateCategory getCategory() {
 		return GateCategory.ARITHMETIC;
 	}

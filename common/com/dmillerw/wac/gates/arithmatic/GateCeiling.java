@@ -8,6 +8,11 @@ import com.dmillerw.wac.tileentity.TileEntityChip;
 public class GateCeiling extends Gate {
 
 	@Override
+	public String getName() {
+		return "Ceiling";
+	}
+	
+	@Override
 	public GateCategory getCategory() {
 		return GateCategory.ARITHMETIC;
 	}

@@ -8,6 +8,11 @@ import com.dmillerw.wac.tileentity.TileEntityChip;
 public class GateAbsolute extends Gate {
 
 	@Override
+	public String getName() {
+		return "Absolute";
+	}
+	
+	@Override
 	public GateCategory getCategory() {
 		return GateCategory.ARITHMETIC;
 	}

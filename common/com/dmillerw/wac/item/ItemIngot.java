@@ -43,7 +43,7 @@ public class ItemIngot extends Item {
 		}
 	}
 	
-	public void updateIcons(IconRegister register) {
+	public void registerIcons(IconRegister register) {
 		textures = new Icon[itemSubNames.length];
 		
 		for (int i=0; i<itemSubNames.length; i++) {

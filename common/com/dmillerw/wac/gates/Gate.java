@@ -4,6 +4,8 @@ import com.dmillerw.wac.tileentity.TileEntityChip;
 
 public abstract class Gate {
 
+	public abstract String getName();
+	
 	public abstract GateCategory getCategory();
 	
 	public abstract GateDataType[] getInputDataTypes();

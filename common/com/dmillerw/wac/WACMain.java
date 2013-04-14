@@ -8,6 +8,7 @@ import com.dmillerw.wac.block.BlockIDs;
 import com.dmillerw.wac.core.CommonProxy;
 import com.dmillerw.wac.core.CreativeTabWAC;
 import com.dmillerw.wac.core.helper.LogHelper;
+import com.dmillerw.wac.gates.GateManager;
 import com.dmillerw.wac.item.ItemHandler;
 import com.dmillerw.wac.item.ItemIDs;
 import com.dmillerw.wac.lib.ModInfo;
@@ -45,6 +46,8 @@ public class WACMain {
 	
 	@Init
 	public void init(FMLInitializationEvent e) {
+		GateManager.initializeDefaultGates();
+		
 		BlockHandler.init();
 		ItemHandler.init();
 		
