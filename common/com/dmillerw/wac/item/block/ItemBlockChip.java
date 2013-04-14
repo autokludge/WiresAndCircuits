@@ -31,7 +31,6 @@ public class ItemBlockChip extends ItemBlock {
 		IAttachedToSide attached = (IAttachedToSide) world.getBlockTileEntity(x, y, z);
 		if (attached == null) return false;
 		attached.setSideAttached(ForgeDirection.getOrientation(side).getOpposite());
-		
 		return true;
 	}
 	
