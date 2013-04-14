@@ -29,13 +29,17 @@ public class ItemBlockChip extends ItemBlock {
 		Gate gate = GateManager.createGate(stack.getItemDamage());
 		
 		if (gate != null) {
-			list.add(EnumChatFormatting.BLUE+"INPUT:"+EnumChatFormatting.RESET);
-			for (int i=0; i<gate.getInputDataTypes().length; i++) {
-				list.add((char)alphabet.toUpperCase().toCharArray()[i]+":"+gate.getInputDataTypes()[i]);
+			if (gate.getInputDataTypes() != null) {
+				list.add(EnumChatFormatting.BLUE+"INPUT:"+EnumChatFormatting.RESET);
+				for (int i=0; i<gate.getInputDataTypes().length; i++) {
+					list.add((char)alphabet.toUpperCase().toCharArray()[i]+":"+gate.getInputDataTypes()[i]);
+				}
 			}
-			list.add(EnumChatFormatting.BLUE+"OUTPUT:"+EnumChatFormatting.RESET);
-			for (int i=0; i<gate.getOutputDataTypes().length; i++) {
-				list.add((char)alphabet.toUpperCase().toCharArray()[i]+":"+gate.getOutputDataTypes()[i]);
+			if (gate.getOutputDataTypes() != null) {
+				list.add(EnumChatFormatting.BLUE+"INPUT:"+EnumChatFormatting.RESET);
+				for (int i=0; i<gate.getOutputDataTypes().length; i++) {
+					list.add((char)alphabet.toUpperCase().toCharArray()[i]+":"+gate.getOutputDataTypes()[i]);
+				}
 			}
 		}
 	}

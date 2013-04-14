@@ -106,6 +106,8 @@ public class TileEntityChip extends TileEntity implements IAttachedToSide, IGate
 	}
 	
 	public boolean hasInputs() {
+		if (inputs == null) return false;
+		
 		for (Object obj : inputs) {
 			if (obj != null) {
 				return true;
