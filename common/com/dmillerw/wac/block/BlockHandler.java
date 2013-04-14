@@ -10,6 +10,7 @@ import com.dmillerw.wac.gates.GateManager;
 import com.dmillerw.wac.item.ItemHandler;
 import com.dmillerw.wac.item.block.ItemBlockGate;
 import com.dmillerw.wac.item.block.ItemBlockCleanroom;
+import com.dmillerw.wac.item.block.ItemBlockMachine;
 import com.dmillerw.wac.item.block.ItemBlockOre;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -20,6 +21,7 @@ public class BlockHandler {
 	public static Block blockOre;
 	public static Block blockCleanroom;
 	public static Block blockGate;
+	public static Block blockMachine;
 	
 	public static void init() {
 		blockOre = new BlockOre(BlockIDs.getID("blockOre")).setUnlocalizedName("blockOre");
@@ -39,8 +41,14 @@ public class BlockHandler {
 		for (int i=0; i<GateManager.gates.size(); i++) {
 			Gate gate = GateManager.createGate(i);
 			if (gate != null) {
-			LanguageRegistry.addName(new ItemStack(blockGate, 1, i), gate.getCategory()+": "+gate.getName());
+				LanguageRegistry.addName(new ItemStack(blockGate, 1, i), gate.getCategory()+": "+gate.getName());
 			}
+		}
+		
+		blockMachine = new BlockMachine(BlockIDs.getID("blockMachine")).setUnlocalizedName("blockMachine");
+		GameRegistry.registerBlock(blockMachine, ItemBlockMachine.class, "blockMachine");
+		for (int i=0; i<BlockMachine.machineNames.length; i++) {
+			LanguageRegistry.addName(new ItemStack(blockMachine, 1, i), BlockMachine.machineNames[i]);
 		}
 		
 		addOreDictionarySupport();

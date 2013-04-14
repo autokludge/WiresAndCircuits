@@ -16,6 +16,7 @@ public class BlockIDs {
 		idMapping.put("blockOre", 3760);
 		idMapping.put("blockCleanroom", 3761);
 		idMapping.put("blockGate", 3762);
+		idMapping.put("blockMachine", 3763);
 	}
 
 	public static void handleConfig(Configuration config) {
