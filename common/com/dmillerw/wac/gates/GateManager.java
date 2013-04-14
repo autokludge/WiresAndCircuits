@@ -20,6 +20,7 @@ import com.dmillerw.wac.gates.arithmatic.GateInverse;
 import com.dmillerw.wac.gates.arithmatic.GateModulo;
 import com.dmillerw.wac.gates.arithmatic.GateMultiply;
 import com.dmillerw.wac.gates.arithmatic.GateNegate;
+import com.dmillerw.wac.gates.arithmatic.GatePercent;
 import com.dmillerw.wac.gates.arithmatic.GatePi;
 import com.dmillerw.wac.gates.arithmatic.GateRandom;
 import com.dmillerw.wac.gates.arithmatic.GateRound;
@@ -74,7 +75,7 @@ public class GateManager {
 		registerGate(19, GateMultiply.class);
 		registerGate(20, GateNegate.class);
 		registerGate(21, GatePi.class);
-//		registerGate(22, GatePercent.class);
+		registerGate(22, GatePercent.class);
 		registerGate(23, GateRandom.class);
 		registerGate(24, GateRound.class);
 		registerGate(25, GateSign.class);
