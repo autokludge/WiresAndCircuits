@@ -21,13 +21,13 @@ import com.dmillerw.wac.interfaces.IAttachedToSide;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.tileentity.TileEntityGate;
 
-public class BlockChip extends BlockContainer {
+public class BlockGate extends BlockContainer {
 
 	public static float CHIP_THICKNESS = 0.10F;
 	
 	private Icon[] textures;
 	
-	public BlockChip(int id) {
+	public BlockGate(int id) {
 		super(id, Material.iron);
 		setHardness(1F);
 		setResistance(1F);

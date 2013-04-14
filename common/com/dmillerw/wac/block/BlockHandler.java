@@ -19,7 +19,7 @@ public class BlockHandler {
 
 	public static Block blockOre;
 	public static Block blockCleanroom;
-	public static Block blockChip;
+	public static Block blockGate;
 	
 	public static void init() {
 		blockOre = new BlockOre(BlockIDs.getID("blockOre")).setUnlocalizedName("blockOre");
@@ -34,12 +34,12 @@ public class BlockHandler {
 			LanguageRegistry.addName(new ItemStack(blockCleanroom, 1, i), BlockCleanroom.blockNames[i]);
 		}
 		
-		blockChip = new BlockChip(BlockIDs.getID("blockChip")).setUnlocalizedName("blockChip");
-		GameRegistry.registerBlock(blockChip, ItemBlockGate.class, "blockChip");
+		blockGate = new BlockGate(BlockIDs.getID("blockGate")).setUnlocalizedName("blockGate");
+		GameRegistry.registerBlock(blockGate, ItemBlockGate.class, "blockGate");
 		for (int i=0; i<GateManager.gates.size(); i++) {
 			Gate gate = GateManager.createGate(i);
 			if (gate != null) {
-			LanguageRegistry.addName(new ItemStack(blockChip, 1, i), gate.getCategory()+": "+gate.getName());
+			LanguageRegistry.addName(new ItemStack(blockGate, 1, i), gate.getCategory()+": "+gate.getName());
 			}
 		}
 		

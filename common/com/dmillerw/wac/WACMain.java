@@ -32,8 +32,9 @@ public class WACMain {
 	public static CommonProxy proxy;
 	
 	public static CreativeTabs wacCreativeTabMaterials = new CreativeTabWAC("materials", "block", "blockOre", "WaC Materials");
-	public static CreativeTabs wacCreativeTabItems = new CreativeTabWAC("items", "item", "cleanroomHat", "WaC Items");
+	public static CreativeTabs wacCreativeTabItems = new CreativeTabWAC("items", "item", "wireSpool", "WaC Items");
 	public static CreativeTabs wacCreativeTabBlocks = new CreativeTabWAC("blocks", "block", "blockCleanroom", "WaC Blocks");
+	public static CreativeTabs wacCreativeTabGates = new CreativeTabWAC("gates", "block", "blockGate", "WaC Gates");
 	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent e) {
