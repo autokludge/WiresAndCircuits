@@ -54,6 +54,7 @@ public class WACMain {
 		BlockHandler.addSmeltingRecipes();
 		
 		proxy.registerTileEntities();
+		proxy.registerRenders();
 	}
 
 }

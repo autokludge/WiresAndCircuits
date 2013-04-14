@@ -1,13 +1,15 @@
 package com.dmillerw.wac.core;
 
-import com.dmillerw.wac.tileentity.TileEntityChip;
+import com.dmillerw.wac.tileentity.TileEntityGate;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy {
 
+	public void registerRenders() {}
+	
 	public void registerTileEntities() {
-		GameRegistry.registerTileEntity(TileEntityChip.class, "blockChip");
+		GameRegistry.registerTileEntity(TileEntityGate.class, "blockChip");
 	}
 	
 }

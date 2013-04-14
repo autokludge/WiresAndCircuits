@@ -5,7 +5,7 @@ import com.dmillerw.wac.gates.GateCategory;
 import com.dmillerw.wac.gates.GateDataType;
 
 import static com.dmillerw.wac.gates.GateDataType.NUMBER;
-import com.dmillerw.wac.tileentity.TileEntityChip;
+import com.dmillerw.wac.tileentity.TileEntityGate;
 
 public class GateAddition extends Gate {
 
@@ -30,7 +30,7 @@ public class GateAddition extends Gate {
 	}
 
 	@Override
-	public void logic(TileEntityChip chip) {
+	public void logic(TileEntityGate chip) {
 		double[] inputs = new double[8];
 		double output = 0;
 		

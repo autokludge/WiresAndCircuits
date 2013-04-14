@@ -3,7 +3,7 @@ package com.dmillerw.wac.gates.arithmatic;
 import com.dmillerw.wac.gates.Gate;
 import com.dmillerw.wac.gates.GateCategory;
 import com.dmillerw.wac.gates.GateDataType;
-import com.dmillerw.wac.tileentity.TileEntityChip;
+import com.dmillerw.wac.tileentity.TileEntityGate;
 
 import static com.dmillerw.wac.gates.GateDataType.NUMBER;
 
@@ -30,7 +30,7 @@ public class GateRound extends Gate {
 	}
 
 	@Override
-	public void logic(TileEntityChip chip) {
+	public void logic(TileEntityGate chip) {
 		double A = 0;
 		
 		if (chip.inputs[0] != null) A = (double) chip.inputs[0];

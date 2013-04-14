@@ -8,7 +8,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import com.dmillerw.wac.gates.Gate;
 import com.dmillerw.wac.gates.GateManager;
 import com.dmillerw.wac.item.ItemHandler;
-import com.dmillerw.wac.item.block.ItemBlockChip;
+import com.dmillerw.wac.item.block.ItemBlockGate;
 import com.dmillerw.wac.item.block.ItemBlockCleanroom;
 import com.dmillerw.wac.item.block.ItemBlockOre;
 
@@ -35,7 +35,7 @@ public class BlockHandler {
 		}
 		
 		blockChip = new BlockChip(BlockIDs.getID("blockChip")).setUnlocalizedName("blockChip");
-		GameRegistry.registerBlock(blockChip, ItemBlockChip.class, "blockChip");
+		GameRegistry.registerBlock(blockChip, ItemBlockGate.class, "blockChip");
 		for (int i=0; i<GateManager.gates.size(); i++) {
 			Gate gate = GateManager.createGate(i);
 			if (gate != null) {

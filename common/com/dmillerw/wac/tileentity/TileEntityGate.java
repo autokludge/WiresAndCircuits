@@ -11,11 +11,13 @@ import com.dmillerw.wac.gates.Gate;
 import com.dmillerw.wac.gates.GateManager;
 import com.dmillerw.wac.interfaces.IAttachedToSide;
 import com.dmillerw.wac.interfaces.IGateContainer;
+import com.dmillerw.wac.interfaces.IRotatable;
 import com.dmillerw.wac.interfaces.ISavableGate;
 
-public class TileEntityChip extends TileEntity implements IAttachedToSide, IGateContainer {
+public class TileEntityGate extends TileEntity implements IAttachedToSide, IGateContainer, IRotatable {
 	
 	private ForgeDirection attached;
+	private ForgeDirection rotation;
 	
 	private int gateID;
 	
@@ -40,6 +42,7 @@ public class TileEntityChip extends TileEntity implements IAttachedToSide, IGate
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		setSideAttached(ForgeDirection.getOrientation(nbt.getByte("attached")));
+		setRotation(ForgeDirection.getOrientation(nbt.getByte("rotation")));
 		setGate(nbt.getInteger("gateID"));
 		
 		if (gate instanceof ISavableGate) {
@@ -51,6 +54,7 @@ public class TileEntityChip extends TileEntity implements IAttachedToSide, IGate
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setByte("attached", (byte) attached.ordinal());
+		nbt.setByte("rotation", (byte) rotation.ordinal());
 		nbt.setInteger("gateID", gateID);
 		
 		if (gate instanceof ISavableGate) {
@@ -90,6 +94,16 @@ public class TileEntityChip extends TileEntity implements IAttachedToSide, IGate
 		return attached;
 	}
 
+	@Override
+	public ForgeDirection getRotation() {
+		return rotation;
+	}
+
+	@Override
+	public void setRotation(ForgeDirection rotation) {
+		this.rotation = rotation;
+	}
+	
 	public void setGate(int id) {
 		gateID = id;
 		gate = GateManager.createGate(id);
@@ -120,5 +134,5 @@ public class TileEntityChip extends TileEntity implements IAttachedToSide, IGate
 		
 		return false;
 	}
-	
+
 }

@@ -19,7 +19,7 @@ import com.dmillerw.wac.WACMain;
 import com.dmillerw.wac.gates.GateManager;
 import com.dmillerw.wac.interfaces.IAttachedToSide;
 import com.dmillerw.wac.lib.ModInfo;
-import com.dmillerw.wac.tileentity.TileEntityChip;
+import com.dmillerw.wac.tileentity.TileEntityGate;
 
 public class BlockChip extends BlockContainer {
 
@@ -134,7 +134,7 @@ public class BlockChip extends BlockContainer {
 	
 	@Override
 	public TileEntity createNewTileEntity(World world) {
-		return new TileEntityChip();
+		return new TileEntityGate();
 	}
 	
 }

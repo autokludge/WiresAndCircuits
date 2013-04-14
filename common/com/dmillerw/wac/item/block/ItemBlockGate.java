@@ -14,13 +14,15 @@ import com.dmillerw.wac.block.BlockIDs;
 import com.dmillerw.wac.gates.Gate;
 import com.dmillerw.wac.gates.GateManager;
 import com.dmillerw.wac.interfaces.IAttachedToSide;
-import com.dmillerw.wac.tileentity.TileEntityChip;
+import com.dmillerw.wac.interfaces.IRotatable;
+import com.dmillerw.wac.tileentity.TileEntityGate;
+import com.dmillerw.wac.util.PlayerUtil;
 
-public class ItemBlockChip extends ItemBlock {
+public class ItemBlockGate extends ItemBlock {
 
 	public static String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
-	public ItemBlockChip(int id) {
+	public ItemBlockGate(int id) {
 		super(id);
 		setHasSubtypes(true);
 	}
@@ -55,9 +57,10 @@ public class ItemBlockChip extends ItemBlock {
 		y += sideForge.offsetY;
 		z += sideForge.offsetZ;
 		
-		TileEntityChip chip = (TileEntityChip) world.getBlockTileEntity(x, y, z);
+		TileEntityGate chip = (TileEntityGate) world.getBlockTileEntity(x, y, z);
 		if (chip == null) return false;
 		((IAttachedToSide)chip).setSideAttached(ForgeDirection.getOrientation(side).getOpposite());
+		((IRotatable)chip).setRotation(ForgeDirection.getOrientation(PlayerUtil.determineOrientation(world, x, y, z, player)));
 		chip.setGate(stack.getItemDamage());
 		return true;
 	}
