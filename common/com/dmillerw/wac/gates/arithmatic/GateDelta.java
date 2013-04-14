@@ -9,7 +9,7 @@ import static com.dmillerw.wac.gates.GateDataType.NUMBER;
 
 public class GateDelta extends Gate {
 
-	int currA = 0;
+	double currA = 0;
 	
 	@Override
 	public String getName() {
@@ -33,7 +33,7 @@ public class GateDelta extends Gate {
 
 	@Override
 	public void logic(TileEntityChip chip) {
-		int output = (int) chip.inputs[0];
+		double output = (double) chip.inputs[0];
 		output -= currA;
 		currA = output;
 		chip.outputs[0] = output;

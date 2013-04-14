@@ -31,7 +31,11 @@ public class GateInverse extends Gate {
 
 	@Override
 	public void logic(TileEntityChip chip) {
-		chip.outputs[0] = 1 / (int)chip.inputs[0];
+		double A = 0;
+		
+		if (chip.inputs[0] != null) A = (double) chip.inputs[0];
+		
+		chip.outputs[0] = 1 / A;
 	}
 
 }

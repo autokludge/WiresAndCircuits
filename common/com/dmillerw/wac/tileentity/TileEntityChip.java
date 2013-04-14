@@ -30,7 +30,7 @@ public class TileEntityChip extends TileEntity implements IAttachedToSide, IGate
 	public void updateEntity() {
 		if (worldObj.isRemote) return;
 		
-		if (dirty && hasInputs()) {
+		if (dirty) {
 			gate.logic(this);
 			dirty = false;
 		}

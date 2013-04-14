@@ -29,7 +29,11 @@ public class GateAbsolute extends Gate {
 
 	@Override
 	public void logic(TileEntityChip chip) {
-		chip.outputs[0] = Math.abs((int) chip.inputs[0]);
+		int A = 0;
+		
+		if (chip.inputs[0] != null) A = (int) chip.inputs[0];
+		
+		chip.outputs[0] = Math.abs(A);
 	}
 
 }

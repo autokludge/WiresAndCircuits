@@ -31,7 +31,13 @@ public class GateExponentialPowers extends Gate {
 
 	@Override
 	public void logic(TileEntityChip chip) {
-		chip.outputs[0] = Math.pow((int)chip.inputs[0], (int)chip.inputs[1]);
+		double A = 0;
+		double B = 0;
+		
+		if (chip.inputs[0] != null) A = (double) chip.inputs[0];
+		if (chip.inputs[1] != null) B = (double) chip.inputs[1];
+		
+		chip.outputs[0] = Math.pow(A, B);
 	}
 
 }

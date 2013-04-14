@@ -30,13 +30,15 @@ public class GateAndAdd extends Gate {
 
 	@Override
 	public void logic(TileEntityChip chip) {
-		int output = 0;
+		double A = 0;
+		double B = 0;
 		
-		if ((int)chip.inputs[0] > 0 && (int)chip.inputs[1] > 0) {
-			output = (int)chip.inputs[0] + (int)chip.inputs[1];
+		if (chip.inputs[0] != null) A = (double) chip.inputs[0];
+		if (chip.inputs[1] != null) B = (double) chip.inputs[1];
+		
+		if (A > 0 && B > 0) {
+			chip.outputs[0] = A + B;
 		}
-		
-		chip.outputs[0] = output;
 	}
 	
 }

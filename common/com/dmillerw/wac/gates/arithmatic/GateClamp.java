@@ -31,10 +31,17 @@ public class GateClamp extends Gate {
 
 	@Override
 	public void logic(TileEntityChip chip) {
-		int output = (int)chip.inputs[0];
-		if (output < (int)chip.inputs[1]) output = (int)chip.inputs[1];
-		if (output < (int)chip.inputs[2]) output = (int)chip.inputs[2];
-		chip.outputs[0] = output;
+		double A = 0;
+		double B = 0;
+		double OUTA = 0;
+		
+		if (chip.inputs[0] != null) A = (double) chip.inputs[0];
+		if (chip.inputs[1] != null) B = (double) chip.inputs[1];
+		if (chip.outputs[0] != null) OUTA = (double)chip.inputs[0];
+		
+		if (OUTA < A) OUTA = A;
+		if (OUTA < B) OUTA = B;
+		chip.outputs[0] = OUTA;
 	}
 	
 }

@@ -31,12 +31,20 @@ public class GateIncrement extends Gate {
 
 	@Override
 	public void logic(TileEntityChip chip) {
-		if ((int)chip.inputs[2] > 0) {
+		double A = 0;
+		double B = 0;
+		double C = 0;
+		
+		if (chip.inputs[0] != null) A = (double) chip.inputs[0];
+		if (chip.inputs[1] != null) B = (double) chip.inputs[1];
+		if (chip.inputs[2] != null) C = (double) chip.inputs[2];
+		
+		if (C > 0) {
 			chip.outputs[0] = 0;
 		}
 		
-		if ((int)chip.inputs[1] > 0) {
-			chip.outputs[0] = (int)chip.outputs[0] + (int)chip.inputs[0];
+		if (B > 0) {
+			chip.outputs[0] = (double)chip.outputs[0] + A;
 		}
 	}
 

@@ -31,11 +31,13 @@ public class GateSign extends Gate {
 
 	@Override
 	public void logic(TileEntityChip chip) {
-		int output = 0;
-		if ((int)chip.inputs[0] < 0) output = -1;
-		if ((int)chip.inputs[0] == 0) output = 0;
-		if ((int)chip.inputs[0] > 0) output = 1;
-		chip.outputs[0] = output;
+		double A = 0;
+		
+		if (chip.inputs[0] != null) A = (double) chip.inputs[0];
+		
+		if (A < 0) chip.outputs[0] = -1;
+		if (A == 0) chip.outputs[0] = 0;
+		if (A > 0) chip.outputs[0] = 1;
 	}
 
 }
