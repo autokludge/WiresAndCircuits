@@ -36,7 +36,7 @@ public class ItemBlockChip extends ItemBlock {
 				}
 			}
 			if (gate.getOutputDataTypes() != null) {
-				list.add(EnumChatFormatting.BLUE+"INPUT:"+EnumChatFormatting.RESET);
+				list.add(EnumChatFormatting.BLUE+"OUTPUT:"+EnumChatFormatting.RESET);
 				for (int i=0; i<gate.getOutputDataTypes().length; i++) {
 					list.add((char)alphabet.toUpperCase().toCharArray()[i]+":"+gate.getOutputDataTypes()[i]);
 				}
