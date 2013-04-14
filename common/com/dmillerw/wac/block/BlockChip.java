@@ -7,7 +7,6 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -19,7 +18,6 @@ import net.minecraftforge.common.ForgeDirection;
 import com.dmillerw.wac.WACMain;
 import com.dmillerw.wac.gates.GateManager;
 import com.dmillerw.wac.interfaces.IAttachedToSide;
-import com.dmillerw.wac.item.block.ItemBlockChip;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.tileentity.TileEntityChip;
 
@@ -37,28 +35,6 @@ public class BlockChip extends BlockContainer {
 	}
 	
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {return null;}
-	
-	//DEBUG
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitx, float hity, float hitz) {
-		if (world.isRemote) return false;
-		
-		TileEntityChip chip = (TileEntityChip) world.getBlockTileEntity(x, y, z);
-		if (chip.inputs != null) {
-			player.addChatMessage("INPUT:");
-			for (int i=0; i<chip.inputs.length; i++) {
-				player.addChatMessage(ItemBlockChip.alphabet.toCharArray()[i]+": "+chip.inputs[i].toString());
-			}
-		}
-		
-		if (chip.outputs != null) {
-			player.addChatMessage("OUTPUT:");
-			for (int i=0; i<chip.outputs.length; i++) {
-				player.addChatMessage(ItemBlockChip.alphabet.toCharArray()[i]+": "+chip.outputs[i].toString());
-			}
-		}
-		
-		return true;
-	}
 	
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockID) {
 		IAttachedToSide attached = (IAttachedToSide) world.getBlockTileEntity(x, y, z);

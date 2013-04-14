@@ -59,8 +59,6 @@ public class ItemBlockChip extends ItemBlock {
 		if (chip == null) return false;
 		((IAttachedToSide)chip).setSideAttached(ForgeDirection.getOrientation(side).getOpposite());
 		chip.setGate(stack.getItemDamage());
-		//DEBUG
-//		chip.inputs[0] = 25;
 		return true;
 	}
 	
