@@ -7,13 +7,19 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
+import com.dmillerw.wac.gates.Gate;
 import com.dmillerw.wac.gates.GateManager;
 import com.dmillerw.wac.interfaces.IAttachedToSide;
+import com.dmillerw.wac.interfaces.IGateContainer;
+import com.dmillerw.wac.interfaces.ISavableGate;
 
-public class TileEntityChip extends TileEntity implements IAttachedToSide {
-
+public class TileEntityChip extends TileEntity implements IAttachedToSide, IGateContainer {
+	
 	private ForgeDirection attached;
+	
 	private int gateID;
+	
+	private Gate gate;
 	
 	public Object[] inputs;
 	public Object[] outputs;
@@ -25,7 +31,7 @@ public class TileEntityChip extends TileEntity implements IAttachedToSide {
 		if (worldObj.isRemote) return;
 		
 		if (dirty && hasInputs()) {
-			GateManager.getGate(gateID).logic(this);
+			gate.logic(this);
 			dirty = false;
 		}
 	}
@@ -35,6 +41,10 @@ public class TileEntityChip extends TileEntity implements IAttachedToSide {
 		super.readFromNBT(nbt);
 		setSideAttached(ForgeDirection.getOrientation(nbt.getByte("attached")));
 		setGate(nbt.getInteger("gateID"));
+		
+		if (gate instanceof ISavableGate) {
+			((ISavableGate)gate).readFromNBT(nbt);
+		}
 	}
 	
 	@Override
@@ -42,6 +52,10 @@ public class TileEntityChip extends TileEntity implements IAttachedToSide {
 		super.writeToNBT(nbt);
 		nbt.setByte("attached", (byte) attached.ordinal());
 		nbt.setInteger("gateID", gateID);
+		
+		if (gate instanceof ISavableGate) {
+			((ISavableGate)gate).writeToNBT(nbt);
+		}
 	}
 	
 	@Override
@@ -78,12 +92,17 @@ public class TileEntityChip extends TileEntity implements IAttachedToSide {
 
 	public void setGate(int id) {
 		gateID = id;
-		inputs = new Object[GateManager.getInputCount(gateID)];
-		outputs = new Object[GateManager.getOutputCount(gateID)];
+		gate = GateManager.createGate(id);
+		inputs = new Object[gate.getInputDataTypes().length];
+		outputs = new Object[gate.getOutputDataTypes().length];
 	}
 	
-	public int getGate() {
+	public int getGateID() {
 		return gateID;
+	}
+	
+	public Gate getGate() {
+		return gate;
 	}
 	
 	public boolean hasInputs() {

@@ -8,8 +8,6 @@ import com.dmillerw.wac.block.BlockIDs;
 import com.dmillerw.wac.core.CommonProxy;
 import com.dmillerw.wac.core.CreativeTabWAC;
 import com.dmillerw.wac.core.helper.LogHelper;
-import com.dmillerw.wac.gates.Gate;
-import com.dmillerw.wac.gates.arithmatic.GateAbsolute;
 import com.dmillerw.wac.item.ItemHandler;
 import com.dmillerw.wac.item.ItemIDs;
 import com.dmillerw.wac.lib.ModInfo;
@@ -35,8 +33,6 @@ public class WACMain {
 	public static CreativeTabs wacCreativeTabMaterials = new CreativeTabWAC("materials", "block", "blockOre", "WaC Materials");
 	public static CreativeTabs wacCreativeTabItems = new CreativeTabWAC("items", "item", "cleanroomHat", "WaC Items");
 	public static CreativeTabs wacCreativeTabBlocks = new CreativeTabWAC("blocks", "block", "blockCleanroom", "WaC Blocks");
-	
-	public static Gate gateAbsoluteValue = new GateAbsolute(0);
 	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent e) {

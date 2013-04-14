@@ -2,6 +2,7 @@ package com.dmillerw.wac.gates;
 
 public enum GateCategory {
 
+	UNKNOWN,
 	ANGLE,
 	ARITHMETIC,
 	ARRAY,

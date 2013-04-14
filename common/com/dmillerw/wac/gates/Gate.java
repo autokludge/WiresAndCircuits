@@ -4,22 +4,7 @@ import com.dmillerw.wac.tileentity.TileEntityChip;
 
 public abstract class Gate {
 
-	protected int id;
-	protected GateCategory cat;
-	
-	public Gate(int id, GateCategory cat) {
-		GateManager.gates[id] = this;
-		this.id = id;
-		this.cat = cat;
-	}
-	
-	public int getID() {
-		return id;
-	}
-	
-	public GateCategory getCategory() {
-		return cat;
-	}
+	public abstract GateCategory getCategory();
 	
 	public abstract GateDataType[] getInputDataTypes();
 	

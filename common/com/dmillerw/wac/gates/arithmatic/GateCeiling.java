@@ -5,13 +5,13 @@ import com.dmillerw.wac.gates.GateCategory;
 import com.dmillerw.wac.gates.GateDataType;
 import com.dmillerw.wac.tileentity.TileEntityChip;
 
-public class GateAbsolute extends Gate {
+public class GateCeiling extends Gate {
 
 	@Override
 	public GateCategory getCategory() {
 		return GateCategory.ARITHMETIC;
 	}
-	
+
 	@Override
 	public GateDataType[] getInputDataTypes() {
 		return new GateDataType[] {GateDataType.NUMBER};
@@ -24,7 +24,7 @@ public class GateAbsolute extends Gate {
 
 	@Override
 	public void logic(TileEntityChip chip) {
-		chip.outputs[0] = Math.abs((int) chip.inputs[0]);
+		chip.outputs[0] = Math.ceil((int) chip.inputs[0]);
 	}
-
+	
 }
