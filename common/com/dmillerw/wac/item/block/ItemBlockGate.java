@@ -77,13 +77,13 @@ public class ItemBlockGate extends ItemBlock {
 			return false;
 		}
 		
-		if (!world.setBlock(x, y, z, BlockIDs.getID("blockChip"), metadata, 3)) {
+		if (!world.setBlock(x, y, z, BlockIDs.getID("blockGate"), metadata, 3)) {
 			return false;
 		}
 
-		if (world.getBlockId(x, y, z) == BlockIDs.getID("blockChip")) {
-			Block.blocksList[BlockIDs.getID("blockChip")].onBlockPlacedBy(world, x, y, z, player, stack);
-			Block.blocksList[BlockIDs.getID("blockChip")].onPostBlockPlaced(world, x, y, z, metadata);
+		if (world.getBlockId(x, y, z) == BlockIDs.getID("blockGate")) {
+			Block.blocksList[BlockIDs.getID("blockGate")].onBlockPlacedBy(world, x, y, z, player, stack);
+			Block.blocksList[BlockIDs.getID("blockGate")].onPostBlockPlaced(world, x, y, z, metadata);
 		}
 
        return true;
