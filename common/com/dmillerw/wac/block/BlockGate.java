@@ -31,7 +31,7 @@ public class BlockGate extends BlockContainer {
 		super(id, Material.iron);
 		setHardness(1F);
 		setResistance(1F);
-		setCreativeTab(WACMain.wacCreativeTabBlocks);
+		setCreativeTab(WACMain.wacCreativeTabGates);
 	}
 	
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {return null;}
