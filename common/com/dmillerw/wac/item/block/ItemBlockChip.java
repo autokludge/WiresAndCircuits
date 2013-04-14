@@ -14,10 +14,11 @@ import com.dmillerw.wac.block.BlockIDs;
 import com.dmillerw.wac.gates.Gate;
 import com.dmillerw.wac.gates.GateManager;
 import com.dmillerw.wac.interfaces.IAttachedToSide;
+import com.dmillerw.wac.tileentity.TileEntityChip;
 
 public class ItemBlockChip extends ItemBlock {
 
-	private String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	public static String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
 	public ItemBlockChip(int id) {
 		super(id);
@@ -54,9 +55,12 @@ public class ItemBlockChip extends ItemBlock {
 		y += sideForge.offsetY;
 		z += sideForge.offsetZ;
 		
-		IAttachedToSide attached = (IAttachedToSide) world.getBlockTileEntity(x, y, z);
-		if (attached == null) return false;
-		attached.setSideAttached(ForgeDirection.getOrientation(side).getOpposite());
+		TileEntityChip chip = (TileEntityChip) world.getBlockTileEntity(x, y, z);
+		if (chip == null) return false;
+		((IAttachedToSide)chip).setSideAttached(ForgeDirection.getOrientation(side).getOpposite());
+		chip.setGate(stack.getItemDamage());
+		//DEBUG
+		chip.inputs[0] = 25;
 		return true;
 	}
 	
