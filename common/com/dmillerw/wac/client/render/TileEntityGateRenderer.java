@@ -1,6 +1,5 @@
 package com.dmillerw.wac.client.render;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.gui.FontRenderer;
@@ -13,6 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.opengl.GL11;
 
 import com.dmillerw.wac.tileentity.TileEntityGate;
+import com.dmillerw.wac.util.Vector;
 
 public class TileEntityGateRenderer extends TileEntitySpecialRenderer {
 
@@ -74,6 +74,29 @@ public class TileEntityGateRenderer extends TileEntitySpecialRenderer {
         }
     }
 	
+	public void renderWires(TileEntityGate gate, double x, double y, double z) {
+		GL11.glPushMatrix();
+		GL11.glTranslated(x, y, z);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glBegin(GL11.GL_LINES);
+		if (gate.outputWirePoints != null) {
+			for (int i=0; i<gate.outputWirePoints.length; i++) {
+				List<Vector> points = gate.outputWirePoints[i];
+				
+				if (points != null) {
+					System.out.println(points.size());
+					
+					for (Vector vec : points) {
+						GL11.glVertex3d(vec.x, vec.y, vec.z);
+					}
+				}
+			}
+		}
+		GL11.glEnd();
+		GL11.glPopMatrix();
+		GL11.glEnable(GL11.GL_LIGHTING);
+	}
+	
 	public double getDistanceSqToEntity(TileEntity tile, Entity entity) {
 		double d0 = tile.xCoord - entity.posX;
 		double d1 = tile.yCoord - entity.posY;
@@ -83,11 +106,7 @@ public class TileEntityGateRenderer extends TileEntitySpecialRenderer {
 	
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float f) {
-		List<String> display = new ArrayList<String>();
-		display.add("ARITHMATIC: Absolute");
-		display.add("A:NUMBER");
-		display.add("B:NUMBER");
-		renderLabel((TileEntityGate) tile, display, x, y, z, 16);
+		renderWires((TileEntityGate) tile, x, y, z);
 	}
 
 }

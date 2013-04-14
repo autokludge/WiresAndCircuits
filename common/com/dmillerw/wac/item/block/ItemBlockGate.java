@@ -13,7 +13,7 @@ import net.minecraftforge.common.ForgeDirection;
 import com.dmillerw.wac.block.BlockIDs;
 import com.dmillerw.wac.gates.Gate;
 import com.dmillerw.wac.gates.GateManager;
-import com.dmillerw.wac.interfaces.IAttachedToSide;
+import com.dmillerw.wac.interfaces.ISideAttachment;
 import com.dmillerw.wac.interfaces.IGateContainer;
 import com.dmillerw.wac.interfaces.IRotatable;
 import com.dmillerw.wac.tileentity.TileEntityGate;
@@ -60,7 +60,7 @@ public class ItemBlockGate extends ItemBlock {
 		
 		TileEntityGate chip = (TileEntityGate) world.getBlockTileEntity(x, y, z);
 		if (chip == null) return false;
-		((IAttachedToSide)chip).setSideAttached(ForgeDirection.getOrientation(side).getOpposite());
+		((ISideAttachment)chip).setSideAttached(ForgeDirection.getOrientation(side).getOpposite());
 		((IRotatable)chip).setRotation(ForgeDirection.getOrientation(PlayerUtil.determineOrientation(world, x, y, z, player)));
 		((IGateContainer)chip).setGate(stack.getItemDamage());
 		return true;
@@ -77,13 +77,13 @@ public class ItemBlockGate extends ItemBlock {
 			return false;
 		}
 		
-		if (!world.setBlock(x, y, z, BlockIDs.getID("blockChip"), metadata, 3)) {
+		if (!world.setBlock(x, y, z, BlockIDs.getID("blockGate"), metadata, 3)) {
 			return false;
 		}
 
-		if (world.getBlockId(x, y, z) == BlockIDs.getID("blockChip")) {
-			Block.blocksList[BlockIDs.getID("blockChip")].onBlockPlacedBy(world, x, y, z, player, stack);
-			Block.blocksList[BlockIDs.getID("blockChip")].onPostBlockPlaced(world, x, y, z, metadata);
+		if (world.getBlockId(x, y, z) == BlockIDs.getID("blockGate")) {
+			Block.blocksList[BlockIDs.getID("blockGate")].onBlockPlacedBy(world, x, y, z, player, stack);
+			Block.blocksList[BlockIDs.getID("blockGate")].onPostBlockPlaced(world, x, y, z, metadata);
 		}
 
        return true;

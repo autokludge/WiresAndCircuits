@@ -22,6 +22,7 @@ public abstract class PacketWAC {
 		ImmutableBiMap.Builder<Integer, Class<? extends PacketWAC>> builder = ImmutableBiMap.builder();
 		
 		//Default packets go here
+		builder.put(0, PacketAddRenderPoint.class);
 		
 		idMap = builder.build();
 	}

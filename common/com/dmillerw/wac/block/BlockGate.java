@@ -17,7 +17,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 import com.dmillerw.wac.WACMain;
 import com.dmillerw.wac.gates.GateManager;
-import com.dmillerw.wac.interfaces.IAttachedToSide;
+import com.dmillerw.wac.interfaces.ISideAttachment;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.tileentity.TileEntityGate;
 
@@ -37,7 +37,7 @@ public class BlockGate extends BlockContainer {
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {return null;}
 	
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockID) {
-		IAttachedToSide attached = (IAttachedToSide) world.getBlockTileEntity(x, y, z);
+		ISideAttachment attached = (ISideAttachment) world.getBlockTileEntity(x, y, z);
 		
 		int xOrig = x;
 		int yOrig = y;
@@ -68,7 +68,7 @@ public class BlockGate extends BlockContainer {
 	
 	@Override
 	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
-		IAttachedToSide attached = (IAttachedToSide) world.getBlockTileEntity(x, y, z);
+		ISideAttachment attached = (ISideAttachment) world.getBlockTileEntity(x, y, z);
 		
 		if (ForgeDirection.getOrientation(side) == attached.getSideAttached().getOpposite()) {
 			return textures[1];
@@ -91,7 +91,7 @@ public class BlockGate extends BlockContainer {
 	}
 	
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-		IAttachedToSide attached = (IAttachedToSide) world.getBlockTileEntity(x, y, z);
+		ISideAttachment attached = (ISideAttachment) world.getBlockTileEntity(x, y, z);
 		
 		if (attached.getSideAttached() == ForgeDirection.UP) {
 			setBlockBounds(0.30F, 0.90F, 0.30F, 0.70F, 0.90F + CHIP_THICKNESS, 0.70F);

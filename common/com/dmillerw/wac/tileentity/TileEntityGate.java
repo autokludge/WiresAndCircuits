@@ -1,5 +1,8 @@
 package com.dmillerw.wac.tileentity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -9,12 +12,14 @@ import net.minecraftforge.common.ForgeDirection;
 
 import com.dmillerw.wac.gates.Gate;
 import com.dmillerw.wac.gates.GateManager;
-import com.dmillerw.wac.interfaces.IAttachedToSide;
 import com.dmillerw.wac.interfaces.IGateContainer;
 import com.dmillerw.wac.interfaces.IRotatable;
 import com.dmillerw.wac.interfaces.ISavableGate;
+import com.dmillerw.wac.interfaces.ISideAttachment;
+import com.dmillerw.wac.interfaces.IWireConnector;
+import com.dmillerw.wac.util.Vector;
 
-public class TileEntityGate extends TileEntity implements IAttachedToSide, IGateContainer, IRotatable {
+public class TileEntityGate extends TileEntity implements ISideAttachment, IGateContainer, IRotatable, IWireConnector {
 	
 	private ForgeDirection attached;
 	private ForgeDirection rotation;
@@ -25,6 +30,9 @@ public class TileEntityGate extends TileEntity implements IAttachedToSide, IGate
 	
 	public Object[] inputs;
 	public Object[] outputs;
+	
+	public List<Vector>[] outputConnections;
+	public List<Vector>[] outputWirePoints;
 	
 	public boolean dirty = true;
 	
@@ -104,6 +112,7 @@ public class TileEntityGate extends TileEntity implements IAttachedToSide, IGate
 		this.rotation = rotation;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void setGate(int id) {
 		gateID = id;
 		gate = GateManager.createGate(id);
@@ -112,6 +121,12 @@ public class TileEntityGate extends TileEntity implements IAttachedToSide, IGate
 		}
 		if (gate.getOutputDataTypes() != null) {
 			outputs = GateManager.generateBlankOutputArray(gate);
+			outputConnections = new List[outputs.length];
+			outputWirePoints = new List[outputs.length];
+			for (int i=0; i<outputs.length; i++) {
+				outputConnections[i] = new ArrayList<Vector>();
+				outputWirePoints[i] = new ArrayList<Vector>();
+			}
 		}
 	}
 	
@@ -133,6 +148,29 @@ public class TileEntityGate extends TileEntity implements IAttachedToSide, IGate
 		}
 		
 		return false;
+	}
+
+	@Override
+	public List<Vector> getOutputConnections(int index) {
+		return outputConnections[index];
+	}
+
+	@Override
+	public void addOutputConnection(int index, Vector connection) {
+		getOutputConnections(index).add(connection);
+	}
+	
+	@Override
+	public void setOutputConnections(int index, List<Vector> connections) {
+		outputConnections[index] = connections;
+	}
+
+	public List<Vector> getPoints(int index) {
+		return outputWirePoints[index];
+	}
+
+	public void addPoint(int index, Vector point) {
+		outputWirePoints[index].add(point);
 	}
 
 }
