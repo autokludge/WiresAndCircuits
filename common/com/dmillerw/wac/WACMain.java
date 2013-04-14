@@ -13,7 +13,6 @@ import com.dmillerw.wac.item.ItemHandler;
 import com.dmillerw.wac.item.ItemIDs;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.network.PacketHandler;
-import com.dmillerw.wac.network.packet.PacketWAC;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -44,8 +43,6 @@ public class WACMain {
 		Configuration config = new Configuration(e.getSuggestedConfigurationFile());
 		BlockIDs.handleConfig(config);
 		ItemIDs.handleConfig(config);
-		
-		PacketWAC.buildPacketList();
 	}
 	
 	@Init
