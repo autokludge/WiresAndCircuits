@@ -14,10 +14,7 @@ public class ItemIDs {
 	
 	public static void initializeDefaults() {
 		idMapping.put("itemIngot", 10000);
-		idMapping.put("cleanroomHat", 10001);
-		idMapping.put("cleanroomSuit", 10002);
-		idMapping.put("cleanroomPants", 10003);
-		idMapping.put("cleanroomShoes", 10004);
+		idMapping.put("wireSpool", 10001);
 	}
 
 	public static void handleConfig(Configuration config) {

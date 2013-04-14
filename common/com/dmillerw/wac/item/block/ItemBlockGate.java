@@ -14,6 +14,7 @@ import com.dmillerw.wac.block.BlockIDs;
 import com.dmillerw.wac.gates.Gate;
 import com.dmillerw.wac.gates.GateManager;
 import com.dmillerw.wac.interfaces.IAttachedToSide;
+import com.dmillerw.wac.interfaces.IGateContainer;
 import com.dmillerw.wac.interfaces.IRotatable;
 import com.dmillerw.wac.tileentity.TileEntityGate;
 import com.dmillerw.wac.util.PlayerUtil;
@@ -61,7 +62,7 @@ public class ItemBlockGate extends ItemBlock {
 		if (chip == null) return false;
 		((IAttachedToSide)chip).setSideAttached(ForgeDirection.getOrientation(side).getOpposite());
 		((IRotatable)chip).setRotation(ForgeDirection.getOrientation(PlayerUtil.determineOrientation(world, x, y, z, player)));
-		chip.setGate(stack.getItemDamage());
+		((IGateContainer)chip).setGate(stack.getItemDamage());
 		return true;
 	}
 	
