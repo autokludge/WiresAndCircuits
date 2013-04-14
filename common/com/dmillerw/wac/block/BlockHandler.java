@@ -38,7 +38,9 @@ public class BlockHandler {
 		GameRegistry.registerBlock(blockChip, ItemBlockChip.class, "blockChip");
 		for (int i=0; i<GateManager.gates.size(); i++) {
 			Gate gate = GateManager.createGate(i);
+			if (gate != null) {
 			LanguageRegistry.addName(new ItemStack(blockChip, 1, i), gate.getCategory()+": "+gate.getName());
+			}
 		}
 		
 		addOreDictionarySupport();

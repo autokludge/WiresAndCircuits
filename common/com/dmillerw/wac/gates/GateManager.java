@@ -42,7 +42,7 @@ public class GateManager {
 	public static Gate createGate(int id) {
 		try {
 			return gates.get(id).newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
+		} catch (InstantiationException | IllegalAccessException | NullPointerException e) {
 			LogHelper.warn("Something tried to create a gate with the id of "+id+" but it doesn't exist.");
 			return null;
 		}

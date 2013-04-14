@@ -116,7 +116,9 @@ public class BlockChip extends BlockContainer {
 	@Override
 	public void getSubBlocks(int id, CreativeTabs tab, List list) {
 		for (int i=0; i<GateManager.gates.size(); i++) {
-			list.add(new ItemStack(id, 1, i));
+			if (GateManager.getGateClass(i) != null) {
+				list.add(new ItemStack(id, 1, i));
+			}
 		}
 	}
 	
