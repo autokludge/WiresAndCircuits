@@ -75,7 +75,7 @@ public class ContainerAmalgamFurnace extends Container {
 		}
 
 		if (id == ENERGY_AMOUNT_ID) {
-			tile.power.update(tile);
+			tile.fakePowerAmount = value;
 		}
 
 //		if (id == LIQUID_AMOUNT_ID) {

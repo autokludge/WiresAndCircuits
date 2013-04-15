@@ -28,13 +28,11 @@ public class GuiAmalgamFurnace extends GuiContainer {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture("/mods/"+ModInfo.MOD_ID.toLowerCase()+"/textures/gui/thingy.png");
         int k = (this.width - this.xSize) / 2;
-        int m = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(k, m, 0, 0, this.xSize, this.ySize);
+        int l = (this.height - this.ySize) / 2;
+        this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
 
-        if (tile.getScaledBurnTime(52) > 0) {
-        	int l = tile.getScaledBurnTime(52);
-        	drawTexturedModalRect(j + 80, (k + 24 + 12) - l, 176, 12 - l, 14, l + 2);
-        }
+        displayEnergyGauge(k, l, 11, 26, tile.getScaledEnergy(52));
+        displayBurnGauge(k, l, 100, 100, tile.getScaledBurnTime(16));
 	}
 	
 	private void displayEnergyGauge(int j, int k, int line, int col, int squaled) {
@@ -57,6 +55,34 @@ public class GuiAmalgamFurnace extends GuiContainer {
 			}
 
 			this.drawTexturedModalRect(j + col, k + line + 58 - x - start, 176, 6, 16, 52 - (52 - x));
+			start = start + 16;
+
+			if (x == 0 || squaled == 0) {
+				break;
+			}
+		}
+	}
+	
+	private void displayBurnGauge(int j, int k, int line, int col, int squaled) {
+		if (tile.power == null) {
+			return;
+		}
+		int start = 0;
+
+		mc.renderEngine.bindTexture("/mods/"+ModInfo.MOD_ID.toLowerCase()+"/textures/gui/thingy.png");
+
+		while (true) {
+			int x = 0;
+
+			if (squaled > 16) {
+				x = 16;
+				squaled -= 16;
+			} else {
+				x = squaled;
+				squaled = 0;
+			}
+
+			this.drawTexturedModalRect(j + col, k + line + 58 - x - start, 176, 6, 16 - (16 - x), 5);
 			start = start + 16;
 
 			if (x == 0 || squaled == 0) {

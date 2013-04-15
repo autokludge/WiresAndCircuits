@@ -1,12 +1,5 @@
 package com.dmillerw.wac.tileentity;
 
-import buildcraft.api.power.IPowerProvider;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerFramework;
-import buildcraft.core.IMachine;
-
-import com.dmillerw.wac.interfaces.IRotatable;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -17,6 +10,17 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import buildcraft.api.power.IPowerProvider;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerFramework;
+import buildcraft.core.IMachine;
+
+import com.dmillerw.wac.interfaces.IRotatable;
+import com.dmillerw.wac.recipe.RecipeAmalgamFurnace;
+import com.dmillerw.wac.recipe.RecipeManager;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, IInventory, IPowerReceptor, IMachine {
 
@@ -30,29 +34,63 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	public int currentBurnTime = 0;
 	public int itemBurnTime = 0;
 	
+	@SideOnly(Side.CLIENT)
+	public int fakePowerAmount = 0;
+	
 	public IPowerProvider power;
 	
 	public TileEntityAmalgamFurnace() {
-		System.out.println("Generating powerframework");
 		power = PowerFramework.currentFramework.createPowerProvider();
 		power.configure(0, 50, 50, 50, MAX_ENERGY);
 	}
 	
 	@Override
 	public void updateEntity() {
-		if (worldObj.isRemote) return;
+		if (power.useEnergy(5, 5, true) == 5) {
+			if (currentBurnTime > 0) {
+				--currentBurnTime;
+			}
+			
+			if (!worldObj.isRemote) {
+				if (currentBurnTime == 0 && itemBurnTime == 0 && canSmelt()) {
+					currentBurnTime = itemBurnTime = getRecipe().cookTime;
+				}
+				
+				if (itemBurnTime > 0 && !isBurning() && canSmelt()) {
+					RecipeAmalgamFurnace recipe = getRecipe();
+					
+					if (power.useEnergy(recipe.powerUsage, recipe.powerUsage, true) == recipe.powerUsage) {
+						setInventorySlotContents(0, null);
+						setInventorySlotContents(1, null);
+						
+						setInventorySlotContents(2, recipe.itemOutput);
+					}
+				}
+			}
+		}
+	}
+	
+	private boolean isBurning() {
+		return currentBurnTime > 0;
+	}
+	
+	private boolean canSmelt() {
+		return getRecipe() != null;
+	}
+	
+	private RecipeAmalgamFurnace getRecipe() {
+		ItemStack stack1 = getStackInSlot(0);
+		ItemStack stack2 = getStackInSlot(1);
 		
-		System.out.println(power.getEnergyStored());
-		
-		if (getStackInSlot(0) != null) {
-			itemBurnTime = 50;
-		} else {
-			itemBurnTime = 0;
+		if (stack1 != null && stack2 != null) {
+			for (RecipeAmalgamFurnace recipe : RecipeManager.amalgamFurnaceRecipes) {
+				if (stack1.isItemEqual(recipe.input1) && stack2.isItemEqual(recipe.input2)) {
+					return recipe;
+				}
+			}
 		}
 		
-//		if (power.useEnergy(50, 50, true) == 50) {
-//			System.out.println("Used 50");
-//		}
+		return null;
 	}
 	
 	@Override
@@ -63,18 +101,16 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		itemBurnTime = nbt.getInteger("itemBurnTime");
 		PowerFramework.currentFramework.loadPowerProvider(this, nbt);
 		
-		NBTTagList nbttaglist = new NBTTagList();
+		NBTTagList nbttaglist = nbt.getTagList("Items");
+		this.inv = new ItemStack[this.getSizeInventory()];
+		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
+			NBTTagCompound nbt1 = (NBTTagCompound) nbttaglist.tagAt(i);
+			byte slot = nbt1.getByte("Slot");
 
-		for (int i = 0; i < this.inv.length; ++i) {
-			if (this.inv[i] != null) {
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte) i);
-				this.inv[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
+			if (slot >= 0 && slot < this.inv.length) {
+				this.inv[slot] = ItemStack.loadItemStackFromNBT(nbt1);
 			}
 		}
-
-		nbt.setTag("Items", nbttaglist);
 	}
 	
 	@Override
@@ -85,17 +121,16 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		nbt.setInteger("currentBurnTime", currentBurnTime);
 		nbt.setInteger("itemBurnTime", itemBurnTime);
 		
-		NBTTagList nbttaglist = nbt.getTagList("Items");
-		this.inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-			NBTTagCompound nbt1 = (NBTTagCompound) nbttaglist.tagAt(i);
-			byte slot = nbt1.getByte("Slot");
-
-			if (slot >= 0 && slot < this.inv.length) {
-				this.inv[slot] = ItemStack.loadItemStackFromNBT(nbt1);
+		NBTTagList items = new NBTTagList();
+		for (int i=0; i<inv.length; i++) {
+			if (getStackInSlot(i) != null) {
+				ItemStack stack = getStackInSlot(i);
+				NBTTagCompound itemNBT = new NBTTagCompound();
+				itemNBT = stack.writeToNBT(itemNBT);
+				items.appendTag(itemNBT);
 			}
 		}
+		nbt.setTag("Items", items);
 	}
 	
 	@Override
@@ -238,7 +273,7 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	}
 	
 	public int getScaledEnergy(int i) {
-		return power.getEnergyStored() != 0 ? (int) (((float) power.getEnergyStored() / (float) (MAX_ENERGY)) * i) : 0;
+		return fakePowerAmount != 0 ? (int) (((float) fakePowerAmount / (float) (MAX_ENERGY)) * i) : 0;
 	}
 
 	@Override
