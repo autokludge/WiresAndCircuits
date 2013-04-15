@@ -7,6 +7,7 @@ import com.dmillerw.wac.block.BlockHandler;
 import com.dmillerw.wac.block.BlockIDs;
 import com.dmillerw.wac.core.CommonProxy;
 import com.dmillerw.wac.core.CreativeTabWAC;
+import com.dmillerw.wac.core.handler.GuiHandler;
 import com.dmillerw.wac.core.helper.LogHelper;
 import com.dmillerw.wac.gates.GateManager;
 import com.dmillerw.wac.item.ItemHandler;
@@ -23,8 +24,9 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid=ModInfo.MOD_ID, name=ModInfo.MOD_NAME, version=ModInfo.MOD_VERSION/*, dependencies="required-after:BuildCraft|Core"*/)
+@Mod(modid=ModInfo.MOD_ID, name=ModInfo.MOD_NAME, version=ModInfo.MOD_VERSION, dependencies="required-after:BuildCraft|Core")
 @NetworkMod(channels = {ModInfo.MOD_CHANNEL}, serverSideRequired=false, clientSideRequired=true, packetHandler=PacketHandler.class)
 public class WACMain {
 	@Instance(ModInfo.MOD_ID)
@@ -48,6 +50,7 @@ public class WACMain {
 	
 	@Init
 	public void init(FMLInitializationEvent e) {
+		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 		GateManager.initializeDefaultGates();
 		
 		BlockHandler.init();

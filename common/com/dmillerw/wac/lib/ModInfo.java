@@ -13,4 +13,7 @@ public class ModInfo {
 	
 	public static final String MOD_CHANNEL = MOD_ID;
 	
+	/* GUI IDS */
+	public static final int AMALGAM_FURNACE_ID = 0;
+	
 }

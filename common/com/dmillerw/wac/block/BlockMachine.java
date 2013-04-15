@@ -3,6 +3,7 @@ package com.dmillerw.wac.block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -11,6 +12,7 @@ import net.minecraftforge.common.ForgeDirection;
 import com.dmillerw.wac.WACMain;
 import com.dmillerw.wac.core.helper.LogHelper;
 import com.dmillerw.wac.interfaces.IRotatable;
+import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.tileentity.TileEntityAmalgamFurnace;
 import com.dmillerw.wac.util.PlayerUtil;
 
@@ -32,6 +34,15 @@ public class BlockMachine extends BlockContainer {
 		super.onBlockPlacedBy(world, x, y, z, entity, stack);
 		IRotatable rotate = (IRotatable) world.getBlockTileEntity(x, y, z);
 		rotate.setRotation(ForgeDirection.getOrientation(PlayerUtil.determineOrientation(world, x, y, z, entity)));
+	}
+	
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float f1, float f2, float f3) {
+		if (player.isSneaking()) {
+			return false;
+		}
+		
+		player.openGui(WACMain.instance, ModInfo.AMALGAM_FURNACE_ID, world, x, y, z);
+		return true;
 	}
 	
 	public TileEntity createTileEntity(World world, int meta) {
