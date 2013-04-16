@@ -16,8 +16,6 @@ import buildcraft.api.power.PowerFramework;
 import buildcraft.core.IMachine;
 
 import com.dmillerw.wac.interfaces.IRotatable;
-import com.dmillerw.wac.recipe.RecipeAmalgamFurnace;
-import com.dmillerw.wac.recipe.RecipeManager;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -42,55 +40,6 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	public TileEntityAmalgamFurnace() {
 		power = PowerFramework.currentFramework.createPowerProvider();
 		power.configure(0, 50, 50, 50, MAX_ENERGY);
-	}
-	
-	@Override
-	public void updateEntity() {
-		if (power.useEnergy(5, 5, true) == 5) {
-			if (currentBurnTime > 0) {
-				--currentBurnTime;
-			}
-			
-			if (!worldObj.isRemote) {
-				if (currentBurnTime == 0 && itemBurnTime == 0 && canSmelt()) {
-					currentBurnTime = itemBurnTime = getRecipe().cookTime;
-				}
-				
-				if (itemBurnTime > 0 && !isBurning() && canSmelt()) {
-					RecipeAmalgamFurnace recipe = getRecipe();
-					
-					if (power.useEnergy(recipe.powerUsage, recipe.powerUsage, true) == recipe.powerUsage) {
-						setInventorySlotContents(0, null);
-						setInventorySlotContents(1, null);
-						
-						setInventorySlotContents(2, recipe.itemOutput);
-					}
-				}
-			}
-		}
-	}
-	
-	private boolean isBurning() {
-		return currentBurnTime > 0;
-	}
-	
-	private boolean canSmelt() {
-		return getRecipe() != null;
-	}
-	
-	private RecipeAmalgamFurnace getRecipe() {
-		ItemStack stack1 = getStackInSlot(0);
-		ItemStack stack2 = getStackInSlot(1);
-		
-		if (stack1 != null && stack2 != null) {
-			for (RecipeAmalgamFurnace recipe : RecipeManager.amalgamFurnaceRecipes) {
-				if (stack1.isItemEqual(recipe.input1) && stack2.isItemEqual(recipe.input2)) {
-					return recipe;
-				}
-			}
-		}
-		
-		return null;
 	}
 	
 	@Override
