@@ -69,7 +69,7 @@ public class GateManager {
 		return objArray;
 	}
 	
-	private static Object generateObject(GateDataType type) {
+	private static Object generateObject(DataType type) {
 		switch(type) {
 			case NUMBER: return (double) 0;
 //			case VECTOR: return new Vector();

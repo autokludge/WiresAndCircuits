@@ -8,9 +8,9 @@ public abstract class Gate {
 	
 	public abstract GateCategory getCategory();
 	
-	public abstract GateDataType[] getInputDataTypes();
+	public abstract DataType[] getInputDataTypes();
 	
-	public abstract GateDataType[] getOutputDataTypes();
+	public abstract DataType[] getOutputDataTypes();
 	
 	public abstract void logic(TileEntityGate chip);
 	

@@ -2,10 +2,10 @@ package com.dmillerw.wac.gates.arithmatic;
 
 import com.dmillerw.wac.gates.Gate;
 import com.dmillerw.wac.gates.GateCategory;
-import com.dmillerw.wac.gates.GateDataType;
+import com.dmillerw.wac.gates.DataType;
 import com.dmillerw.wac.tileentity.TileEntityGate;
 
-import static com.dmillerw.wac.gates.GateDataType.NUMBER;
+import static com.dmillerw.wac.gates.DataType.NUMBER;
 
 public class GatePi extends Gate {
 
@@ -20,13 +20,13 @@ public class GatePi extends Gate {
 	}
 
 	@Override
-	public GateDataType[] getInputDataTypes() {
+	public DataType[] getInputDataTypes() {
 		return null;
 	}
 
 	@Override
-	public GateDataType[] getOutputDataTypes() {
-		return new GateDataType[] {NUMBER};
+	public DataType[] getOutputDataTypes() {
+		return new DataType[] {NUMBER};
 	}
 
 	@Override

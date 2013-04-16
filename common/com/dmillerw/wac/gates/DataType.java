@@ -1,6 +1,6 @@
 package com.dmillerw.wac.gates;
 
-public enum GateDataType {
+public enum DataType {
 
 	NUMBER,
 	VECTOR,
