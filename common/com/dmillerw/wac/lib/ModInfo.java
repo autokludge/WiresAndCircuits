@@ -4,7 +4,7 @@ public class ModInfo {
 
 	public static final String MOD_ID = "WaC";
 	//Name subject to change
-	public static final String MOD_NAME = "Wires and Circuts";
+	public static final String MOD_NAME = "Wires and Circuits";
 	public static final String MOD_VERSION = "0.0.1";
 	
 	public static final String MOD_BASE_PACKAGE = "com.dmillerw.wac.";
