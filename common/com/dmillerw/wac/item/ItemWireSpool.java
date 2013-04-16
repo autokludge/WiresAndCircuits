@@ -9,7 +9,6 @@ import net.minecraft.world.World;
 
 import com.dmillerw.wac.WACMain;
 import com.dmillerw.wac.interfaces.IConnectable;
-import com.dmillerw.wac.interfaces.IGateContainer;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.util.BlockCoord;
 import com.dmillerw.wac.util.GateConnection;
@@ -34,7 +33,7 @@ public class ItemWireSpool extends Item {
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float f1, float f2, float f3) {
 		if (world.isRemote) return false;
-		if (!(world.getBlockTileEntity(x, y, z) instanceof IGateContainer)) return false;
+		if (!(world.getBlockTileEntity(x, y, z) instanceof IConnectable)) return false;
 		
 		//TODO so much type checking
 		if (startGate == null) {

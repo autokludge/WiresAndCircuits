@@ -1,16 +1,20 @@
 package com.dmillerw.wac.tileentity;
 
 import com.dmillerw.wac.gates.DataType;
+import com.dmillerw.wac.interfaces.IConnectable;
 import com.dmillerw.wac.interfaces.IDataHandler;
 import com.dmillerw.wac.interfaces.ISideAttachment;
+import com.dmillerw.wac.util.GateConnection;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
-public class TileEntityScreen extends TileEntity implements ISideAttachment, IDataHandler {
+public class TileEntityScreen extends TileEntity implements ISideAttachment, IDataHandler, IConnectable {
 
 	private ForgeDirection attached;
+	
+	public String input = "0";
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
@@ -42,6 +46,14 @@ public class TileEntityScreen extends TileEntity implements ISideAttachment, IDa
 	@Override
 	public DataType[] getOutputDataTypes() {
 		return null;
+	}
+
+	@Override
+	public void linkOutput(int index, GateConnection end) {}
+
+	@Override
+	public void receiveInput(int index, Object value) {
+		input = String.valueOf(value);
 	}
 
 }

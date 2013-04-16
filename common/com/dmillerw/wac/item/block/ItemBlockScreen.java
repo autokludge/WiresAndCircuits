@@ -20,18 +20,24 @@ public class ItemBlockScreen extends ItemBlock {
 
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
-		
-		//Getting actual block coords based on side hit of targeted block
 		ForgeDirection sideForge = ForgeDirection.getOrientation(side);
-		x += sideForge.offsetX;
-		y += sideForge.offsetY;
-		z += sideForge.offsetZ;
 		
-		TileEntityScreen screen = (TileEntityScreen) world.getBlockTileEntity(x, y, z);
-		if (screen == null) return false;
-		((ISideAttachment)screen).setSideAttached(ForgeDirection.getOrientation(side).getOpposite());
-		return true;
+		if (sideForge != ForgeDirection.UP && sideForge != ForgeDirection.DOWN) {
+			super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
+			
+			//Getting actual block coords based on side hit of targeted block
+			x += sideForge.offsetX;
+			y += sideForge.offsetY;
+			z += sideForge.offsetZ;
+		
+		
+			TileEntityScreen screen = (TileEntityScreen) world.getBlockTileEntity(x, y, z);
+			if (screen == null) return false;
+			((ISideAttachment)screen).setSideAttached(ForgeDirection.getOrientation(side).getOpposite());
+			return true;
+		}
+		
+		return false;
 	}
 	
 	@Override
