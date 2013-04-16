@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
@@ -18,6 +19,8 @@ import com.dmillerw.wac.interfaces.IRotatable;
 import com.dmillerw.wac.interfaces.ISavableGate;
 import com.dmillerw.wac.interfaces.ISideAttachment;
 import com.dmillerw.wac.util.GateConnection;
+
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class TileEntityGate extends TileEntity implements ISideAttachment, IGateContainer, IRotatable, IConnectable {
 	
@@ -49,16 +52,32 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 				}
 			}
 			
+			PacketDispatcher.sendPacketToAllAround(xCoord, yCoord, zCoord, 64, worldObj.provider.dimensionId, getDescriptionPacket());
+			
 			dirty = false;
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		setSideAttached(ForgeDirection.getOrientation(nbt.getByte("attached")));
 		setRotation(ForgeDirection.getOrientation(nbt.getByte("rotation")));
 		setGate(nbt.getInteger("gateID"));
+		
+		NBTTagList connections = nbt.getTagList("connections");
+		connectedOutputs = new ArrayList[connections.tagCount()];
+		for (int i=0; i<connections.tagCount(); i++) {
+			NBTTagList connections2 = (NBTTagList) connections.tagAt(i);
+			List<GateConnection> list = new ArrayList<GateConnection>();
+			
+			for (int j=0; j<connections2.tagCount(); j++) {
+				list.add(new GateConnection((NBTTagCompound) connections2.tagAt(j)));
+			}
+			
+			connectedOutputs[i] = list;
+		}
 		
 		if (gate instanceof ISavableGate) {
 			((ISavableGate)gate).readFromNBT(nbt);
@@ -71,6 +90,18 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 		nbt.setByte("attached", (byte) attached.ordinal());
 		nbt.setByte("rotation", (byte) rotation.ordinal());
 		nbt.setInteger("gateID", gateID);
+		
+		NBTTagList connections = new NBTTagList();
+		for (List<GateConnection> list : connectedOutputs) {
+			NBTTagList connections2 = new NBTTagList();
+			
+			for (GateConnection connect : list) {
+				connections2.appendTag(connect.writeToNBT());
+			}
+			
+			connections.appendTag(connections2);
+		}
+		nbt.setTag("connections", connections);
 		
 		if (gate instanceof ISavableGate) {
 			((ISavableGate)gate).writeToNBT(nbt);
