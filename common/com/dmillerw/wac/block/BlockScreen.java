@@ -29,7 +29,7 @@ public class BlockScreen extends BlockContainer {
 		setCreativeTab(WACMain.wacCreativeTabBlocks);
 	}
 
-public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {return null;}
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {return null;}
 	
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockID) {
 		ISideAttachment attached = (ISideAttachment) world.getBlockTileEntity(x, y, z);
