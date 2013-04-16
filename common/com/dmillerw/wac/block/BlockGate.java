@@ -18,6 +18,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 import com.dmillerw.wac.WACMain;
 import com.dmillerw.wac.gates.GateManager;
+import com.dmillerw.wac.interfaces.IHandleActivation;
 import com.dmillerw.wac.interfaces.ISideAttachment;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.tileentity.TileEntityGate;
@@ -74,19 +75,8 @@ public class BlockGate extends BlockContainer {
 		
 		if (world.isRemote) return false;
 		
-		TileEntityGate container = (TileEntityGate) world.getBlockTileEntity(x, y, z);
-		
-		if (container.outputs != null) {
-			player.addChatMessage("OUTPUT:");
-			for (Object obj : container.outputs) {
-				player.addChatMessage(""+obj);
-			}
-		}
-		if (container.inputs != null) {
-			player.addChatMessage("INPUT:");
-			for (Object obj : container.inputs) {
-				player.addChatMessage(""+obj);
-			}
+		if (world.getBlockTileEntity(x, y, z) instanceof IHandleActivation) {
+			((IHandleActivation)world.getBlockTileEntity(x, y, z)).onBlockActivated(world, x, y, z, player);
 		}
 		
 		return true;

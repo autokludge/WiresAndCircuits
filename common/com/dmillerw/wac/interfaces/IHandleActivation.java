@@ -5,6 +5,6 @@ import net.minecraft.world.World;
 
 public interface IHandleActivation {
 
-	public boolean onGateActivated(World world, int x, int y, int z, EntityPlayer player);
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player);
 	
 }
