@@ -8,6 +8,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 import com.dmillerw.wac.WACMain;
+import com.dmillerw.wac.interfaces.IConnectable;
 import com.dmillerw.wac.interfaces.IGateContainer;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.util.BlockCoord;
@@ -52,8 +53,8 @@ public class ItemWireSpool extends Item {
 			endIndex = 0;
 			
 			//Might be temp
-			IGateContainer gate = (IGateContainer) world.getBlockTileEntity(startGate.x, startGate.y, startGate.z);
-			gate.linkGate(startIndex, new GateConnection(endGate, endIndex));
+			IConnectable gate = (IConnectable) world.getBlockTileEntity(startGate.x, startGate.y, startGate.z);
+			gate.linkOutput(startIndex, new GateConnection(endGate, endIndex));
 			
 			//End
 			startGate = null;

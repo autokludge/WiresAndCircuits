@@ -18,7 +18,6 @@ import net.minecraftforge.common.ForgeDirection;
 
 import com.dmillerw.wac.WACMain;
 import com.dmillerw.wac.gates.GateManager;
-import com.dmillerw.wac.interfaces.IGateContainer;
 import com.dmillerw.wac.interfaces.ISideAttachment;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.tileentity.TileEntityGate;

@@ -12,13 +12,14 @@ import net.minecraftforge.common.ForgeDirection;
 
 import com.dmillerw.wac.gates.Gate;
 import com.dmillerw.wac.gates.GateManager;
+import com.dmillerw.wac.interfaces.IConnectable;
 import com.dmillerw.wac.interfaces.IGateContainer;
 import com.dmillerw.wac.interfaces.IRotatable;
 import com.dmillerw.wac.interfaces.ISavableGate;
 import com.dmillerw.wac.interfaces.ISideAttachment;
 import com.dmillerw.wac.util.GateConnection;
 
-public class TileEntityGate extends TileEntity implements ISideAttachment, IGateContainer, IRotatable {
+public class TileEntityGate extends TileEntity implements ISideAttachment, IGateContainer, IRotatable, IConnectable {
 	
 	private ForgeDirection attached;
 	private ForgeDirection rotation;
@@ -39,13 +40,11 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 		if (worldObj.isRemote) return;
 		
 		if (dirty) {
-			System.out.println("Gate update @ "+xCoord+", "+yCoord+", "+zCoord);
-			System.out.println("Gate == "+gate.getName());
 			gate.logic(this);
 			
 			for (int i=0; i<connectedOutputs.length; i++) {
 				for (GateConnection connection : connectedOutputs[i]) {
-					IGateContainer container = (IGateContainer) worldObj.getBlockTileEntity(connection.gateLocation.x, connection.gateLocation.y, connection.gateLocation.z);
+					IConnectable container = (IConnectable) worldObj.getBlockTileEntity(connection.gateLocation.x, connection.gateLocation.y, connection.gateLocation.z);
 					container.receiveInput(connection.gateIndex, outputs[i]);
 				}
 			}
@@ -144,7 +143,7 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 		return gate;
 	}
 	
-	public void linkGate(int index, GateConnection end) {
+	public void linkOutput(int index, GateConnection end) {
 		connectedOutputs[index].add(end);
 		dirty = true;
 	}
