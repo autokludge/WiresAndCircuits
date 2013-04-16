@@ -22,6 +22,7 @@ public abstract class PacketWAC {
 		ImmutableBiMap.Builder<Integer, Class<? extends PacketWAC>> builder = ImmutableBiMap.builder();
 		
 		//Default packets go here
+		builder.put(1, PacketLinkOutput.class);
 		
 		idMap = builder.build();
 	}
@@ -47,7 +48,7 @@ public abstract class PacketWAC {
 		ByteArrayDataOutput out = ByteStreams.newDataOutput();
 		out.writeByte(getPacketID());
 		write(out);
-		return PacketDispatcher.getPacket(ModInfo.MOD_ID, out.toByteArray());
+		return PacketDispatcher.getPacket(ModInfo.MOD_CHANNEL, out.toByteArray());
 	}
 	
 	public abstract void write(ByteArrayDataOutput out);

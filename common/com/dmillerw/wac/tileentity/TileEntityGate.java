@@ -18,7 +18,7 @@ import com.dmillerw.wac.interfaces.IGateContainer;
 import com.dmillerw.wac.interfaces.IRotatable;
 import com.dmillerw.wac.interfaces.ISavableGate;
 import com.dmillerw.wac.interfaces.ISideAttachment;
-import com.dmillerw.wac.util.GateConnection;
+import com.dmillerw.wac.util.DataConnection;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 
@@ -34,7 +34,7 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 	public Object[] inputs;
 	public Object[] outputs;
 	
-	public List<GateConnection>[] connectedOutputs;
+	public List<DataConnection>[] connectedOutputs;
 	
 	public boolean dirty = true;
 	
@@ -46,7 +46,7 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 			gate.logic(this);
 			
 			for (int i=0; i<connectedOutputs.length; i++) {
-				for (GateConnection connection : connectedOutputs[i]) {
+				for (DataConnection connection : connectedOutputs[i]) {
 					IConnectable container = (IConnectable) worldObj.getBlockTileEntity(connection.gateLocation.x, connection.gateLocation.y, connection.gateLocation.z);
 					container.receiveInput(connection.gateIndex, outputs[i]);
 				}
@@ -70,10 +70,10 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 		connectedOutputs = new ArrayList[connections.tagCount()];
 		for (int i=0; i<connections.tagCount(); i++) {
 			NBTTagList connections2 = (NBTTagList) connections.tagAt(i);
-			List<GateConnection> list = new ArrayList<GateConnection>();
+			List<DataConnection> list = new ArrayList<DataConnection>();
 			
 			for (int j=0; j<connections2.tagCount(); j++) {
-				list.add(new GateConnection((NBTTagCompound) connections2.tagAt(j)));
+				list.add(new DataConnection((NBTTagCompound) connections2.tagAt(j)));
 			}
 			
 			connectedOutputs[i] = list;
@@ -92,10 +92,10 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 		nbt.setInteger("gateID", gateID);
 		
 		NBTTagList connections = new NBTTagList();
-		for (List<GateConnection> list : connectedOutputs) {
+		for (List<DataConnection> list : connectedOutputs) {
 			NBTTagList connections2 = new NBTTagList();
 			
-			for (GateConnection connect : list) {
+			for (DataConnection connect : list) {
 				connections2.appendTag(connect.writeToNBT());
 			}
 			
@@ -161,7 +161,7 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 			outputs = GateManager.generateBlankOutputArray(gate);
 			connectedOutputs = new List[outputs.length];
 			for (int i=0; i<connectedOutputs.length; i++) {
-				connectedOutputs[i] = new ArrayList<GateConnection>();
+				connectedOutputs[i] = new ArrayList<DataConnection>();
 			}
 		}
 	}
@@ -174,7 +174,7 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 		return gate;
 	}
 	
-	public void linkOutput(int index, GateConnection end) {
+	public void linkOutput(int index, DataConnection end) {
 		connectedOutputs[index].add(end);
 		dirty = true;
 	}

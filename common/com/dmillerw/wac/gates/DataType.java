@@ -4,12 +4,12 @@ public enum DataType {
 
 	NUMBER,
 	VECTOR,
-	VECTOR2D,
+	VECTOR3D,
 	VECTOR4D,
 	ANGLE,
-	RANGER,
+	RANGER, //Still to be implemented
 	MATRIX,
-	MATRIX2D,
+	MATRIX3D,
 	MATRIX4D,
 	ENTITY,
 	STRING;

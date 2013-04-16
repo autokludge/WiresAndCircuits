@@ -2,18 +2,18 @@ package com.dmillerw.wac.util;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class GateConnection {
+public class DataConnection {
 
 	public BlockCoord gateLocation;
 	
 	public int gateIndex;
 	
-	public GateConnection(BlockCoord loc, int index) {
+	public DataConnection(BlockCoord loc, int index) {
 		this.gateLocation = loc;
 		this.gateIndex = index;
 	}
 	
-	public GateConnection(NBTTagCompound nbt) {
+	public DataConnection(NBTTagCompound nbt) {
 		this(new BlockCoord(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z")), nbt.getInteger("index"));
 	}
 	

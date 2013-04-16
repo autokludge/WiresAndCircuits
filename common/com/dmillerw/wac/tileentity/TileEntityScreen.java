@@ -4,7 +4,7 @@ import com.dmillerw.wac.gates.DataType;
 import com.dmillerw.wac.interfaces.IConnectable;
 import com.dmillerw.wac.interfaces.IDataHandler;
 import com.dmillerw.wac.interfaces.ISideAttachment;
-import com.dmillerw.wac.util.GateConnection;
+import com.dmillerw.wac.util.DataConnection;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -49,7 +49,7 @@ public class TileEntityScreen extends TileEntity implements ISideAttachment, IDa
 	}
 
 	@Override
-	public void linkOutput(int index, GateConnection end) {}
+	public void linkOutput(int index, DataConnection end) {}
 
 	@Override
 	public void receiveInput(int index, Object value) {

@@ -16,7 +16,7 @@ public class ItemHandler {
 		for (int i=0; i<ItemIngot.itemNames.length; i++) {
 			LanguageRegistry.addName(new ItemStack(itemIngot, 1, i), ItemIngot.itemNames[i]);
 		}
-		
+
 		wireSpool = new ItemWireSpool(ItemIDs.getID("wireSpool")).setUnlocalizedName("wireSpool");
 		GameRegistry.registerItem(wireSpool, "wireSpool");
 		LanguageRegistry.addName(wireSpool, "Wire Spool");

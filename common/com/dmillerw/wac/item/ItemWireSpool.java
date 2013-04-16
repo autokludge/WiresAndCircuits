@@ -10,8 +10,12 @@ import net.minecraft.world.World;
 import com.dmillerw.wac.WACMain;
 import com.dmillerw.wac.interfaces.IConnectable;
 import com.dmillerw.wac.lib.ModInfo;
+import com.dmillerw.wac.network.packet.PacketBlockCoord;
+import com.dmillerw.wac.network.packet.PacketLinkOutput;
 import com.dmillerw.wac.util.BlockCoord;
-import com.dmillerw.wac.util.GateConnection;
+import com.dmillerw.wac.util.DataConnection;
+
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class ItemWireSpool extends Item {
 
@@ -52,8 +56,11 @@ public class ItemWireSpool extends Item {
 			endIndex = 0;
 			
 			//Might be temp
-			IConnectable gate = (IConnectable) world.getBlockTileEntity(startGate.x, startGate.y, startGate.z);
-			gate.linkOutput(startIndex, new GateConnection(endGate, endIndex));
+			PacketLinkOutput packet = new PacketLinkOutput();
+			((PacketBlockCoord)packet).coords = new BlockCoord(startGate.x, startGate.y, startGate.z);
+			packet.connection = new DataConnection(endGate, endIndex);
+			packet.startIndex = startIndex;
+			PacketDispatcher.sendPacketToServer(packet.makePacket());
 			
 			//End
 			startGate = null;
