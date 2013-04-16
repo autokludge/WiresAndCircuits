@@ -19,7 +19,9 @@ public class ItemHandler {
 
 		wireSpool = new ItemWireSpool(ItemIDs.getID("wireSpool")).setUnlocalizedName("wireSpool");
 		GameRegistry.registerItem(wireSpool, "wireSpool");
-		LanguageRegistry.addName(wireSpool, "Wire Spool");
+		for (int i=0; i<ItemWireSpool.itemNames.length; i++) {
+			LanguageRegistry.addName(new ItemStack(wireSpool, 1, i), ItemWireSpool.itemNames[i]);
+		}
 	}
 	
 }
