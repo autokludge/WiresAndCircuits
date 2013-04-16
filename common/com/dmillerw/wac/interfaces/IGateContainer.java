@@ -10,4 +10,8 @@ public interface IGateContainer {
 	
 	public Gate getGate();
 	
+	public Object[] getOutputs();
+	
+	public Object[] getInputs();
+	
 }

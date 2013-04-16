@@ -59,10 +59,10 @@ public class WACMain {
 	
 	@Init
 	public void init(FMLInitializationEvent e) {
-		gui = new GuiIndexSelection();
+//		gui = new GuiIndexSelection();
 		
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
-		TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);
+//		TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);
 		GateManager.initializeDefaultGates();
 		
 		BlockHandler.init();

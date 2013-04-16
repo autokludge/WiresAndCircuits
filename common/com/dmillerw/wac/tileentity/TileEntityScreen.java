@@ -7,6 +7,9 @@ import com.dmillerw.wac.interfaces.ISideAttachment;
 import com.dmillerw.wac.util.DataConnection;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
@@ -27,6 +30,20 @@ public class TileEntityScreen extends TileEntity implements ISideAttachment, IDa
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		setSideAttached(ForgeDirection.getOrientation(nbt.getByte("attached")));
+	}
+	
+	@Override
+	public Packet getDescriptionPacket() {
+		Packet132TileEntityData packet = new Packet132TileEntityData();
+		NBTTagCompound tag = new NBTTagCompound();
+		this.writeToNBT(tag);
+		packet.customParam1 = tag;
+		return packet;
+	}
+
+	@Override
+	public void onDataPacket(INetworkManager network, Packet132TileEntityData packet) {
+		readFromNBT(packet.customParam1);
 	}
 	
 	@Override

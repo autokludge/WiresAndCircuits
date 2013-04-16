@@ -20,8 +20,6 @@ import com.dmillerw.wac.interfaces.ISavableGate;
 import com.dmillerw.wac.interfaces.ISideAttachment;
 import com.dmillerw.wac.util.DataConnection;
 
-import cpw.mods.fml.common.network.PacketDispatcher;
-
 public class TileEntityGate extends TileEntity implements ISideAttachment, IGateContainer, IRotatable, IConnectable {
 	
 	private ForgeDirection attached;
@@ -54,8 +52,6 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 					//TODO remove dead outputs
 				}
 			}
-			
-			PacketDispatcher.sendPacketToAllAround(xCoord, yCoord, zCoord, 64, worldObj.provider.dimensionId, getDescriptionPacket());
 			
 			dirty = false;
 		}
@@ -115,22 +111,14 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 	public Packet getDescriptionPacket() {
 		Packet132TileEntityData packet = new Packet132TileEntityData();
 		NBTTagCompound tag = new NBTTagCompound();
-
 		this.writeToNBT(tag);
-
-		packet.xPosition = this.xCoord;
-		packet.yPosition = this.yCoord;
-		packet.zPosition = this.zCoord;
 		packet.customParam1 = tag;
-
 		return packet;
 	}
 
 	@Override
 	public void onDataPacket(INetworkManager network, Packet132TileEntityData packet) {
-		if (packet.xPosition == this.xCoord && packet.yPosition == this.yCoord && packet.zPosition == this.zCoord) {
-			readFromNBT(packet.customParam1);
-		}
+		readFromNBT(packet.customParam1);
 	}
 	
 	@Override
@@ -171,6 +159,14 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 	
 	public int getGateID() {
 		return gateID;
+	}
+	
+	public Object[] getOutputs() {
+		return outputs;
+	}
+	
+	public Object[] getInputs() {
+		return inputs;
 	}
 	
 	public Gate getGate() {
