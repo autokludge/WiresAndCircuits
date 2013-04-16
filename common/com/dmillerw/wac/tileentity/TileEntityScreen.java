@@ -12,6 +12,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityScreen extends TileEntity implements ISideAttachment, IDataHandler, IConnectable {
 
+	//TODO this isn't getting loaded from nbt
 	private ForgeDirection attached;
 	
 	public String input = "0";

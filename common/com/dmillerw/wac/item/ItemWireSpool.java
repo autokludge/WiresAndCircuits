@@ -56,6 +56,7 @@ public class ItemWireSpool extends Item {
 			endIndex = 0;
 			
 			//Might be temp
+			//TODO client never receives the update
 			PacketLinkOutput packet = new PacketLinkOutput();
 			((PacketBlockCoord)packet).coords = new BlockCoord(startGate.x, startGate.y, startGate.z);
 			packet.connection = new DataConnection(endGate, endIndex);

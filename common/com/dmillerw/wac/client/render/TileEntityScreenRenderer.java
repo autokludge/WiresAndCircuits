@@ -11,12 +11,15 @@ import com.dmillerw.wac.interfaces.ISideAttachment;
 import com.dmillerw.wac.tileentity.TileEntityScreen;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityScreenRenderer extends TileEntitySpecialRenderer {
 
+	@SideOnly(Side.CLIENT)
 	public void renderScreenAt(TileEntityScreen tile, double x, double y, double z, float f) {
 		String toDisplay = tile.input;
-		
+
 		GL11.glPushMatrix();
 		GL11.glTranslated(x+.5, y+.5, z+.5);
 		FontRenderer font = FMLClientHandler.instance().getClient().fontRenderer;

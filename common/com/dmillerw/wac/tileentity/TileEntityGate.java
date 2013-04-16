@@ -48,7 +48,10 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 			for (int i=0; i<connectedOutputs.length; i++) {
 				for (DataConnection connection : connectedOutputs[i]) {
 					IConnectable container = (IConnectable) worldObj.getBlockTileEntity(connection.gateLocation.x, connection.gateLocation.y, connection.gateLocation.z);
-					container.receiveInput(connection.gateIndex, outputs[i]);
+					if (container != null) {
+						container.receiveInput(connection.gateIndex, outputs[i]);
+					}
+					//TODO remove dead outputs
 				}
 			}
 			
