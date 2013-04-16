@@ -20,7 +20,7 @@ import com.dmillerw.wac.interfaces.ISavableGate;
 import com.dmillerw.wac.interfaces.ISideAttachment;
 import com.dmillerw.wac.util.DataConnection;
 
-import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class TileEntityGate extends TileEntity implements ISideAttachment, IGateContainer, IRotatable, IConnectable {
 	
@@ -54,6 +54,7 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 			}
 			
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			updateClients();
 			dirty = false;
 		}
 	}
@@ -110,10 +111,8 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 	
 	@Override
     public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-    	System.out.println(FMLCommonHandler.instance().getEffectiveSide());
 		readFromNBT(pkt.customParam1);
     	dirty = true;
-    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
     }
 
     @Override
@@ -126,6 +125,7 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 	@Override
 	public void setSideAttached(ForgeDirection side) {
 		attached = side;
+		dirty = true;
 	}
 
 	@Override
@@ -141,6 +141,7 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 	@Override
 	public void setRotation(ForgeDirection rotation) {
 		this.rotation = rotation;
+		dirty = true;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -186,6 +187,12 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 		//TODO type checking
 		inputs[index] = value;
 		dirty = true;
+	}
+	
+	public void updateClients(){
+		if(worldObj.isRemote) return;
+		Packet132TileEntityData packet = (Packet132TileEntityData) this.getDescriptionPacket();
+		PacketDispatcher.sendPacketToAllInDimension(packet, this.worldObj.provider.dimensionId);
 	}
 	
 	public boolean hasInputs() {
