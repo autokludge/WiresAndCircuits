@@ -14,9 +14,9 @@ public class PacketBlockCoord extends PacketWAC {
 	
 	@Override
 	public void write(ByteArrayDataOutput out) {
-		out.write(coords.x);
-		out.write(coords.y);
-		out.write(coords.z);
+		out.writeInt(coords.x);
+		out.writeInt(coords.y);
+		out.writeInt(coords.z);
 	}
 
 	@Override
