@@ -8,10 +8,11 @@ import net.minecraftforge.oredict.OreDictionary;
 import com.dmillerw.wac.gates.Gate;
 import com.dmillerw.wac.gates.GateManager;
 import com.dmillerw.wac.item.ItemHandler;
-import com.dmillerw.wac.item.block.ItemBlockGate;
 import com.dmillerw.wac.item.block.ItemBlockCleanroom;
+import com.dmillerw.wac.item.block.ItemBlockGate;
 import com.dmillerw.wac.item.block.ItemBlockMachine;
 import com.dmillerw.wac.item.block.ItemBlockOre;
+import com.dmillerw.wac.item.block.ItemBlockScreen;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -22,6 +23,7 @@ public class BlockHandler {
 	public static Block blockCleanroom;
 	public static Block blockGate;
 	public static Block blockMachine;
+	public static Block blockScreen;
 	
 	public static void init() {
 		blockOre = new BlockOre(BlockIDs.getID("blockOre")).setUnlocalizedName("blockOre");
@@ -50,6 +52,10 @@ public class BlockHandler {
 		for (int i=0; i<BlockMachine.machineNames.length; i++) {
 			LanguageRegistry.addName(new ItemStack(blockMachine, 1, i), BlockMachine.machineNames[i]);
 		}
+		
+		blockScreen = new BlockScreen(BlockIDs.getID("blockScreen")).setUnlocalizedName("blockScren");
+		GameRegistry.registerBlock(blockScreen, ItemBlockScreen.class, "blockScreen");
+		LanguageRegistry.addName(blockScreen, "Screen");
 		
 		addOreDictionarySupport();
 	}
