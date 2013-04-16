@@ -7,6 +7,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -17,6 +18,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 import com.dmillerw.wac.WACMain;
 import com.dmillerw.wac.gates.GateManager;
+import com.dmillerw.wac.interfaces.IGateContainer;
 import com.dmillerw.wac.interfaces.ISideAttachment;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.tileentity.TileEntityGate;
@@ -64,6 +66,31 @@ public class BlockGate extends BlockContainer {
 			world.setBlock(xOrig, yOrig, zOrig, 0);
 			return;
 		}
+	}
+	
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float f1, float f2, float f3) {
+		if (player.isSneaking()) {
+			return false;
+		}
+		
+		if (world.isRemote) return false;
+		
+		TileEntityGate container = (TileEntityGate) world.getBlockTileEntity(x, y, z);
+		
+		if (container.outputs != null) {
+			player.addChatMessage("OUTPUT:");
+			for (Object obj : container.outputs) {
+				player.addChatMessage(""+obj);
+			}
+		}
+		if (container.inputs != null) {
+			player.addChatMessage("INPUT:");
+			for (Object obj : container.inputs) {
+				player.addChatMessage(""+obj);
+			}
+		}
+		
+		return true;
 	}
 	
 	@Override

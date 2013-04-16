@@ -1,5 +1,8 @@
 package com.dmillerw.wac.tileentity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -9,10 +12,11 @@ import net.minecraftforge.common.ForgeDirection;
 
 import com.dmillerw.wac.gates.Gate;
 import com.dmillerw.wac.gates.GateManager;
-import com.dmillerw.wac.interfaces.ISideAttachment;
 import com.dmillerw.wac.interfaces.IGateContainer;
 import com.dmillerw.wac.interfaces.IRotatable;
 import com.dmillerw.wac.interfaces.ISavableGate;
+import com.dmillerw.wac.interfaces.ISideAttachment;
+import com.dmillerw.wac.util.GateConnection;
 
 public class TileEntityGate extends TileEntity implements ISideAttachment, IGateContainer, IRotatable {
 	
@@ -26,6 +30,8 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 	public Object[] inputs;
 	public Object[] outputs;
 	
+	public List<GateConnection>[] connectedOutputs;
+	
 	public boolean dirty = true;
 	
 	@Override
@@ -33,7 +39,17 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 		if (worldObj.isRemote) return;
 		
 		if (dirty) {
+			System.out.println("Gate update @ "+xCoord+", "+yCoord+", "+zCoord);
+			System.out.println("Gate == "+gate.getName());
 			gate.logic(this);
+			
+			for (int i=0; i<connectedOutputs.length; i++) {
+				for (GateConnection connection : connectedOutputs[i]) {
+					IGateContainer container = (IGateContainer) worldObj.getBlockTileEntity(connection.gateLocation.x, connection.gateLocation.y, connection.gateLocation.z);
+					container.receiveInput(connection.gateIndex, outputs[i]);
+				}
+			}
+			
 			dirty = false;
 		}
 	}
@@ -104,6 +120,7 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 		this.rotation = rotation;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void setGate(int id) {
 		gateID = id;
 		gate = GateManager.createGate(id);
@@ -112,6 +129,10 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 		}
 		if (gate.getOutputDataTypes() != null) {
 			outputs = GateManager.generateBlankOutputArray(gate);
+			connectedOutputs = new List[outputs.length];
+			for (int i=0; i<connectedOutputs.length; i++) {
+				connectedOutputs[i] = new ArrayList<GateConnection>();
+			}
 		}
 	}
 	
@@ -121,6 +142,17 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 	
 	public Gate getGate() {
 		return gate;
+	}
+	
+	public void linkGate(int index, GateConnection end) {
+		connectedOutputs[index].add(end);
+		dirty = true;
+	}
+	
+	public void receiveInput(int index, Object value) {
+		//TODO type checking
+		inputs[index] = value;
+		dirty = true;
 	}
 	
 	public boolean hasInputs() {
