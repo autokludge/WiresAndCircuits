@@ -12,4 +12,13 @@ public class BlockCoord {
 		this.z = z;
 	}
 	
+	public boolean equals(BlockCoord coord) {
+		if (coord == null) return false;
+		return equals(coord.x, coord.y, coord.z);
+	}
+	
+	public boolean equals(int x, int y, int z) {
+		return (this.x == x) && (this.y == y) && (this.z == z);
+	}
+	
 }

@@ -5,6 +5,8 @@ import net.minecraftforge.common.Configuration;
 
 import com.dmillerw.wac.block.BlockHandler;
 import com.dmillerw.wac.block.BlockIDs;
+import com.dmillerw.wac.client.gui.GuiIndexSelection;
+import com.dmillerw.wac.client.handler.TickHandler;
 import com.dmillerw.wac.core.CommonProxy;
 import com.dmillerw.wac.core.CreativeTabWAC;
 import com.dmillerw.wac.core.handler.GuiHandler;
@@ -26,6 +28,8 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid=ModInfo.MOD_ID, name=ModInfo.MOD_NAME, version=ModInfo.MOD_VERSION, dependencies="required-after:BuildCraft|Core")
 @NetworkMod(channels = {ModInfo.MOD_CHANNEL}, serverSideRequired=false, clientSideRequired=true, packetHandler=PacketHandler.class)
@@ -40,6 +44,8 @@ public class WACMain {
 	public static CreativeTabs wacCreativeTabBlocks = new CreativeTabWAC("blocks", "block", "blockCleanroom", "WaC Blocks");
 	public static CreativeTabs wacCreativeTabGates = new CreativeTabWAC("gates", "block", "blockGate", "WaC Gates");
 	
+	public GuiIndexSelection gui;
+	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent e) {
 		LogHelper.init();
@@ -53,7 +59,10 @@ public class WACMain {
 	
 	@Init
 	public void init(FMLInitializationEvent e) {
+		gui = new GuiIndexSelection();
+		
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
+		TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);
 		GateManager.initializeDefaultGates();
 		
 		BlockHandler.init();

@@ -7,6 +7,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -36,7 +37,11 @@ public class BlockGate extends BlockContainer {
 		setCreativeTab(WACMain.wacCreativeTabGates);
 	}
 	
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {return null;}
+	@SuppressWarnings("rawtypes")
+	public void addCollisionBoxesToList(World par1World, int par2, int par3, int par4, AxisAlignedBB par5AxisAlignedBB, List par6List, Entity par7Entity) {
+        this.setBlockBoundsBasedOnState(par1World, par2, par3, par4);
+        super.addCollisionBoxesToList(par1World, par2, par3, par4, par5AxisAlignedBB, par6List, par7Entity);
+    }
 	
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockID) {
 		ISideAttachment attached = (ISideAttachment) world.getBlockTileEntity(x, y, z);
@@ -77,20 +82,6 @@ public class BlockGate extends BlockContainer {
 		
 		if (world.getBlockTileEntity(x, y, z) instanceof IHandleActivation) {
 			((IHandleActivation)world.getBlockTileEntity(x, y, z)).onBlockActivated(world, x, y, z, player);
-		}
-		
-		TileEntityGate container = (TileEntityGate) world.getBlockTileEntity(x, y, z);
-		if (container.outputs != null) {
-			player.addChatMessage("OUTPUT:");
-			for (Object obj : container.outputs) {
-				player.addChatMessage(""+obj);
-			}
-		}
-		if (container.inputs != null) {
-			player.addChatMessage("INPUT:");
-			for (Object obj : container.inputs) {
-				player.addChatMessage(""+obj);
-			}
 		}
 		
 		return true;
