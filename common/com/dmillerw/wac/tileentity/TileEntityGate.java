@@ -20,6 +20,8 @@ import com.dmillerw.wac.interfaces.ISavableGate;
 import com.dmillerw.wac.interfaces.ISideAttachment;
 import com.dmillerw.wac.util.DataConnection;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+
 public class TileEntityGate extends TileEntity implements ISideAttachment, IGateContainer, IRotatable, IConnectable {
 	
 	private ForgeDirection attached;
@@ -38,8 +40,6 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 	
 	@Override
 	public void updateEntity() {
-		if (worldObj.isRemote) return;
-		
 		if (dirty) {
 			gate.logic(this);
 			
@@ -53,6 +53,7 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 				}
 			}
 			
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			dirty = false;
 		}
 	}
@@ -108,18 +109,19 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 	}
 	
 	@Override
-	public Packet getDescriptionPacket() {
-		Packet132TileEntityData packet = new Packet132TileEntityData();
-		NBTTagCompound tag = new NBTTagCompound();
-		this.writeToNBT(tag);
-		packet.customParam1 = tag;
-		return packet;
-	}
+    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
+    	System.out.println(FMLCommonHandler.instance().getEffectiveSide());
+		readFromNBT(pkt.customParam1);
+    	dirty = true;
+    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
 
-	@Override
-	public void onDataPacket(INetworkManager network, Packet132TileEntityData packet) {
-		readFromNBT(packet.customParam1);
-	}
+    @Override
+    public Packet getDescriptionPacket() {
+		NBTTagCompound tag = new NBTTagCompound();
+		writeToNBT(tag);
+		return new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, tag);
+    }
 	
 	@Override
 	public void setSideAttached(ForgeDirection side) {
@@ -155,6 +157,8 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 				connectedOutputs[i] = new ArrayList<DataConnection>();
 			}
 		}
+		
+		dirty = true;
 	}
 	
 	public int getGateID() {

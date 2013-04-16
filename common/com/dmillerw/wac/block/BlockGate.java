@@ -78,10 +78,24 @@ public class BlockGate extends BlockContainer {
 			return false;
 		}
 		
-		if (world.isRemote) return false;
+		if (!world.isRemote) return false;
 		
 		if (world.getBlockTileEntity(x, y, z) instanceof IHandleActivation) {
 			((IHandleActivation)world.getBlockTileEntity(x, y, z)).onBlockActivated(world, x, y, z, player);
+		}
+		
+		TileEntityGate container = (TileEntityGate) world.getBlockTileEntity(x, y, z);
+		if (container.outputs != null) {
+			player.addChatMessage("OUTPUT:");
+			for (Object obj : container.outputs) {
+				player.addChatMessage("" + obj);
+			}
+		}
+		if (container.inputs != null) {
+			player.addChatMessage("INPUT:");
+			for (Object obj : container.inputs) {
+				player.addChatMessage("" + obj);
+			}
 		}
 		
 		return true;

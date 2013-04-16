@@ -33,18 +33,17 @@ public class TileEntityScreen extends TileEntity implements ISideAttachment, IDa
 	}
 	
 	@Override
-	public Packet getDescriptionPacket() {
-		Packet132TileEntityData packet = new Packet132TileEntityData();
-		NBTTagCompound tag = new NBTTagCompound();
-		this.writeToNBT(tag);
-		packet.customParam1 = tag;
-		return packet;
-	}
+    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
+    	readFromNBT(pkt.customParam1);
+    	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
 
-	@Override
-	public void onDataPacket(INetworkManager network, Packet132TileEntityData packet) {
-		readFromNBT(packet.customParam1);
-	}
+    @Override
+    public Packet getDescriptionPacket() {
+		NBTTagCompound tag = new NBTTagCompound();
+		writeToNBT(tag);
+		return new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, tag);
+    }
 	
 	@Override
 	public void setSideAttached(ForgeDirection side) {

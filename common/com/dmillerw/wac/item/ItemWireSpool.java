@@ -14,6 +14,7 @@ import com.dmillerw.wac.WACMain;
 import com.dmillerw.wac.interfaces.IConnectable;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.util.BlockCoord;
+import com.dmillerw.wac.util.DataConnection;
 
 public class ItemWireSpool extends Item {
 
@@ -44,38 +45,32 @@ public class ItemWireSpool extends Item {
 		
 		//TODO REWRITE!
 //		//TODO so much type checking
-//		if (startGate == null) {
-//			TickHandler.outOrIn = 0;
-//			startGate = new BlockCoord(x, y, z);
-//			//Temp
-//			startIndex = TickHandler.selectedIndex;
-//			player.addChatMessage("Link started");
-//			return true;
-//		} else if (endGate == null) {
-//			TickHandler.outOrIn = 1;
-//			endGate = new BlockCoord(x, y, z);
-//			if (startGate == endGate) {
-//				endGate = null;
-//				return false;
-//			}
-//			//Temp
-//			endIndex = TickHandler.selectedIndex;
-//			
-//			//Might be temp
-//			//TODO client never receives the update
-//			PacketLinkOutput packet = new PacketLinkOutput();
-//			((PacketBlockCoord)packet).coords = new BlockCoord(startGate.x, startGate.y, startGate.z);
-//			packet.connection = new DataConnection(endGate, endIndex);
-//			packet.startIndex = startIndex;
-//			PacketDispatcher.sendPacketToServer(packet.makePacket());
-//			
-//			//End
-//			startGate = null;
-//			endGate = null;
-//			
-//			player.addChatMessage("Link ended");
-//			return true;
-//		}
+		if (startGate == null) {
+			startGate = new BlockCoord(x, y, z);
+			//Temp
+			startIndex = 0;
+			player.addChatMessage("Link started");
+			return true;
+		} else if (endGate == null) {
+			endGate = new BlockCoord(x, y, z);
+			if (startGate == endGate) {
+				endGate = null;
+				return false;
+			}
+			//Temp
+			endIndex = 0;
+			
+			//Might be temp
+			IConnectable connectable = (IConnectable) world.getBlockTileEntity(startGate.x, startGate.y, startGate.z);
+			connectable.linkOutput(startIndex, new DataConnection(endGate, endIndex));
+			
+			//End
+			startGate = null;
+			endGate = null;
+			
+			player.addChatMessage("Link ended");
+			return true;
+		}
 		
 		return true;
 	}
