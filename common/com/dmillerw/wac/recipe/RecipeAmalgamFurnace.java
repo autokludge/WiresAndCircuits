@@ -20,7 +20,7 @@ public class RecipeAmalgamFurnace {
 		this.itemOutput = itemOutput;
 		this.liquidOutput = liquidOutput;
 		this.powerUsage = powerUsage;
-		this.cookTime = cookTime;
+		this.cookTime = cookTime / 5;
 	}
 	
 	public RecipeAmalgamFurnace(ItemStack input1, ItemStack input2, ItemStack itemOutput, int powerUsage, int cookTime) {

@@ -37,7 +37,6 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	
 	private static final int MAX_LIQUID = LiquidContainerRegistry.BUCKET_VOLUME * 10;
 	private static final int MAX_ENERGY = 5000;
-	private static final int USE_ENERGY = 5;
 	
 	public int currentBurnTime = 0;
 	public int itemBurnTime = 0;
@@ -56,26 +55,29 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	
 	@Override
 	public void updateEntity() {
-		if (worldObj.isRemote) return;
+		if (worldObj.isRemote || worldObj.getWorldTime() % 5 != 0) return;
+		if (power.getEnergyStored() < 100 && itemBurnTime == 0) return;
 		
 		if (canSmelt()) {
-			if (getRecipe() != null && roomForOutput(getRecipe())) {
-				if (itemBurnTime > 0) {
-					if (currentBurnTime <= itemBurnTime) {
-						if (power.useEnergy(USE_ENERGY, USE_ENERGY, true) == USE_ENERGY) {
-							System.out.println("Burn Time ++");
+			if (getRecipe() != null) {
+				if (roomForOutput(getRecipe())) {
+					if (itemBurnTime > 0) {
+						if (currentBurnTime <= itemBurnTime) {
 							currentBurnTime++;
+						} else {
+							if (power.useEnergy(getRecipe().powerUsage / 2, getRecipe().powerUsage / 2, true) == getRecipe().powerUsage / 2) {
+								currentBurnTime = 0;
+								smelt();
+							}
 						}
 					} else {
-						if (power.useEnergy(getRecipe().powerUsage, getRecipe().powerUsage, true) == getRecipe().powerUsage) {
-							System.out.println("Smelted");
-							currentBurnTime = 0;
-							smelt();
-						}
+						itemBurnTime = getRecipe().cookTime;
 					}
-				} else {
-					itemBurnTime = getRecipe().cookTime;
 				}
+			}
+		} else {
+			if (currentBurnTime > 0) {
+				currentBurnTime = 0;
 			}
 		}
 	}
@@ -83,8 +85,17 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	public void smelt() {
 		RecipeAmalgamFurnace recipe = getRecipe();
 		
-		inv[0].stackSize -= recipe.input1.stackSize;
-		inv[1].stackSize -= recipe.input2.stackSize;
+		if (inv[0].stackSize == 1) {
+			setInventorySlotContents(0, null);
+		} else {
+			inv[0].stackSize -= recipe.input1.stackSize;
+		}
+		
+		if (inv[1].stackSize == 1) {
+			setInventorySlotContents(1, null);
+		} else {
+			inv[1].stackSize -= recipe.input2.stackSize;
+		}
 		
 		if (inv[2] == null) {
 			inv[2] = recipe.itemOutput;
@@ -124,16 +135,12 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	}
 	
 	public RecipeAmalgamFurnace getRecipe() {
-//		for (RecipeAmalgamFurnace recipe : RecipeManager.amalgamFurnaceRecipes) {
-//			if (recipe.matchesRecipe(inv[0], inv[1])) {
-//				return recipe;
-//			}
-//		}
-		
-		if (RecipeManager.amalgamFurnaceRecipes.get(0).matchesRecipe(inv[0], inv[1])) {
-			return RecipeManager.amalgamFurnaceRecipes.get(0);
+		for (RecipeAmalgamFurnace recipe : RecipeManager.amalgamFurnaceRecipes) {
+			if (recipe.matchesRecipe(inv[0], inv[1])) {
+				return recipe;
+			}
 		}
-		
+
 		return null;
 	}
 	
@@ -145,16 +152,33 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		itemBurnTime = nbt.getInteger("itemBurnTime");
 		PowerFramework.currentFramework.loadPowerProvider(this, nbt);
 		
+		/* ITEMS */
 		NBTTagList nbttaglist = nbt.getTagList("Items");
-		this.inv = new ItemStack[this.getSizeInventory()];
-		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-			NBTTagCompound nbt1 = (NBTTagCompound) nbttaglist.tagAt(i);
-			byte slot = nbt1.getByte("Slot");
+        this.inv = new ItemStack[this.getSizeInventory()];
+        for (int i = 0; i < nbttaglist.tagCount(); ++i) {
+            NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.tagAt(i);
+            byte b0 = nbttagcompound1.getByte("Slot");
 
-			if (slot >= 0 && slot < this.inv.length) {
-				this.inv[slot] = ItemStack.loadItemStackFromNBT(nbt1);
-			}
-		}
+            if (b0 >= 0 && b0 < this.inv.length) {
+                this.inv[b0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+            }
+        }
+        
+        /* LIQUID */
+        if (nbt.hasKey("liquid")) {
+        	NBTTagCompound liquid = nbt.getCompoundTag("liquid");
+        	
+        	int id = liquid.getInteger("itemID");
+        	int meta = liquid.getInteger("itemMeta");
+        	int amount = liquid.getInteger("amount");
+        	
+        	LiquidStack liquidStack = new LiquidStack(id, amount, meta);
+        	if (liquid.hasKey("tags")) {
+        		liquidStack.extra = liquid.getCompoundTag("tags");
+        	}
+        	
+        	recipeResultTank.setLiquid(liquidStack);
+        }
 	}
 	
 	@Override
@@ -165,16 +189,33 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		nbt.setInteger("currentBurnTime", currentBurnTime);
 		nbt.setInteger("itemBurnTime", itemBurnTime);
 		
-		NBTTagList items = new NBTTagList();
-		for (int i=0; i<inv.length; i++) {
-			if (getStackInSlot(i) != null) {
-				ItemStack stack = getStackInSlot(i);
-				NBTTagCompound itemNBT = new NBTTagCompound();
-				itemNBT = stack.writeToNBT(itemNBT);
-				items.appendTag(itemNBT);
+		/* ITEMS */
+		NBTTagList nbttaglist = new NBTTagList();
+		for (int i = 0; i < this.inv.length; ++i)
+        {
+            if (this.inv[i] != null)
+            {
+                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                nbttagcompound1.setByte("Slot", (byte)i);
+                this.inv[i].writeToNBT(nbttagcompound1);
+                nbttaglist.appendTag(nbttagcompound1);
+            }
+        }
+		nbt.setTag("Items", nbttaglist);
+		
+		/* LIQUID */
+		if (recipeResultTank.getLiquid() != null) {
+			NBTTagCompound liquid = new NBTTagCompound();
+			
+			liquid.setInteger("itemID", recipeResultTank.getLiquid().itemID);
+			liquid.setInteger("itemMeta", recipeResultTank.getLiquid().itemMeta);
+			liquid.setInteger("amount", recipeResultTank.getLiquid().amount);
+			if (recipeResultTank.getLiquid().extra != null) {
+				liquid.setTag("tags", recipeResultTank.getLiquid().extra);
 			}
+			
+			nbt.setTag("liquid", liquid);
 		}
-		nbt.setTag("Items", items);
 	}
 	
 	@Override
@@ -321,7 +362,15 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	}
 
 	public int getScaledLiquid(int i) {
-		return recipeResultTank.getCapacity() != 0 ? (int) (((float) recipeResultTank.getCapacity() / (float) (MAX_LIQUID)) * i) : 0;
+		return getLiquidAmount() != 0 ? (int) (((float) getLiquidAmount() / (float) (MAX_LIQUID)) * i) : 0;
+	}
+	
+	public int getLiquidAmount() {
+		if (recipeResultTank.getLiquid() == null) {
+			return 0;
+		}
+		
+		return recipeResultTank.getLiquid().amount;
 	}
 	
 	@Override

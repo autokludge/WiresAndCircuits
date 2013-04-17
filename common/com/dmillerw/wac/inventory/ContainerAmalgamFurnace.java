@@ -4,7 +4,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
 import com.dmillerw.wac.tileentity.TileEntityAmalgamFurnace;
 
@@ -14,8 +13,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ContainerAmalgamFurnace extends Container {
 
 	private TileEntityAmalgamFurnace tile;
-	
-	private ItemStack[] inv;
 	
 	private int BURN_TIME_ID = 0;
 	private int ENERGY_AMOUNT_ID = 1;
@@ -27,7 +24,6 @@ public class ContainerAmalgamFurnace extends Container {
 	
 	public ContainerAmalgamFurnace(EntityPlayer player, TileEntityAmalgamFurnace tile) {
 		this.tile = tile;
-		this.inv = new ItemStack[tile.getSizeInventory()];
 		
 		/* INPUT/OUTPUT SLOTS */
 		addSlotToContainer(new Slot(tile, 0, 56, 17));
@@ -50,7 +46,7 @@ public class ContainerAmalgamFurnace extends Container {
       super.addCraftingToCrafters(par1ICrafting);
       par1ICrafting.sendProgressBarUpdate(this, BURN_TIME_ID, tile.currentBurnTime);
       par1ICrafting.sendProgressBarUpdate(this, ENERGY_AMOUNT_ID, (int) tile.power.getEnergyStored());
-      par1ICrafting.sendProgressBarUpdate(this, LIQUID_AMOUNT_ID, tile.recipeResultTank.getCapacity());
+      par1ICrafting.sendProgressBarUpdate(this, LIQUID_AMOUNT_ID, tile.getLiquidAmount());
     }
 	
 	@Override
@@ -58,13 +54,6 @@ public class ContainerAmalgamFurnace extends Container {
 		super.detectAndSendChanges();
 		
 		for (int j = 0; j < this.crafters.size(); ++j) {
-			for (int i=0; i<tile.getSizeInventory(); i++) {
-				if (!areItemStacksEqual(inv[i], tile.getStackInSlot(i))) {
-					((ICrafting) this.crafters.get(j)).sendSlotContents(this, i, tile.getStackInSlot(i));
-					inv[i] = tile.getStackInSlot(i);
-				}
-			}
-			
 			if (lastBurnTime != tile.currentBurnTime) {
 				((ICrafting) this.crafters.get(j)).sendProgressBarUpdate(this, BURN_TIME_ID, tile.currentBurnTime);
 			}
@@ -74,13 +63,13 @@ public class ContainerAmalgamFurnace extends Container {
 			}
 			
 			if (lastLiquidAmount != tile.recipeResultTank.getCapacity()) {
-				((ICrafting) this.crafters.get(j)).sendProgressBarUpdate(this, LIQUID_AMOUNT_ID, tile.recipeResultTank.getCapacity());
+				((ICrafting) this.crafters.get(j)).sendProgressBarUpdate(this, LIQUID_AMOUNT_ID, tile.getLiquidAmount());
 			}
 		}
 		
 		this.lastBurnTime = tile.currentBurnTime;
 		this.lastEnergyAmount = (int) tile.power.getEnergyStored();
-		this.lastLiquidAmount = tile.recipeResultTank.getCapacity();
+		this.lastLiquidAmount = tile.getLiquidAmount();
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -104,24 +93,4 @@ public class ContainerAmalgamFurnace extends Container {
 		return tile.isUseableByPlayer(entityplayer);
 	}
 
-	private boolean areItemStacksEqual(ItemStack stack1, ItemStack stack2) {
-		if (stack1 == null && stack2 == null) {
-			return true;
-		}
-		
-		if (stack1 == null && stack2 != null) {
-			return false;
-		}
-		
-		if (stack1 != null && stack2 == null) {
-			return false;
-		}
-		
-		if (stack1 != null && stack2 != null) {
-			return ItemStack.areItemStacksEqual(stack1, stack2);
-		}
-		
-		return false;
-	}
-	
 }
