@@ -10,6 +10,11 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.liquids.ILiquidTank;
+import net.minecraftforge.liquids.ITankContainer;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
+import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.liquids.LiquidTank;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
@@ -20,13 +25,15 @@ import com.dmillerw.wac.interfaces.IRotatable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, IInventory, IPowerReceptor, IMachine {
+public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, IInventory, IPowerReceptor, IMachine, ITankContainer {
 
 	private ForgeDirection rotation;
 	
 	private ItemStack[] inv = new ItemStack[3];
 	
-//	private static final int MAX_LIQUID = LiquidContainerRegistry.BUCKET_VOLUME * 10;
+	public LiquidTank recipeResultTank = new LiquidTank(MAX_LIQUID);
+	
+	private static final int MAX_LIQUID = LiquidContainerRegistry.BUCKET_VOLUME * 10;
 	private static final int MAX_ENERGY = 5000;
 	
 	public int currentBurnTime = 0;
@@ -36,6 +43,21 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	public int fakePowerAmount = 0;
 	
 	public IPowerProvider power;
+	
+	@Override
+	public void updateEntity() {
+		if (worldObj.isRemote) return;
+		
+		System.out.println(getScaledLiquid(52));
+		
+		itemBurnTime = 100;
+		
+		if (currentBurnTime <= itemBurnTime) {
+			currentBurnTime++;
+		} else {
+			currentBurnTime = 0;
+		}
+	}
 	
 	public TileEntityAmalgamFurnace() {
 		power = PowerFramework.currentFramework.createPowerProvider();
@@ -225,6 +247,10 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		return fakePowerAmount != 0 ? (int) (((float) fakePowerAmount / (float) (MAX_ENERGY)) * i) : 0;
 	}
 
+	public int getScaledLiquid(int i) {
+		return recipeResultTank.getCapacity() != 0 ? (int) (((float) recipeResultTank.getCapacity() / (float) (MAX_LIQUID)) * i) : 0;
+	}
+	
 	@Override
 	public boolean isActive() {
 		return itemBurnTime > 0;
@@ -243,6 +269,36 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	@Override
 	public boolean allowActions() {
 		return false;
+	}
+
+	@Override
+	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
+		return fill(0, resource, doFill);
+	}
+
+	@Override
+	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
+		return recipeResultTank.fill(resource, doFill);
+	}
+
+	@Override
+	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return drain(0, maxDrain, doDrain);
+	}
+
+	@Override
+	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
+		return recipeResultTank.drain(maxDrain, doDrain);
+	}
+
+	@Override
+	public ILiquidTank[] getTanks(ForgeDirection direction) {
+		return new ILiquidTank[] {recipeResultTank};
+	}
+
+	@Override
+	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
+		return recipeResultTank;
 	}
 	
 }

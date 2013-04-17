@@ -74,7 +74,7 @@ public class BlockGate extends BlockContainer {
 	}
 	
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float f1, float f2, float f3) {
-		if (player.isSneaking()) {
+		if (!player.isSneaking()) {
 			return false;
 		}
 		
