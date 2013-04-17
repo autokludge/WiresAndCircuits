@@ -4,6 +4,16 @@ public class Matrix3D {
 
 	public int[][] data;
 	
+	public Matrix3D() {
+		data = new int[3][3];
+		
+		for (int i=0; i<3; i++) {
+			for (int j=0; j<3; j++) {
+				data[i][j] = 0;
+			}
+		}
+	}
+	
 	/** Fills by column. Fills one, then goes to the next one */
 	public Matrix3D(int a1, int b1, int c1, int a2, int b2, int c2, int a3, int b3, int c3) {
 		data = new int[3][3];

@@ -9,6 +9,10 @@ public class Angle {
 	/** DO A BARREL ROLL */
 	public double roll;
 	
+	public Angle() {
+		this(0,0,0);
+	}
+	
 	public Angle(double pitch, double yaw, double roll) {
 		this.pitch = pitch;
 		this.yaw = yaw;

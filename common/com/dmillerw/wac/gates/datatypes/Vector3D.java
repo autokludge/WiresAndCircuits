@@ -6,6 +6,10 @@ public class Vector3D {
 	public int y;
 	public int z;
 	
+	public Vector3D() {
+		this(0,0,0);
+	}
+	
 	public Vector3D(int x, int y, int z) {
 		this.x = x;
 		this.y = y;

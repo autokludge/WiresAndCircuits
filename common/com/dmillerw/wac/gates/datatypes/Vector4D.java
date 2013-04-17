@@ -7,6 +7,10 @@ public class Vector4D {
 	public int z;
 	public int w;
 	
+	public Vector4D() {
+		this(0, 0, 0, 0);
+	}
+	
 	public Vector4D(int x, int y, int z, int w) {
 		this.x = x;
 		this.y = y;

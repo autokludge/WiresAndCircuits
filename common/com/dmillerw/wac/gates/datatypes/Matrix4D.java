@@ -4,6 +4,16 @@ public class Matrix4D {
 
 	public int[][] data;
 	
+	public Matrix4D() {
+		data = new int[4][4];
+		
+		for (int i=0; i<4; i++) {
+			for (int j=0; j<4; j++) {
+				data[i][j] = 0;
+			}
+		}
+	}
+	
 	/** Fills by column. Fills one, then goes to the next one */
 	public Matrix4D(int a1, int b1, int c1, int d1, int a2, int b2, int c2, int d2, int a3, int b3, int c3, int d3, int a4, int b4, int c4, int d4) {
 		data = new int[4][4];
