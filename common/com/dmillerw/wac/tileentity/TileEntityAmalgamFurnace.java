@@ -62,16 +62,17 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 			if (getRecipe() != null && roomForOutput(getRecipe())) {
 				if (itemBurnTime > 0) {
 					if (currentBurnTime <= itemBurnTime) {
-						if (power.useEnergy(USE_ENERGY, USE_ENERGY, true) == USE_ENERGY) { 
+						if (power.useEnergy(USE_ENERGY, USE_ENERGY, true) == USE_ENERGY) {
+							System.out.println("Burn Time ++");
 							currentBurnTime++;
 						}
+					} else {
+						if (power.useEnergy(getRecipe().powerUsage, getRecipe().powerUsage, true) == getRecipe().powerUsage) {
+							System.out.println("Smelted");
+							currentBurnTime = 0;
+							smelt();
+						}
 					}
-//					} else {
-//						if (power.useEnergy(getRecipe().powerUsage, getRecipe().powerUsage, true) == getRecipe().powerUsage) {
-//							currentBurnTime = 0;
-//							smelt();
-//						}
-//					}
 				} else {
 					itemBurnTime = getRecipe().cookTime;
 				}
@@ -99,7 +100,11 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	}
 	
 	public boolean roomForOutput(RecipeAmalgamFurnace recipe) {
-		if (recipeResultTank.getLiquid() == null && inv[2] == null) {
+		if (recipe == null) {
+			return false;
+		}
+		
+		if (recipeResultTank.getLiquid() == null || inv[2] == null) {
 			return true;
 		}
 		
@@ -119,10 +124,14 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	}
 	
 	public RecipeAmalgamFurnace getRecipe() {
-		for (RecipeAmalgamFurnace recipe : RecipeManager.amalgamFurnaceRecipes) {
-			if (recipe.matchesRecipe(inv[0], inv[1])) {
-				return recipe;
-			}
+//		for (RecipeAmalgamFurnace recipe : RecipeManager.amalgamFurnaceRecipes) {
+//			if (recipe.matchesRecipe(inv[0], inv[1])) {
+//				return recipe;
+//			}
+//		}
+		
+		if (RecipeManager.amalgamFurnaceRecipes.get(0).matchesRecipe(inv[0], inv[1])) {
+			return RecipeManager.amalgamFurnaceRecipes.get(0);
 		}
 		
 		return null;
