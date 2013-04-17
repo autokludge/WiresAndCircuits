@@ -8,6 +8,8 @@ public abstract class Option {
 
 	public Object data;
 	
+	public String category = "General Settings";
+	
 	public static Option createFromNBT(NBTTagCompound nbt) {
 		OptionType type = OptionType.valueOf(nbt.getString("type"));
 		

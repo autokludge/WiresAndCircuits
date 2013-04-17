@@ -22,6 +22,7 @@ public class Configurable {
 		for (Entry<String, Option> option : options.entrySet()) {
 			NBTTagCompound optionTag = new NBTTagCompound();
 			optionTag.setString("id", option.getKey());
+			optionTag.setString("category", option.getValue().category);
 			option.getValue().writeToNBT(optionTag);
 			optionsList.appendTag(optionTag);
 		}
