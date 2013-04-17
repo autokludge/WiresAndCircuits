@@ -31,4 +31,18 @@ public class RecipeAmalgamFurnace {
 		this(input1, input2, null, liquidOutput, powerUsage, cookTime);
 	}
 	
+	public boolean matchesRecipe(ItemStack item1, ItemStack item2) {
+		if (item1 == null || item2 == null) {
+			return false;
+		}
+		
+		if (item1.isItemEqual(input1) && item2.isItemEqual(item2)) {
+			if (item1.stackSize >= input1.stackSize && item2.stackSize >= input2.stackSize) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 }

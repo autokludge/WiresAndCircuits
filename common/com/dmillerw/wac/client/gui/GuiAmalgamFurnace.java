@@ -1,7 +1,5 @@
 package com.dmillerw.wac.client.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,6 +7,11 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
 import net.minecraftforge.liquids.LiquidStack;
 
+import org.lwjgl.opengl.GL11;
+
+import com.dmillerw.wac.client.gui.tooltip.TooltipBCEnergy;
+import com.dmillerw.wac.client.gui.tooltip.TooltipLiquid;
+import com.dmillerw.wac.client.gui.tooltip.TooltipManager;
 import com.dmillerw.wac.inventory.ContainerAmalgamFurnace;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.tileentity.TileEntityAmalgamFurnace;
@@ -17,14 +20,26 @@ public class GuiAmalgamFurnace extends GuiContainer {
 
 	private TileEntityAmalgamFurnace tile;
 	
+	private TooltipManager tm;
+	
 	public GuiAmalgamFurnace(EntityPlayer player, TileEntityAmalgamFurnace tile) {
 		super(new ContainerAmalgamFurnace(player, tile));
 		
 		this.tile = tile;
 	}
 	
+	@Override
+	public void initGui() {
+		super.initGui();
+		this.tm = new TooltipManager(this);
+		tm.registerTooltipSlot(new TooltipLiquid(134 + this.guiLeft, 17 + this.guiTop, 16, 52, tile.recipeResultTank));
+		tm.registerTooltipSlot(new TooltipBCEnergy(26 + this.guiLeft, 17 + this.guiTop, 16, 52, tile));
+	}
+	
+	@Override
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
+		tm.handleMouseOver(mouseX, mouseY);
 	}
 
 	@Override
@@ -99,11 +114,10 @@ public class GuiAmalgamFurnace extends GuiContainer {
 	public void displayLiquidGauge(int j, int k, int line, int col, int squaled, LiquidStack liquid) {
 		if (liquid == null)
 		{
-			System.out.println("Liquid == null");
 			return;
 		}
 		int start = 0;
-		System.out.println(liquid.amount);
+
 		Icon liquidIcon;
 		String textureSheet;
 		if(liquid.canonical().getRenderingIcon() != null) {

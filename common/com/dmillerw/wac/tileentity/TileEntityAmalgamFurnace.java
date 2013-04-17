@@ -20,6 +20,8 @@ import buildcraft.api.power.PowerFramework;
 import buildcraft.core.IMachine;
 
 import com.dmillerw.wac.interfaces.IRotatable;
+import com.dmillerw.wac.recipe.RecipeAmalgamFurnace;
+import com.dmillerw.wac.recipe.RecipeManager;
 import com.dmillerw.wac.tank.OutputTank;
 
 import cpw.mods.fml.relauncher.Side;
@@ -35,6 +37,7 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	
 	private static final int MAX_LIQUID = LiquidContainerRegistry.BUCKET_VOLUME * 10;
 	private static final int MAX_ENERGY = 5000;
+	private static final int USE_ENERGY = 5;
 	
 	public int currentBurnTime = 0;
 	public int itemBurnTime = 0;
@@ -46,22 +49,83 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	
 	public IPowerProvider power;
 	
+	public TileEntityAmalgamFurnace() {
+		power = PowerFramework.currentFramework.createPowerProvider();
+		power.configure(0, 50, 50, 50, MAX_ENERGY);
+	}
+	
 	@Override
 	public void updateEntity() {
 		if (worldObj.isRemote) return;
 		
-		itemBurnTime = 100;
-		
-		if (currentBurnTime <= itemBurnTime) {
-			currentBurnTime++;
-		} else {
-			currentBurnTime = 0;
+		if (canSmelt()) {
+			if (getRecipe() != null && roomForOutput(getRecipe())) {
+				if (itemBurnTime > 0) {
+					if (currentBurnTime <= itemBurnTime) {
+						if (power.useEnergy(USE_ENERGY, USE_ENERGY, true) == USE_ENERGY) { 
+							currentBurnTime++;
+						}
+					}
+//					} else {
+//						if (power.useEnergy(getRecipe().powerUsage, getRecipe().powerUsage, true) == getRecipe().powerUsage) {
+//							currentBurnTime = 0;
+//							smelt();
+//						}
+//					}
+				} else {
+					itemBurnTime = getRecipe().cookTime;
+				}
+			}
 		}
 	}
 	
-	public TileEntityAmalgamFurnace() {
-		power = PowerFramework.currentFramework.createPowerProvider();
-		power.configure(0, 50, 50, 50, MAX_ENERGY);
+	public void smelt() {
+		RecipeAmalgamFurnace recipe = getRecipe();
+		
+		inv[0].stackSize -= recipe.input1.stackSize;
+		inv[1].stackSize -= recipe.input2.stackSize;
+		
+		if (inv[2] == null) {
+			inv[2] = recipe.itemOutput;
+		} else {
+			inv[2].stackSize += recipe.itemOutput.stackSize;
+		}
+		
+		if (recipeResultTank.getLiquid() == null) {
+			recipeResultTank.setLiquid(recipe.liquidOutput);
+		} else {
+			recipeResultTank.getLiquid().amount += recipe.liquidOutput.amount;
+		}
+	}
+	
+	public boolean roomForOutput(RecipeAmalgamFurnace recipe) {
+		if (recipeResultTank.getLiquid() == null && inv[2] == null) {
+			return true;
+		}
+		
+		if (recipeResultTank.getLiquid().isLiquidEqual(recipe.liquidOutput) && (recipeResultTank.getLiquid().amount + recipe.liquidOutput.amount) <= recipeResultTank.getCapacity()) {
+			return true;
+		}
+		
+		if (inv[2].isItemEqual(recipe.itemOutput) && (inv[2].stackSize + recipe.itemOutput.stackSize) <= 64) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean canSmelt() {
+		return inv[0] != null && inv[1] != null;
+	}
+	
+	public RecipeAmalgamFurnace getRecipe() {
+		for (RecipeAmalgamFurnace recipe : RecipeManager.amalgamFurnaceRecipes) {
+			if (recipe.matchesRecipe(inv[0], inv[1])) {
+				return recipe;
+			}
+		}
+		
+		return null;
 	}
 	
 	@Override
