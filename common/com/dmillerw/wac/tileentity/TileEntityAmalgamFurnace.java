@@ -14,13 +14,13 @@ import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
-import net.minecraftforge.liquids.LiquidTank;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
 import buildcraft.core.IMachine;
 
 import com.dmillerw.wac.interfaces.IRotatable;
+import com.dmillerw.wac.tank.OutputTank;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -31,7 +31,7 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	
 	private ItemStack[] inv = new ItemStack[3];
 	
-	public LiquidTank recipeResultTank = new LiquidTank(MAX_LIQUID);
+	public OutputTank recipeResultTank = new OutputTank(MAX_LIQUID);
 	
 	private static final int MAX_LIQUID = LiquidContainerRegistry.BUCKET_VOLUME * 10;
 	private static final int MAX_ENERGY = 5000;
@@ -273,12 +273,12 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 
 	@Override
 	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
-		return fill(0, resource, doFill);
+		return 0;
 	}
 
 	@Override
 	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
-		return recipeResultTank.fill(resource, doFill);
+		return 0;
 	}
 
 	@Override
