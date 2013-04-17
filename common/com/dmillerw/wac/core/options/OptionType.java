@@ -6,7 +6,7 @@ public enum OptionType {
 	STRING,
 	BOOLEAN,
 	LIST,
-	CHECKBOXES,
+	SELECTION,
 	UNKNOWN
 	
 }
