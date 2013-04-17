@@ -16,9 +16,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityScreenRenderer extends TileEntitySpecialRenderer {
 
+	//TODO Make this more intelligent (resize based on text width, etc)
 	@SideOnly(Side.CLIENT)
 	public void renderScreenAt(TileEntityScreen tile, double x, double y, double z, float f) {
-		String toDisplay = tile.input;
+		String toDisplay = String.valueOf(tile.input);
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(x+.5, y+.5, z+.5);
@@ -47,7 +48,7 @@ public class TileEntityScreenRenderer extends TileEntitySpecialRenderer {
 		
 		GL11.glRotatef((rotation * 360) / 4, 0F, 1F, 0F);
 		GL11.glTranslatef(0, 0, -0.51F);
-		for (int i=0; i<5; i++) {
+		for (int i=0; i<7; i++) {
 			GL11.glScalef(.5F, .5F, .5F);
 		}
 		
