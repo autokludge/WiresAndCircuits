@@ -10,12 +10,13 @@ import net.minecraftforge.common.ForgeDirection;
 import com.dmillerw.wac.core.options.Configurable;
 import com.dmillerw.wac.core.options.OptionNumber;
 import com.dmillerw.wac.gates.DataType;
+import com.dmillerw.wac.interfaces.IConfigurable;
 import com.dmillerw.wac.interfaces.IConnectable;
 import com.dmillerw.wac.interfaces.IDataHandler;
 import com.dmillerw.wac.interfaces.ISideAttachment;
 import com.dmillerw.wac.util.DataConnection;
 
-public class TileEntityScreen extends TileEntity implements ISideAttachment, IDataHandler, IConnectable {
+public class TileEntityScreen extends TileEntity implements ISideAttachment, IDataHandler, IConnectable, IConfigurable {
 
 	private ForgeDirection attached;
 	
@@ -85,6 +86,16 @@ public class TileEntityScreen extends TileEntity implements ISideAttachment, IDa
 	@Override
 	public void receiveInput(int index, Object value) {
 		input = ((Double)value).doubleValue();
+	}
+
+	@Override
+	public Configurable getConfiguration() {
+		return options;
+	}
+
+	@Override
+	public void setConfiguration(Configurable config) {
+		this.options = config;
 	}
 
 }
