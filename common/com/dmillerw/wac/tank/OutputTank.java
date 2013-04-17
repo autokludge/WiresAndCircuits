@@ -9,6 +9,10 @@ public class OutputTank extends LiquidTank {
 		super(capacity);
 	}
 
+	public OutputTank(LiquidStack liquid, int capacity) {
+		super(liquid, capacity);
+	}
+	
 	@Override
 	public int fill(LiquidStack resource, boolean doFill) {
 		return 0;

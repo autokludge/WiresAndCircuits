@@ -36,10 +36,8 @@ public class GuiAmalgamFurnace extends GuiContainer {
         this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
 
         displayEnergyGauge(k, l, 11, 26, tile.getScaledEnergy(52));
-        displayBurnGauge(k, l, 78, 80, tile.getScaledBurnTime(16));
-        if (tile.recipeResultTank.containsValidLiquid()) {
-        	displayLiquidGauge(k, l, 0, 0, tile.getScaledLiquid(52), tile.recipeResultTank.getLiquid());
-        }
+        displayBurnGauge(k, l, 41, 80, tile.getScaledBurnTime(16));
+        displayLiquidGauge(k, l, 11, 134, tile.getScaledLiquid(52), tile.recipeResultTank.getLiquid());
 	}
 	
 	private void displayEnergyGauge(int j, int k, int line, int col, int squaled) {
@@ -89,7 +87,7 @@ public class GuiAmalgamFurnace extends GuiContainer {
 				squaled = 0;
 			}
 
-			this.drawTexturedModalRect(j + col, line, 176, 6, 16 - (16 - x), 4);
+			this.drawTexturedModalRect(j + col, k + line, 176, 6, 16 - (16 - x), 4);
 			start = start + 16;
 
 			if (x == 0 || squaled == 0) {
@@ -101,10 +99,11 @@ public class GuiAmalgamFurnace extends GuiContainer {
 	public void displayLiquidGauge(int j, int k, int line, int col, int squaled, LiquidStack liquid) {
 		if (liquid == null)
 		{
+			System.out.println("Liquid == null");
 			return;
 		}
 		int start = 0;
-	
+		System.out.println(liquid.amount);
 		Icon liquidIcon;
 		String textureSheet;
 		if(liquid.canonical().getRenderingIcon() != null) {

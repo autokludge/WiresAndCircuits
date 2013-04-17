@@ -42,13 +42,13 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	@SideOnly(Side.CLIENT)
 	public int fakePowerAmount = 0;
 	
+	public boolean validRecipe = false;
+	
 	public IPowerProvider power;
 	
 	@Override
 	public void updateEntity() {
 		if (worldObj.isRemote) return;
-		
-		System.out.println(getScaledLiquid(52));
 		
 		itemBurnTime = 100;
 		

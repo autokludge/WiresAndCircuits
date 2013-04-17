@@ -16,11 +16,11 @@ public class ContainerAmalgamFurnace extends Container {
 	
 	private int BURN_TIME_ID = 0;
 	private int ENERGY_AMOUNT_ID = 1;
-//	private int LIQUID_AMOUNT_ID = 2;
+	private int LIQUID_AMOUNT_ID = 2;
 	
 	private int lastBurnTime = 0;
 	private int lastEnergyAmount = 0;
-//	private int lastLiquidAmount = 0;
+	private int lastLiquidAmount = 0;
 	
 	public ContainerAmalgamFurnace(EntityPlayer player, TileEntityAmalgamFurnace tile) {
 		this.tile = tile;
@@ -43,10 +43,10 @@ public class ContainerAmalgamFurnace extends Container {
 	}
 	
 	public void addCraftingToCrafters(ICrafting par1ICrafting) {
-        super.addCraftingToCrafters(par1ICrafting);
-        par1ICrafting.sendProgressBarUpdate(this, BURN_TIME_ID, tile.currentBurnTime);
-        par1ICrafting.sendProgressBarUpdate(this, ENERGY_AMOUNT_ID, (int) tile.power.getEnergyStored());
-//      par1ICrafting.sendProgressBarUpdate(this, LIQUID_AMOUNT_ID, );
+      super.addCraftingToCrafters(par1ICrafting);
+      par1ICrafting.sendProgressBarUpdate(this, BURN_TIME_ID, tile.currentBurnTime);
+      par1ICrafting.sendProgressBarUpdate(this, ENERGY_AMOUNT_ID, (int) tile.power.getEnergyStored());
+      par1ICrafting.sendProgressBarUpdate(this, LIQUID_AMOUNT_ID, tile.recipeResultTank.getCapacity());
     }
 	
 	@Override
@@ -61,10 +61,15 @@ public class ContainerAmalgamFurnace extends Container {
 			if (lastEnergyAmount != tile.power.getEnergyStored()) {
 				((ICrafting) this.crafters.get(j)).sendProgressBarUpdate(this, ENERGY_AMOUNT_ID, (int) tile.power.getEnergyStored());
 			}
+			
+			if (lastLiquidAmount != tile.recipeResultTank.getCapacity()) {
+				((ICrafting) this.crafters.get(j)).sendProgressBarUpdate(this, LIQUID_AMOUNT_ID, tile.recipeResultTank.getCapacity());
+			}
 		}
 		
 		this.lastBurnTime = tile.currentBurnTime;
 		this.lastEnergyAmount = (int) tile.power.getEnergyStored();
+		this.lastLiquidAmount = tile.recipeResultTank.getCapacity();
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -78,9 +83,9 @@ public class ContainerAmalgamFurnace extends Container {
 			tile.fakePowerAmount = value;
 		}
 
-//		if (id == LIQUID_AMOUNT_ID) {
-//			
-//		}
+		if (id == LIQUID_AMOUNT_ID) {
+			tile.recipeResultTank.setCapacity(value);
+		}
     }
 	
 	@Override
