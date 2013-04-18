@@ -44,7 +44,7 @@ public class GuiAmalgamFurnace extends GuiContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture("/mods/"+ModInfo.MOD_ID.toLowerCase()+"/textures/gui/thingy.png");
+        this.mc.renderEngine.bindTexture("/mods/"+ModInfo.MOD_ID.toLowerCase()+"/textures/gui/amalgam.png");
         int k = (this.width - this.xSize) / 2;
         int l = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
@@ -60,7 +60,7 @@ public class GuiAmalgamFurnace extends GuiContainer {
 		}
 		int start = 0;
 
-		mc.renderEngine.bindTexture("/mods/"+ModInfo.MOD_ID.toLowerCase()+"/textures/gui/thingy.png");
+		mc.renderEngine.bindTexture("/mods/"+ModInfo.MOD_ID.toLowerCase()+"/textures/gui/amalgam.png");
 
 		while (true) {
 			int x = 0;
@@ -88,7 +88,7 @@ public class GuiAmalgamFurnace extends GuiContainer {
 		}
 		int start = 0;
 
-		mc.renderEngine.bindTexture("/mods/"+ModInfo.MOD_ID.toLowerCase()+"/textures/gui/thingy.png");
+		mc.renderEngine.bindTexture("/mods/"+ModInfo.MOD_ID.toLowerCase()+"/textures/gui/amalgam.png");
 
 		while (true) {
 			int x = 0;
