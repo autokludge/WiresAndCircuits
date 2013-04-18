@@ -44,7 +44,7 @@ public class ContainerAmalgamFurnace extends Container {
 	
 	public void addCraftingToCrafters(ICrafting par1ICrafting) {
       super.addCraftingToCrafters(par1ICrafting);
-      par1ICrafting.sendProgressBarUpdate(this, BURN_TIME_ID, tile.currentBurnTime);
+      par1ICrafting.sendProgressBarUpdate(this, BURN_TIME_ID, tile.itemBurnTime);
       par1ICrafting.sendProgressBarUpdate(this, ENERGY_AMOUNT_ID, (int) tile.power.getEnergyStored());
       par1ICrafting.sendProgressBarUpdate(this, LIQUID_AMOUNT_ID, tile.getLiquidAmount());
     }
@@ -54,8 +54,8 @@ public class ContainerAmalgamFurnace extends Container {
 		super.detectAndSendChanges();
 		
 		for (int j = 0; j < this.crafters.size(); ++j) {
-			if (lastBurnTime != tile.currentBurnTime) {
-				((ICrafting) this.crafters.get(j)).sendProgressBarUpdate(this, BURN_TIME_ID, tile.currentBurnTime);
+			if (lastBurnTime != tile.itemBurnTime) {
+				((ICrafting) this.crafters.get(j)).sendProgressBarUpdate(this, BURN_TIME_ID, tile.itemBurnTime);
 			}
 			
 			if (lastEnergyAmount != tile.power.getEnergyStored()) {
@@ -67,16 +67,15 @@ public class ContainerAmalgamFurnace extends Container {
 			}
 		}
 		
-		this.lastBurnTime = tile.currentBurnTime;
+		this.lastBurnTime = tile.itemBurnTime;
 		this.lastEnergyAmount = (int) tile.power.getEnergyStored();
 		this.lastLiquidAmount = tile.getLiquidAmount();
 	}
 	
 	@SideOnly(Side.CLIENT)
-    public void updateProgressBar(int id, int value)
-    {
+    public void updateProgressBar(int id, int value) {
 		if (id == BURN_TIME_ID) {
-			this.tile.currentBurnTime = value;
+			this.tile.itemBurnTime = value;
 		}
 
 		if (id == ENERGY_AMOUNT_ID) {

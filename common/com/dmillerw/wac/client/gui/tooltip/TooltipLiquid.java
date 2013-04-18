@@ -21,10 +21,10 @@ public class TooltipLiquid extends TooltipSlot {
 		
 		if (tank.getLiquid() != null) {
 			display.add(tank.getLiquid().asItemStack().getDisplayName());
-			display.add(tank.getLiquid().amount+"/"+tank.getCapacity());
+			display.add(tank.getLiquid().amount+"/10000");
 		} else {
 			display.add("None");
-			display.add("0/"+tank.getCapacity());
+			display.add("0/10000");
 		}
 		
 		return display;

@@ -56,15 +56,14 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	//TODO Freezing bug is back. :(
 	@Override
 	public void updateEntity() {
-		if (worldObj.isRemote || worldObj.getWorldTime() % 5 != 0) return;
 		if (power.getEnergyStored() < 100 && itemBurnTime == 0) return;
 		
 		if (canSmelt()) {
 			if (getRecipe() != null) {
 				if (roomForOutput(getRecipe())) {
 					if (itemBurnTime > 0) {
-						if (currentBurnTime <= itemBurnTime) {
-							currentBurnTime++;
+						if (currentBurnTime < itemBurnTime && power.getEnergyStored() >= 25) {
+							++currentBurnTime;
 						} else {
 							if (power.useEnergy(getRecipe().powerUsage / 2, getRecipe().powerUsage / 2, true) == getRecipe().powerUsage / 2) {
 								currentBurnTime = 0;
@@ -98,16 +97,20 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 			inv[1].stackSize -= recipe.input2.stackSize;
 		}
 		
-		if (inv[2] == null) {
-			inv[2] = recipe.itemOutput;
-		} else {
-			inv[2].stackSize += recipe.itemOutput.stackSize;
+		if (recipe.itemOutput != null) {
+			if (inv[2] == null) {
+				inv[2] = recipe.itemOutput;
+			} else {
+				inv[2].stackSize += recipe.itemOutput.stackSize;
+			}
 		}
 		
-		if (recipeResultTank.getLiquid() == null) {
-			recipeResultTank.setLiquid(recipe.liquidOutput);
-		} else {
-			recipeResultTank.getLiquid().amount += recipe.liquidOutput.amount;
+		if (recipe.liquidOutput != null) {
+			if (recipeResultTank.getLiquid() == null) {
+				recipeResultTank.setLiquid(recipe.liquidOutput);
+			} else {
+				recipeResultTank.getLiquid().amount += recipe.liquidOutput.amount;
+			}
 		}
 	}
 	
