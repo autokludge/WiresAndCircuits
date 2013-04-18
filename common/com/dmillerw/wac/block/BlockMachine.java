@@ -89,7 +89,7 @@ public class BlockMachine extends BlockContainer {
 		switch(sideForge) {
 		case UP: return textures[meta][1];
 		case DOWN: return textures[meta][0];
-		case EAST: return textures[meta][3];
+		case SOUTH: return textures[meta][3];
 		default: return textures[meta][2];
 		}
 	}

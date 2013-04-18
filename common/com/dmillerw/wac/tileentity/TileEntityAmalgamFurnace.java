@@ -38,6 +38,7 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	private static final int MAX_LIQUID = LiquidContainerRegistry.BUCKET_VOLUME * 10;
 	private static final int MAX_ENERGY = 5000;
 	
+	public int timeSinceLastPacket = 0;
 	public int currentBurnTime = 0;
 	public int itemBurnTime = 0;
 	
@@ -53,9 +54,10 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		power.configure(0, 50, 50, 50, MAX_ENERGY);
 	}
 	
-	//TODO Freezing bug is back. :(
+	//TODO Block front texture still wont update if Player isn't using GUI
 	@Override
 	public void updateEntity() {
+		if (worldObj.isRemote) return;
 		if (power.getEnergyStored() < 100 && itemBurnTime == 0) return;
 		
 		if (canSmelt()) {
@@ -67,6 +69,7 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 						} else {
 							if (power.useEnergy(getRecipe().powerUsage / 2, getRecipe().powerUsage / 2, true) == getRecipe().powerUsage / 2) {
 								currentBurnTime = 0;
+								timeSinceLastPacket = 0;
 								smelt();
 							}
 						}
@@ -78,6 +81,7 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		} else {
 			if (currentBurnTime > 0) {
 				currentBurnTime = 0;
+				timeSinceLastPacket = 0;
 			}
 		}
 	}
