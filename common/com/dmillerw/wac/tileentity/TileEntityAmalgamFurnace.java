@@ -42,6 +42,8 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	public int currentBurnTime = 0;
 	public int itemBurnTime = 0;
 	
+	public boolean smelted = false;
+	
 	@SideOnly(Side.CLIENT)
 	public int fakePowerAmount = 0;
 	
@@ -55,6 +57,8 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	}
 	
 	//TODO Block front texture still wont update if Player isn't using GUI
+	//TODO Once the output item has been pulled at least once, the recipe output gets messed up and breaks
+	//TODO Player isn't receiving liquid amount updates
 	@Override
 	public void updateEntity() {
 		if (worldObj.isRemote) return;
@@ -69,8 +73,10 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 						} else {
 							if (power.useEnergy(getRecipe().powerUsage / 2, getRecipe().powerUsage / 2, true) == getRecipe().powerUsage / 2) {
 								currentBurnTime = 0;
+								itemBurnTime = 0;
 								timeSinceLastPacket = 0;
 								smelt();
+								smelted = true;
 							}
 						}
 					} else {
@@ -106,6 +112,7 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 				inv[2] = recipe.itemOutput;
 			} else {
 				inv[2].stackSize += recipe.itemOutput.stackSize;
+				System.out.println(inv[2].stackSize);
 			}
 		}
 		
@@ -383,7 +390,7 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	
 	@Override
 	public boolean isActive() {
-		return itemBurnTime > 0;
+		return currentBurnTime > 0;
 	}
 
 	@Override

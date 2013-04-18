@@ -47,6 +47,7 @@ public class ContainerAmalgamFurnace extends Container {
 	public void addCraftingToCrafters(ICrafting par1ICrafting) {
       super.addCraftingToCrafters(par1ICrafting);
       par1ICrafting.sendProgressBarUpdate(this, ITEM_BURN_TIME_ID, tile.itemBurnTime);
+      par1ICrafting.sendProgressBarUpdate(this, CURR_BURN_TIME_ID, tile.currentBurnTime);
       par1ICrafting.sendProgressBarUpdate(this, ENERGY_AMOUNT_ID, (int) tile.power.getEnergyStored());
       par1ICrafting.sendProgressBarUpdate(this, LIQUID_AMOUNT_ID, tile.getLiquidAmount());
     }
@@ -70,6 +71,14 @@ public class ContainerAmalgamFurnace extends Container {
 			
 			if (lastLiquidAmount != tile.recipeResultTank.getCapacity()) {
 				((ICrafting) this.crafters.get(j)).sendProgressBarUpdate(this, LIQUID_AMOUNT_ID, tile.getLiquidAmount());
+			}
+			
+			if (tile.smelted) {
+				((ICrafting) this.crafters.get(j)).sendSlotContents(this, 0, tile.getStackInSlot(0));
+				((ICrafting) this.crafters.get(j)).sendSlotContents(this, 1, tile.getStackInSlot(1));
+				((ICrafting) this.crafters.get(j)).sendSlotContents(this, 2, tile.getStackInSlot(2));
+				
+				tile.smelted = false;
 			}
 		}
 		
