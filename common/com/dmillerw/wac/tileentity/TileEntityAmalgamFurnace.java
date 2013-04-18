@@ -53,6 +53,7 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		power.configure(0, 50, 50, 50, MAX_ENERGY);
 	}
 	
+	//TODO Freezing bug is back. :(
 	@Override
 	public void updateEntity() {
 		if (worldObj.isRemote || worldObj.getWorldTime() % 5 != 0) return;
