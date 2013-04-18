@@ -1,8 +1,10 @@
 package com.dmillerw.wac.core.options;
 
-import com.dmillerw.wac.core.helper.LogHelper;
+import java.util.ArrayList;
 
 import net.minecraft.nbt.NBTTagCompound;
+
+import com.dmillerw.wac.core.helper.LogHelper;
 
 public abstract class Option {
 
@@ -23,6 +25,18 @@ public abstract class Option {
 				return null;
 			}
 		}
+	}
+	
+	public static ArrayList<Option> getOptionsFromCategory(ArrayList<Option> options, String category) {
+		ArrayList<Option> toReturn = new ArrayList<Option>();
+		
+		for (Option option : options) {
+			if (option.category.equals(category)) {
+				toReturn.add(option);
+			}
+		}
+		
+		return toReturn;
 	}
 	
 	public abstract OptionType getType();
