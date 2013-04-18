@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 import com.dmillerw.wac.tileentity.TileEntityAmalgamFurnace;
 
@@ -59,4 +60,44 @@ public class ContainerAmalgamFurnace extends Container {
 		return tile.isUseableByPlayer(entityplayer);
 	}
 
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotNum) {
+        ItemStack itemstack = null;
+        Slot slot = (Slot)this.inventorySlots.get(slotNum);
+
+        if (slot != null && slot.getHasStack()) {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
+
+            //Transfer from output to inventory
+            if (slotNum == 2)
+            {
+                if (!this.mergeItemStack(itemstack1, 3, 39, true)) {
+                    return null;
+                }
+
+                slot.onSlotChange(itemstack1, itemstack);
+            } else if (slotNum != 1 && slotNum != 0) {
+            	System.out.println("In inventory");
+            }
+            else if (!this.mergeItemStack(itemstack1, 3, 39, false)) {
+                return null;
+            }
+
+            if (itemstack1.stackSize == 0) {
+                slot.putStack((ItemStack)null);
+            } else {
+                slot.onSlotChanged();
+            }
+
+            if (itemstack1.stackSize == itemstack.stackSize) {
+                return null;
+            }
+
+            slot.onPickupFromSlot(player, itemstack1);
+        }
+
+        return itemstack;
+    }
+	
 }

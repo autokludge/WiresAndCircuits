@@ -48,7 +48,7 @@ public class TileEntityScreenRenderer extends TileEntitySpecialRenderer {
 		
 		GL11.glRotatef((rotation * 360) / 4, 0F, 1F, 0F);
 		GL11.glTranslatef(0, 0, -0.51F);
-		for (int i=0; i<7; i++) {
+		for (int i=0; i<5; i++) {
 			GL11.glScalef(.5F, .5F, .5F);
 		}
 		

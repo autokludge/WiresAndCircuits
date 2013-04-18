@@ -256,7 +256,7 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return true;
+		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : entityplayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
 	}
 
 	@Override
@@ -270,10 +270,6 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		return slot != 2;
 	}
 
-	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-		return null;
-	}
-	
 	/* IPOWERRECEPTOR */
 	@Override
 	public void setPowerProvider(IPowerProvider provider) {
