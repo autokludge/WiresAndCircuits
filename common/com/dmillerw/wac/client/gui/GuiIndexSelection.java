@@ -15,11 +15,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiIndexSelection extends GuiScreen {
 
-	private int selectedIndex;
 	private int xSize = 134;
 	private int ySize = 136;
 	
-	private ArrayList<IOData> indexes = new ArrayList<IOData>();
+	public ArrayList<IOData> indexes = new ArrayList<IOData>();
 
 	@Override
 	public void initGui() {
@@ -33,18 +32,6 @@ public class GuiIndexSelection extends GuiScreen {
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
-	}
-
-	public void selectIndex(int index) {
-		selectedIndex = index;
-	}
-
-	public int getSelectedIndex() {
-		return selectedIndex;
-	}
-
-	public boolean isSelected(int index) {
-		return index == selectedIndex;
 	}
 
 }
