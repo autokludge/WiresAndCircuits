@@ -10,7 +10,6 @@ import net.minecraftforge.liquids.LiquidStack;
 import org.lwjgl.opengl.GL11;
 
 import com.dmillerw.wac.client.gui.tooltip.TooltipBCEnergy;
-import com.dmillerw.wac.client.gui.tooltip.TooltipLiquid;
 import com.dmillerw.wac.client.gui.tooltip.TooltipManager;
 import com.dmillerw.wac.inventory.ContainerAmalgamFurnace;
 import com.dmillerw.wac.lib.ModInfo;
@@ -32,7 +31,7 @@ public class GuiAmalgamFurnace extends GuiContainer {
 	public void initGui() {
 		super.initGui();
 		this.tm = new TooltipManager(this);
-		tm.registerTooltipSlot(new TooltipLiquid(134 + this.guiLeft, 17 + this.guiTop, 16, 52, tile.recipeResultTank));
+//		tm.registerTooltipSlot(new TooltipLiquid(134 + this.guiLeft, 17 + this.guiTop, 16, 52, tile.recipeResultTank));
 		tm.registerTooltipSlot(new TooltipBCEnergy(26 + this.guiLeft, 17 + this.guiTop, 16, 52, tile));
 	}
 	
@@ -52,7 +51,7 @@ public class GuiAmalgamFurnace extends GuiContainer {
 
         displayEnergyGauge(k, l, 11, 26, tile.getScaledEnergy(52));
         displayBurnGauge(k, l, 41, 80, tile.getScaledBurnTime(16));
-        displayLiquidGauge(k, l, 11, 134, tile.getScaledLiquid(52), tile.recipeResultTank.getLiquid());
+//      displayLiquidGauge(k, l, 11, 134, tile.getScaledLiquid(52), tile.recipeResultTank.getLiquid());
 	}
 	
 	private void displayEnergyGauge(int j, int k, int line, int col, int squaled) {

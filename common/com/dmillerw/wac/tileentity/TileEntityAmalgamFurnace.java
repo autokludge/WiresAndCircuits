@@ -10,30 +10,25 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.ILiquidTank;
-import net.minecraftforge.liquids.ITankContainer;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
-import net.minecraftforge.liquids.LiquidStack;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
 import buildcraft.core.IMachine;
 
 import com.dmillerw.wac.interfaces.IRotatable;
-import com.dmillerw.wac.tank.OutputTank;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, IInventory, IPowerReceptor, IMachine, ITankContainer {
+public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, IInventory, IPowerReceptor, IMachine {
 
 	private ForgeDirection rotation;
 	
 	private ItemStack[] inv = new ItemStack[3];
 	
-	public OutputTank recipeResultTank = new OutputTank(MAX_LIQUID);
+//	public OutputTank recipeResultTank = new OutputTank(MAX_LIQUID);
 	
-	private static final int MAX_LIQUID = LiquidContainerRegistry.BUCKET_VOLUME * 10;
+//	private static final int MAX_LIQUID = LiquidContainerRegistry.BUCKET_VOLUME * 10;
 	private static final int MAX_ENERGY = 5000;
 	
 	public int currentBurnTime = 0;
@@ -75,21 +70,21 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
             }
         }
         
-        /* LIQUID */
-        if (nbt.hasKey("liquid")) {
-        	NBTTagCompound liquid = nbt.getCompoundTag("liquid");
-        	
-        	int id = liquid.getInteger("itemID");
-        	int meta = liquid.getInteger("itemMeta");
-        	int amount = liquid.getInteger("amount");
-        	
-        	LiquidStack liquidStack = new LiquidStack(id, amount, meta);
-        	if (liquid.hasKey("tags")) {
-        		liquidStack.extra = liquid.getCompoundTag("tags");
-        	}
-        	
-        	recipeResultTank.setLiquid(liquidStack);
-        }
+//        /* LIQUID */
+//       if (nbt.hasKey("liquid")) {
+//        	NBTTagCompound liquid = nbt.getCompoundTag("liquid");
+//        	
+//        	int id = liquid.getInteger("itemID");
+//        	int meta = liquid.getInteger("itemMeta");
+//        	int amount = liquid.getInteger("amount");
+//        	
+//        	LiquidStack liquidStack = new LiquidStack(id, amount, meta);
+//        	if (liquid.hasKey("tags")) {
+//        		liquidStack.extra = liquid.getCompoundTag("tags");
+//        	}
+//        	
+//        	recipeResultTank.setLiquid(liquidStack);
+//       }
 	}
 	
 	@Override
@@ -114,19 +109,19 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
         }
 		nbt.setTag("Items", nbttaglist);
 		
-		/* LIQUID */
-		if (recipeResultTank.getLiquid() != null) {
-			NBTTagCompound liquid = new NBTTagCompound();
-			
-			liquid.setInteger("itemID", recipeResultTank.getLiquid().itemID);
-			liquid.setInteger("itemMeta", recipeResultTank.getLiquid().itemMeta);
-			liquid.setInteger("amount", recipeResultTank.getLiquid().amount);
-			if (recipeResultTank.getLiquid().extra != null) {
-				liquid.setTag("tags", recipeResultTank.getLiquid().extra);
-			}
-			
-			nbt.setTag("liquid", liquid);
-		}
+//		/* LIQUID */
+//		if (recipeResultTank.getLiquid() != null) {
+//			NBTTagCompound liquid = new NBTTagCompound();
+//			
+//			liquid.setInteger("itemID", recipeResultTank.getLiquid().itemID);
+//			liquid.setInteger("itemMeta", recipeResultTank.getLiquid().itemMeta);
+//			liquid.setInteger("amount", recipeResultTank.getLiquid().amount);
+//			if (recipeResultTank.getLiquid().extra != null) {
+//				liquid.setTag("tags", recipeResultTank.getLiquid().extra);
+//			}
+//			
+//			nbt.setTag("liquid", liquid);
+//		}
 	}
 	
 	@Override
@@ -160,17 +155,17 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		return fakePowerAmount != 0 ? (int) (((float) fakePowerAmount / (float) (MAX_ENERGY)) * i) : 0;
 	}
 
-	public int getScaledLiquid(int i) {
-		return getLiquidAmount() != 0 ? (int) (((float) getLiquidAmount() / (float) (MAX_LIQUID)) * i) : 0;
-	}
-	
-	public int getLiquidAmount() {
-		if (recipeResultTank.getLiquid() == null) {
-			return 0;
-		}
-		
-		return recipeResultTank.getLiquid().amount;
-	}
+//	public int getScaledLiquid(int i) {
+//		return getLiquidAmount() != 0 ? (int) (((float) getLiquidAmount() / (float) (MAX_LIQUID)) * i) : 0;
+//	}
+//	
+//	public int getLiquidAmount() {
+//		if (recipeResultTank.getLiquid() == null) {
+//			return 0;
+//		}
+//		
+//		return recipeResultTank.getLiquid().amount;
+//	}
 	
 	@Override
 	public boolean isActive() {
@@ -306,34 +301,34 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	}
 
 	/* ITANKCONTAINER */
-	@Override
-	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
-		return 0;
-	}
-
-	@Override
-	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
-		return 0;
-	}
-
-	@Override
-	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return drain(0, maxDrain, doDrain);
-	}
-
-	@Override
-	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
-		return recipeResultTank.drain(maxDrain, doDrain);
-	}
-
-	@Override
-	public ILiquidTank[] getTanks(ForgeDirection direction) {
-		return new ILiquidTank[] {recipeResultTank};
-	}
-
-	@Override
-	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
-		return recipeResultTank;
-	}
+//	@Override
+//	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
+//		return 0;
+//	}
+//
+//	@Override
+//	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
+//		return 0;
+//	}
+//
+//	@Override
+//	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+//		return drain(0, maxDrain, doDrain);
+//	}
+//
+//	@Override
+//	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
+//		return recipeResultTank.drain(maxDrain, doDrain);
+//	}
+//
+//	@Override
+//	public ILiquidTank[] getTanks(ForgeDirection direction) {
+//		return new ILiquidTank[] {recipeResultTank};
+//	}
+//
+//	@Override
+//	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
+//		return recipeResultTank;
+//	}
 	
 }
