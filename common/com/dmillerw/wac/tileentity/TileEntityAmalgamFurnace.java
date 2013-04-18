@@ -20,8 +20,6 @@ import buildcraft.api.power.PowerFramework;
 import buildcraft.core.IMachine;
 
 import com.dmillerw.wac.interfaces.IRotatable;
-import com.dmillerw.wac.recipe.RecipeAmalgamFurnace;
-import com.dmillerw.wac.recipe.RecipeManager;
 import com.dmillerw.wac.tank.OutputTank;
 
 import cpw.mods.fml.relauncher.Side;
@@ -38,16 +36,11 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	private static final int MAX_LIQUID = LiquidContainerRegistry.BUCKET_VOLUME * 10;
 	private static final int MAX_ENERGY = 5000;
 	
-	public int timeSinceLastPacket = 0;
 	public int currentBurnTime = 0;
 	public int itemBurnTime = 0;
 	
-	public boolean smelted = false;
-	
 	@SideOnly(Side.CLIENT)
 	public int fakePowerAmount = 0;
-	
-	public boolean validRecipe = false;
 	
 	public IPowerProvider power;
 	
@@ -56,107 +49,10 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		power.configure(0, 50, 50, 50, MAX_ENERGY);
 	}
 	
-	//TODO Block front texture still wont update if Player isn't using GUI
-	//TODO Once the output item has been pulled at least once, the recipe output gets messed up and breaks
-	//TODO Player isn't receiving liquid amount updates
+	/* VANILLA */
 	@Override
 	public void updateEntity() {
-		if (worldObj.isRemote) return;
-		if (power.getEnergyStored() < 100 && itemBurnTime == 0) return;
-		
-		if (canSmelt()) {
-			if (getRecipe() != null) {
-				if (roomForOutput(getRecipe())) {
-					if (itemBurnTime > 0) {
-						if (currentBurnTime < itemBurnTime && power.getEnergyStored() >= 25) {
-							++currentBurnTime;
-						} else {
-							if (power.useEnergy(getRecipe().powerUsage / 2, getRecipe().powerUsage / 2, true) == getRecipe().powerUsage / 2) {
-								currentBurnTime = 0;
-								itemBurnTime = 0;
-								timeSinceLastPacket = 0;
-								smelt();
-								smelted = true;
-							}
-						}
-					} else {
-						itemBurnTime = getRecipe().cookTime;
-					}
-				}
-			}
-		} else {
-			if (currentBurnTime > 0) {
-				currentBurnTime = 0;
-				timeSinceLastPacket = 0;
-			}
-		}
-	}
-	
-	public void smelt() {
-		RecipeAmalgamFurnace recipe = getRecipe();
-		
-		if (inv[0].stackSize == 1) {
-			setInventorySlotContents(0, null);
-		} else {
-			inv[0].stackSize -= recipe.input1.stackSize;
-		}
-		
-		if (inv[1].stackSize == 1) {
-			setInventorySlotContents(1, null);
-		} else {
-			inv[1].stackSize -= recipe.input2.stackSize;
-		}
-		
-		if (recipe.itemOutput != null) {
-			if (inv[2] == null) {
-				inv[2] = recipe.itemOutput;
-			} else {
-				inv[2].stackSize += recipe.itemOutput.stackSize;
-				System.out.println(inv[2].stackSize);
-			}
-		}
-		
-		if (recipe.liquidOutput != null) {
-			if (recipeResultTank.getLiquid() == null) {
-				recipeResultTank.setLiquid(recipe.liquidOutput);
-			} else {
-				recipeResultTank.getLiquid().amount += recipe.liquidOutput.amount;
-			}
-		}
-	}
-	
-	public boolean roomForOutput(RecipeAmalgamFurnace recipe) {
-		if (recipe == null) {
-			return false;
-		}
-		
-		if (recipeResultTank.getLiquid() == null || inv[2] == null) {
-			return true;
-		}
-		
-		if (recipeResultTank.getLiquid().isLiquidEqual(recipe.liquidOutput) && (recipeResultTank.getLiquid().amount + recipe.liquidOutput.amount) <= recipeResultTank.getCapacity()) {
-			return true;
-		}
-		
-		if (inv[2].isItemEqual(recipe.itemOutput) && (inv[2].stackSize + recipe.itemOutput.stackSize) <= 64) {
-			return true;
-		}
-		
-		return false;
-	}
-	
-	public boolean canSmelt() {
-		return inv[0] != null && inv[1] != null;
-	}
-	
-	public RecipeAmalgamFurnace getRecipe() {
-		for (RecipeAmalgamFurnace recipe : RecipeManager.amalgamFurnaceRecipes) {
-			if (recipe.matchesRecipe(inv[0], inv[1])) {
-				return recipe;
-			}
-		}
-
-		return null;
+		//TODO Do
 	}
 	
 	@Override
@@ -255,6 +151,33 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		}
 	}
 	
+	/* MACHINE SPECIFIC */
+	public int getScaledBurnTime(int i) {
+		return currentBurnTime != 0 ? (int) (((float) currentBurnTime / (float) (itemBurnTime)) * i) : 0;
+	}
+	
+	public int getScaledEnergy(int i) {
+		return fakePowerAmount != 0 ? (int) (((float) fakePowerAmount / (float) (MAX_ENERGY)) * i) : 0;
+	}
+
+	public int getScaledLiquid(int i) {
+		return getLiquidAmount() != 0 ? (int) (((float) getLiquidAmount() / (float) (MAX_LIQUID)) * i) : 0;
+	}
+	
+	public int getLiquidAmount() {
+		if (recipeResultTank.getLiquid() == null) {
+			return 0;
+		}
+		
+		return recipeResultTank.getLiquid().amount;
+	}
+	
+	@Override
+	public boolean isActive() {
+		return currentBurnTime > 0;
+	}
+	
+	/* IROTATABLE */
 	@Override
 	public ForgeDirection getRotation() {
 		return rotation;
@@ -265,6 +188,7 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		this.rotation = rotation;
 	}
 
+	/* IINVENTORY */
 	@Override
 	public int getSizeInventory() {
 		return 3;
@@ -346,6 +270,11 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		return slot != 2;
 	}
 
+	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
+		return null;
+	}
+	
+	/* IPOWERRECEPTOR */
 	@Override
 	public void setPowerProvider(IPowerProvider provider) {
 		power = provider;
@@ -364,35 +293,7 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		return 50;
 	}
 
-	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-		return null;
-	}
-	
-	public int getScaledBurnTime(int i) {
-		return currentBurnTime != 0 ? (int) (((float) currentBurnTime / (float) (itemBurnTime)) * i) : 0;
-	}
-	
-	public int getScaledEnergy(int i) {
-		return fakePowerAmount != 0 ? (int) (((float) fakePowerAmount / (float) (MAX_ENERGY)) * i) : 0;
-	}
-
-	public int getScaledLiquid(int i) {
-		return getLiquidAmount() != 0 ? (int) (((float) getLiquidAmount() / (float) (MAX_LIQUID)) * i) : 0;
-	}
-	
-	public int getLiquidAmount() {
-		if (recipeResultTank.getLiquid() == null) {
-			return 0;
-		}
-		
-		return recipeResultTank.getLiquid().amount;
-	}
-	
-	@Override
-	public boolean isActive() {
-		return currentBurnTime > 0;
-	}
-
+	/* IMACHINE */
 	@Override
 	public boolean manageLiquids() {
 		return false;
@@ -408,6 +309,7 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 		return false;
 	}
 
+	/* ITANKCONTAINER */
 	@Override
 	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
 		return 0;

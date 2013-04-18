@@ -14,16 +14,6 @@ public class ContainerAmalgamFurnace extends Container {
 
 	private TileEntityAmalgamFurnace tile;
 	
-	private int ITEM_BURN_TIME_ID = 0;
-	private int CURR_BURN_TIME_ID = 1;
-	private int ENERGY_AMOUNT_ID = 2;
-	private int LIQUID_AMOUNT_ID = 3;
-	
-	private int lastItemBurnTime = 0;
-	private int lastCurrBurnTime = 0;
-	private int lastEnergyAmount = 0;
-	private int lastLiquidAmount = 0;
-	
 	public ContainerAmalgamFurnace(EntityPlayer player, TileEntityAmalgamFurnace tile) {
 		this.tile = tile;
 		
@@ -46,10 +36,7 @@ public class ContainerAmalgamFurnace extends Container {
 	
 	public void addCraftingToCrafters(ICrafting par1ICrafting) {
       super.addCraftingToCrafters(par1ICrafting);
-      par1ICrafting.sendProgressBarUpdate(this, ITEM_BURN_TIME_ID, tile.itemBurnTime);
-      par1ICrafting.sendProgressBarUpdate(this, CURR_BURN_TIME_ID, tile.currentBurnTime);
-      par1ICrafting.sendProgressBarUpdate(this, ENERGY_AMOUNT_ID, (int) tile.power.getEnergyStored());
-      par1ICrafting.sendProgressBarUpdate(this, LIQUID_AMOUNT_ID, tile.getLiquidAmount());
+      
     }
 	
 	@Override
@@ -57,56 +44,14 @@ public class ContainerAmalgamFurnace extends Container {
 		super.detectAndSendChanges();
 		
 		for (int j = 0; j < this.crafters.size(); ++j) {
-			if (lastItemBurnTime != tile.itemBurnTime) {
-				((ICrafting) this.crafters.get(j)).sendProgressBarUpdate(this, ITEM_BURN_TIME_ID, tile.itemBurnTime);
-			}
 			
-			if (lastCurrBurnTime != tile.currentBurnTime && tile.timeSinceLastPacket == 0) {
-				((ICrafting) this.crafters.get(j)).sendProgressBarUpdate(this, CURR_BURN_TIME_ID, tile.currentBurnTime);
-			}
-			
-			if (lastEnergyAmount != tile.power.getEnergyStored()) {
-				((ICrafting) this.crafters.get(j)).sendProgressBarUpdate(this, ENERGY_AMOUNT_ID, (int) tile.power.getEnergyStored());
-			}
-			
-			if (lastLiquidAmount != tile.recipeResultTank.getCapacity()) {
-				((ICrafting) this.crafters.get(j)).sendProgressBarUpdate(this, LIQUID_AMOUNT_ID, tile.getLiquidAmount());
-			}
-			
-			if (tile.smelted) {
-				((ICrafting) this.crafters.get(j)).sendSlotContents(this, 0, tile.getStackInSlot(0));
-				((ICrafting) this.crafters.get(j)).sendSlotContents(this, 1, tile.getStackInSlot(1));
-				((ICrafting) this.crafters.get(j)).sendSlotContents(this, 2, tile.getStackInSlot(2));
-				
-				tile.smelted = false;
-			}
 		}
-		
-		this.lastItemBurnTime = tile.itemBurnTime;
-		this.lastCurrBurnTime = tile.currentBurnTime;
-		this.lastEnergyAmount = (int) tile.power.getEnergyStored();
-		this.lastLiquidAmount = tile.getLiquidAmount();
 	}
 	
 	@SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value) {
-		if (id == ITEM_BURN_TIME_ID) {
-			this.tile.itemBurnTime = value;
-		}
-
-		if (id == CURR_BURN_TIME_ID) {
-			this.tile.currentBurnTime = value;
-		}
+		super.updateProgressBar(id, value);
 		
-		if (id == ENERGY_AMOUNT_ID) {
-			tile.fakePowerAmount = value;
-		}
-
-		if (id == LIQUID_AMOUNT_ID) {
-			tile.recipeResultTank.setCapacity(value);
-		}
-		
-		tile.worldObj.markBlockForUpdate(tile.xCoord, tile.yCoord, tile.zCoord);
     }
 	
 	@Override
