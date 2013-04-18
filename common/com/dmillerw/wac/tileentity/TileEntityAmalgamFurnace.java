@@ -124,23 +124,21 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	private void smelt() {
 		RecipeAmalgamFurnace recipe = getRecipe();
 		
-		if (inv[0].stackSize - recipe.input1.stackSize <= 0) {
+		inv[0].stackSize -= recipe.input1.stackSize;
+		if (inv[0].stackSize <= 0) {
 			setInventorySlotContents(0, null);
-		} else {
-			inv[0].stackSize -= recipe.input1.stackSize;
 		}
 		
+		inv[1].stackSize -= recipe.input2.stackSize;
 		if (inv[1].stackSize - recipe.input2.stackSize <= 0) {
 			setInventorySlotContents(1, null);
-		} else {
-			inv[1].stackSize -= recipe.input2.stackSize;
 		}
 		
-		if (inv[2] != null) {
-			inv[2].stackSize += recipe.itemOutput.stackSize;
-		} else {
-			setInventorySlotContents(2, recipe.itemOutput);
-		}
+		if (this.inv[2] == null) {
+            this.inv[2] = recipe.itemOutput.copy();
+        } else if (this.inv[2].isItemEqual(recipe.itemOutput)) {
+            inv[2].stackSize += recipe.itemOutput.stackSize;
+        }
 		
 		onInventoryChanged();
 	}
