@@ -16,9 +16,8 @@ import buildcraft.api.power.PowerFramework;
 import buildcraft.core.IMachine;
 
 import com.dmillerw.wac.interfaces.IRotatable;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.dmillerw.wac.recipe.RecipeAmalgamFurnace;
+import com.dmillerw.wac.recipe.RecipeManager;
 
 public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, IInventory, IPowerReceptor, IMachine {
 
@@ -34,7 +33,6 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	public int currentBurnTime = 0;
 	public int itemBurnTime = 0;
 	
-	@SideOnly(Side.CLIENT)
 	public int fakePowerAmount = 0;
 	
 	public IPowerProvider power;
@@ -47,7 +45,104 @@ public class TileEntityAmalgamFurnace extends TileEntity implements IRotatable, 
 	/* VANILLA */
 	@Override
 	public void updateEntity() {
-		//TODO Do
+		if (!worldObj.isRemote) {
+			if (canSmelt()) {
+				RecipeAmalgamFurnace recipe = getRecipe();
+
+				if (itemBurnTime == 0) {
+					itemBurnTime = recipe.cookTime;
+					currentBurnTime = 0;
+					clean();
+				} else if (itemBurnTime > 0 && currentBurnTime < itemBurnTime) {
+					++currentBurnTime;
+				} else if (currentBurnTime == itemBurnTime) {
+					if (power.useEnergy(recipe.powerUsage, recipe.powerUsage, true) == recipe.powerUsage) {
+						smelt();
+					}
+					
+					itemBurnTime = 0;
+					currentBurnTime = 0;
+					clean();
+				}
+			} else {
+				if (currentBurnTime > 0) {
+					currentBurnTime = 0;
+				}
+				
+				if (itemBurnTime > 0) {
+					itemBurnTime = 0;
+				}
+				clean();
+			}
+		}
+
+	}
+	
+	private void clean() {
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		this.onInventoryChanged();
+	}
+	
+	private boolean canSmelt() {
+		if (inv[0] != null && inv[1] != null) {
+			return validRecipe();
+		}
+		
+		return false;
+	}
+	
+	private boolean validRecipe() {
+		for (RecipeAmalgamFurnace recipe : RecipeManager.amalgamFurnaceRecipes) {
+			return recipe.matchesRecipe(inv[0], inv[1]) && canAddToSlot(2, recipe.itemOutput);
+		}
+		
+		return false;
+	}
+	
+	private RecipeAmalgamFurnace getRecipe() {
+		for (RecipeAmalgamFurnace recipe : RecipeManager.amalgamFurnaceRecipes) {
+			return recipe.matchesRecipe(inv[0], inv[1]) ? recipe : null;
+		}
+		
+		return null;
+	}
+	
+	private boolean canAddToSlot(int slot, ItemStack toAdd) {
+		ItemStack inSlot = getStackInSlot(slot);
+		
+		if (inSlot == null) {
+			return true;
+		}
+		
+		if (inSlot.isItemEqual(toAdd) && (inSlot.stackSize + toAdd.stackSize) <= 64) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private void smelt() {
+		RecipeAmalgamFurnace recipe = getRecipe();
+		
+		if (inv[0].stackSize - recipe.input1.stackSize <= 0) {
+			setInventorySlotContents(0, null);
+		} else {
+			inv[0].stackSize -= recipe.input1.stackSize;
+		}
+		
+		if (inv[1].stackSize - recipe.input2.stackSize <= 0) {
+			setInventorySlotContents(1, null);
+		} else {
+			inv[1].stackSize -= recipe.input2.stackSize;
+		}
+		
+		if (inv[2] != null) {
+			inv[2].stackSize += recipe.itemOutput.stackSize;
+		} else {
+			setInventorySlotContents(2, recipe.itemOutput);
+		}
+		
+		onInventoryChanged();
 	}
 	
 	@Override

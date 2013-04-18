@@ -15,6 +15,14 @@ public class ContainerAmalgamFurnace extends Container {
 
 	private TileEntityAmalgamFurnace tile;
 	
+	private static final int ITEM_BURN_TIME = 0;
+	private static final int CURRENT_BURN_TIME = 1;
+	private static final int ENERGY_AMOUNT = 2;
+	
+	private int lastItemBurnTime = 0;
+	private int lastCurrentBurnTime = 0;
+	private int lastEnergyAmount = 0;
+	
 	public ContainerAmalgamFurnace(EntityPlayer player, TileEntityAmalgamFurnace tile) {
 		this.tile = tile;
 		
@@ -35,9 +43,11 @@ public class ContainerAmalgamFurnace extends Container {
 		}
 	}
 	
-	public void addCraftingToCrafters(ICrafting par1ICrafting) {
-      super.addCraftingToCrafters(par1ICrafting);
-      
+	public void addCraftingToCrafters(ICrafting crafter) {
+      super.addCraftingToCrafters(crafter);
+      crafter.sendProgressBarUpdate(this, ITEM_BURN_TIME, tile.itemBurnTime);
+      crafter.sendProgressBarUpdate(this, CURRENT_BURN_TIME, tile.currentBurnTime);
+      crafter.sendProgressBarUpdate(this, ENERGY_AMOUNT, (int) tile.power.getEnergyStored());
     }
 	
 	@Override
@@ -45,7 +55,19 @@ public class ContainerAmalgamFurnace extends Container {
 		super.detectAndSendChanges();
 		
 		for (int j = 0; j < this.crafters.size(); ++j) {
+			ICrafting crafter = (ICrafting) crafters.get(j);
 			
+			if (this.lastItemBurnTime != tile.itemBurnTime) {
+				crafter.sendProgressBarUpdate(this, ITEM_BURN_TIME, tile.itemBurnTime);
+			}
+			
+			if (this.lastCurrentBurnTime != tile.currentBurnTime) {
+				crafter.sendProgressBarUpdate(this, CURRENT_BURN_TIME, tile.currentBurnTime);
+			}
+			
+			if (this.lastEnergyAmount != tile.power.getEnergyStored()) {
+				crafter.sendProgressBarUpdate(this, ENERGY_AMOUNT, (int) tile.power.getEnergyStored());
+			}
 		}
 	}
 	
@@ -53,6 +75,13 @@ public class ContainerAmalgamFurnace extends Container {
     public void updateProgressBar(int id, int value) {
 		super.updateProgressBar(id, value);
 		
+		switch(id) {
+			case ITEM_BURN_TIME: tile.itemBurnTime = value;
+			case CURRENT_BURN_TIME: tile.currentBurnTime = value;
+			case ENERGY_AMOUNT: tile.fakePowerAmount = value;
+		}
+		
+		tile.worldObj.markBlockForUpdate(tile.xCoord, tile.yCoord, tile.zCoord);
     }
 	
 	@Override
