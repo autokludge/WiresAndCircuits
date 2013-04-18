@@ -69,16 +69,17 @@ public class ContainerAmalgamFurnace extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            //Transfer from output to inventory
-            if (slotNum == 2)
-            {
+            if (slotNum == 2) {
                 if (!this.mergeItemStack(itemstack1, 3, 39, true)) {
                     return null;
                 }
 
                 slot.onSlotChange(itemstack1, itemstack);
             } else if (slotNum != 1 && slotNum != 0) {
-            	System.out.println("In inventory");
+            	if (!this.mergeItemStack(itemstack1, 0, 1, false))
+                {
+                    return null;
+                }
             }
             else if (!this.mergeItemStack(itemstack1, 3, 39, false)) {
                 return null;
