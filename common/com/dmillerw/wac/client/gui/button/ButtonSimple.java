@@ -14,8 +14,4 @@ public class ButtonSimple extends Button {
 		bm.font.drawString(display, x, y, 0x000cff);
 	}
 	
-	public void handleClick(int mouseX, int mouseY) {
-
-	}
-	
 }

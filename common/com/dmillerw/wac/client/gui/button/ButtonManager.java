@@ -31,6 +31,12 @@ public class ButtonManager {
 		}
 	}
 	
+	public void handleClick(int mouseX, int mouseY) {
+		for (Button button : buttons) {
+			button.handleClick(mouseX, mouseY);
+		}
+	}
+	
 	public void draw() {
 		for (Button button : buttons) {
 			button.draw();

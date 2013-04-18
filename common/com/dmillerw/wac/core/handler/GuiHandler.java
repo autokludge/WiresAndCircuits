@@ -37,6 +37,9 @@ public class GuiHandler implements IGuiHandler {
 		
 		ArrayList<Option> options = new ArrayList<Option>();
 		options.add(new OptionString("HELLO"));
+		Option test = new OptionString("POTATO");
+		test.category = "Test 2";
+		options.add(test);
 		return side == Side.CLIENT ? new GuiConfigurable(options) : null;
 	}
 	

@@ -24,6 +24,9 @@ public class GuiConfigurable extends GuiScreen implements IClickHandler {
 	private int ySize = 136;
 	private int activeCategory = 0;
 	
+	private int guiTop;
+	private int guiLeft;
+	
 	public ArrayList<Option> options = new ArrayList<Option>();
 	public ArrayList<String> categories = new ArrayList<String>();
 	
@@ -45,19 +48,34 @@ public class GuiConfigurable extends GuiScreen implements IClickHandler {
 		}
 	}
 	
-	//TODO get this working
 	@Override
 	public void handleButtonClick(int id) {
-		System.out.println(id+" clicked");
+		if (id == 1) {
+			activeCategory++;
+		} else if (id == 0) {
+			activeCategory--;
+		}
+		
+		clampCategory();
+	}
+	
+	public void clampCategory() {
+		if (activeCategory >= categories.size()) {
+			activeCategory = categories.size() - 1;
+		}
+		
+		if (activeCategory < 0) {
+			activeCategory = 0;
+		}
 	}
 	
 	@Override
 	public void initGui() {
-		int k = (this.width - this.xSize) / 2;
-		int l = (this.height - this.ySize) / 2;
+		guiLeft = (this.width - this.xSize) / 2;
+		guiTop = (this.height - this.ySize) / 2;
 		
-		bm.registerButton(new ButtonSimple(0, k + 182 - 6 - font.getCharWidth('>'), l + 6, font.getCharWidth('<'), font.FONT_HEIGHT, "<"));
-		bm.registerButton(new ButtonSimple(1, k + 182, l + 6, font.getCharWidth('>'), font.FONT_HEIGHT, ">"));
+		bm.registerButton(new ButtonSimple(0, guiLeft + 182 - 6 - font.getCharWidth('>'), guiTop + 6, font.getCharWidth('<'), font.FONT_HEIGHT, "<"));
+		bm.registerButton(new ButtonSimple(1, guiLeft + 182, guiTop + 6, font.getCharWidth('>'), font.FONT_HEIGHT, ">"));
 	}
 
 	@Override
@@ -74,4 +92,9 @@ public class GuiConfigurable extends GuiScreen implements IClickHandler {
 		bm.handleMouse(x, y);
 	}
 
+	@Override
+	public void mouseClicked(int mouseX, int mouseY, int something) {
+		bm.handleClick(mouseX, mouseY);
+	}
+	
 }
