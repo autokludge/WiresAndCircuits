@@ -18,19 +18,16 @@ public class GuiVerticalSlideControl extends GuiSlideControl {
 	protected void mouseDragged(Minecraft par1Minecraft, int par2, int par3) {
         if (this.drawButton) {
             if (this.dragging) {
-                this.slideValue = (float)(par3 - (this.yPosition + 4)) / (float)(this.height - 8);
+            	slide(par3);
             }
-            
             applyScrollLimits();
-            
             draw();
         }
     }
 
     public boolean mousePressed(Minecraft par1Minecraft, int par2, int par3) {
         if (super.mousePressed(par1Minecraft, par2, par3)) {
-            this.slideValue = (float)(par3 - (this.yPosition + 4)) / (float)(this.height - 8);
-
+        	slide(par3);
             applyScrollLimits();
             
             this.dragging = true;
@@ -40,6 +37,19 @@ public class GuiVerticalSlideControl extends GuiSlideControl {
         }
     }
 	
+    @Override
+    public void slide(int amount) {
+    	float slideAmount = (float) (((amount - (this.yPosition + 4)) / (float) (this.height / 2)) / 8);
+    	
+    	if (amount == -1) {
+    		this.slideValue += slideAmount;
+    	} else if (amount == 1) {
+    		this.slideValue -= slideAmount;
+    	} else {
+    		this.slideValue = slideAmount;
+    	}
+    }
+    
 	@Override
 	public void draw() {
 		FMLClientHandler.instance().getClient().renderEngine.bindTexture("/mods/"+ModInfo.MOD_ID.toLowerCase()+"/textures/gui/verticalControls.png");

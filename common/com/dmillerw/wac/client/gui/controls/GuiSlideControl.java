@@ -44,19 +44,16 @@ public class GuiSlideControl extends GuiSpecialButton {
     protected void mouseDragged(Minecraft par1Minecraft, int par2, int par3) {
         if (this.drawButton) {
             if (this.dragging) {
-                this.slideValue = (float)(par2 - (this.xPosition + 4)) / (float)(this.width - 8);
-
-                applyScrollLimits();
+            	slide(par2);
             }
-            
+            applyScrollLimits();
             draw();
         }
     }
 
     public boolean mousePressed(Minecraft par1Minecraft, int par2, int par3) {
         if (super.mousePressed(par1Minecraft, par2, par3)) {
-            this.slideValue = (float)(par2 - (this.xPosition + 4)) / (float)(this.width - 8);
-
+        	slide(par2);
 	        applyScrollLimits();
 
             this.dragging = true;
@@ -80,6 +77,18 @@ public class GuiSlideControl extends GuiSpecialButton {
     	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.drawTexturedModalRect(this.xPosition + (int)(this.slideValue * (float)(this.width - 8)), this.yPosition, 0, 66, 4, 20);
         this.drawTexturedModalRect(this.xPosition + (int)(this.slideValue * (float)(this.width - 8)) + 4, this.yPosition, 196, 66, 4, 20);
+    }
+    
+    public void slide(int amount) {
+    	float slideAmount = (float) (((amount - (this.yPosition + 4)) / (float) (this.width / 2)) / 8);
+    	
+    	if (amount == -1) {
+    		this.slideValue += slideAmount;
+    	} else if (amount == 1) {
+    		this.slideValue -= slideAmount;
+    	} else {
+    		this.slideValue = slideAmount;
+    	}
     }
     
     @Override

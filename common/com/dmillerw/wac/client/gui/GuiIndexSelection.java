@@ -40,7 +40,7 @@ public class GuiIndexSelection extends GuiScreen {
 		container.xSize = this.xSize;
 		container.ySize = this.ySize;
 		
-//		container.registerGuiElement(new GuiText(this.mc.fontRenderer, "Test String", 0, 0, 0xFFFFFF));
+		container.registerGuiElement(new GuiText(this.mc.fontRenderer, "Test String", 0, 0, 0xFFFFFF));
 	}
 
 	@Override
@@ -58,11 +58,11 @@ public class GuiIndexSelection extends GuiScreen {
 			if (scroll != 0) {
 				if (scroll > 0) {
 					scroll = -1;
-					this.slider.slideValue += (float) ((scroll - (this.slider.yPosition + 4)) / (float) (this.height - 8)) / 16;
 				} else if (scroll < 0) {
 					scroll = 1;
-					this.slider.slideValue -= (float) ((scroll - (this.slider.yPosition + 4)) / (float) (this.height - 8)) / 16;
 				}
+				
+				this.slider.slide(scroll);
 				this.slider.applyScrollLimits();
 			}
 			
