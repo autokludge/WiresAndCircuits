@@ -5,6 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.dmillerw.wac.client.gui.GuiAmalgamFurnace;
+import com.dmillerw.wac.client.gui.GuiIndexSelection;
 import com.dmillerw.wac.inventory.ContainerAmalgamFurnace;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.tileentity.TileEntityAmalgamFurnace;
@@ -25,15 +26,17 @@ public class GuiHandler implements IGuiHandler {
 	}
 
 	public Object handleGuiRequest(int ID, EntityPlayer player, World world, int x, int y, int z, Side side) {
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
+//		TileEntity tile = world.getBlockTileEntity(x, y, z);
+//		
+//		if (ID == ModInfo.AMALGAM_FURNACE_ID) {
+//			if (tile instanceof TileEntityAmalgamFurnace) {
+//				return side == Side.SERVER ? new ContainerAmalgamFurnace(player, (TileEntityAmalgamFurnace) tile) : new GuiAmalgamFurnace(player, (TileEntityAmalgamFurnace) tile);
+//			}
+//		}
+//		
+		return side == Side.CLIENT ? new GuiIndexSelection() : null;
 		
-		if (ID == ModInfo.AMALGAM_FURNACE_ID) {
-			if (tile instanceof TileEntityAmalgamFurnace) {
-				return side == Side.SERVER ? new ContainerAmalgamFurnace(player, (TileEntityAmalgamFurnace) tile) : new GuiAmalgamFurnace(player, (TileEntityAmalgamFurnace) tile);
-			}
-		}
-		
-		return null;
+//		return null;
 	}
 	
 }

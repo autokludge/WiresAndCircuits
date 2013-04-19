@@ -10,16 +10,20 @@ public abstract class Option {
 
 	public Object data;
 	
+	public String name;
+	public String description;
 	public String category = "General Settings";
 	
 	public static Option createFromNBT(NBTTagCompound nbt) {
+		String name = nbt.getString("name");
+		String description = nbt.getString("description");
 		OptionType type = OptionType.valueOf(nbt.getString("type"));
 		
 		switch(type) {
-			case INTEGER: return new OptionNumber().readFromNBT(nbt);
-			case STRING: return new OptionString().readFromNBT(nbt);
-			case BOOLEAN: return new OptionBoolean().readFromNBT(nbt);
-			case SELECTION: return new OptionSelection().readFromNBT(nbt);
+			case INTEGER: return new OptionNumber().readFromNBT(nbt).setName(name).setDescription(description);
+			case STRING: return new OptionString().readFromNBT(nbt).setName(name).setDescription(description);
+			case BOOLEAN: return new OptionBoolean().readFromNBT(nbt).setName(name).setDescription(description);
+			case SELECTION: return new OptionSelection().readFromNBT(nbt).setName(name).setDescription(description);
 			default: {
 				LogHelper.warn("Failed to load an option!");
 				return null;
@@ -37,6 +41,24 @@ public abstract class Option {
 		}
 		
 		return toReturn;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public Option setName(String name) {
+		this.name = name;
+		return this;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	public Option setDescription(String description) {
+		this.description = description;
+		return this;
 	}
 	
 	public abstract OptionType getType();
