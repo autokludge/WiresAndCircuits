@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.dmillerw.wac.client.gui.controls.GuiListContainer;
 import com.dmillerw.wac.client.gui.controls.GuiSlideControl;
+import com.dmillerw.wac.client.gui.controls.GuiText;
 import com.dmillerw.wac.client.gui.controls.GuiVerticalSlideControl;
 import com.dmillerw.wac.gates.IOData;
 import com.dmillerw.wac.lib.ModInfo;
@@ -35,34 +36,40 @@ public class GuiIndexSelection extends GuiScreen {
 		
 		this.buttonList.add(slider = new GuiVerticalSlideControl(0, ((this.width - this.xSize) / 2) + 114, ((this.height - this.ySize) / 2) + 18, 110, 0F, 0F, 100F).setDrawBackground(false));
 		
-		container = new GuiListContainer(this.mc, 9, 18, 100, 110, this, slider);
+		container = new GuiListContainer(this.mc, ((this.width - this.xSize) / 2) + 9, ((this.height - this.ySize) / 2) + 18, 100, 110, this, slider);
 		container.xSize = this.xSize;
 		container.ySize = this.ySize;
+		
+//		container.registerGuiElement(new GuiText(this.mc.fontRenderer, "Test String", 0, 0, 0xFFFFFF));
 	}
 
 	@Override
 	public void drawScreen(int x, int y, float f) {
-		container.drawScreen(x, y, f);
-		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture("/mods/" + ModInfo.MOD_ID.toLowerCase() + "/textures/gui/index.png");
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
 
-		int scroll = Mouse.getDWheel();
+		if (slider.enabled) {
+			int scroll = Mouse.getDWheel();
 
-		if (scroll != 0) {
-			if (scroll > 0) {
-				scroll = -1;
-				this.slider.slideValue -= (float) (scroll - (this.slider.yPosition + 4)) / (float) (this.height - 8);
-			} else if (scroll < 0) {
-				scroll = 1;
-				this.slider.slideValue += (float) (scroll - (this.slider.yPosition + 4)) / (float) (this.height - 8);
+			//TODO Make sure scrolling (and slider) values limit themselves based on element mapping length
+			if (scroll != 0) {
+				if (scroll > 0) {
+					scroll = -1;
+					this.slider.slideValue += (float) ((scroll - (this.slider.yPosition + 4)) / (float) (this.height - 8)) / 16;
+				} else if (scroll < 0) {
+					scroll = 1;
+					this.slider.slideValue -= (float) ((scroll - (this.slider.yPosition + 4)) / (float) (this.height - 8)) / 16;
+				}
+				this.slider.applyScrollLimits();
 			}
-
-			this.slider.applyScrollLimits();
+			
+			super.drawScreen(x, y, f);
 		}
+		
+		container.drawScreen(x, y, f);
 	}
-	
+
 }

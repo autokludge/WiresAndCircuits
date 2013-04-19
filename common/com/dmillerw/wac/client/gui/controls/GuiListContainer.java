@@ -47,23 +47,43 @@ public class GuiListContainer extends Gui {
 		this.parentSlider = parentSlider;
 	}
 	
+	/** Registers an element to display in the container. Coords are relative to the container coords */
+	public void registerGuiElement(Gui gui) {
+		GuiElementInfo info = new GuiElementInfo(gui);
+		info.setXValue(info.x + (this.x + X_MARGIN));
+		info.setYValue(info.y + (this.y + Y_MARGIN));
+		elements.put(gui, info);
+	}
+	
+	//TODO Fix element drawing (they're currently really... off)
 	public void drawScreen(int x, int y, float f) {
+		if (elements.size() == 0) {
+			parentSlider.enabled = false;
+		}
+		
 		for (Entry<Gui, GuiElementInfo> entry : elements.entrySet()) {
 			Gui guiElement = entry.getKey();
 			GuiElementInfo info = entry.getValue();
-			
+			info.reset();
+
 			if (lastSlideValue != parentSlider.slideValue) {
+				if (parentSlider.slideValue == 0.0F) {
+					info.setYValue(info.y + (this.h + Y_MARGIN));
+				}
+				
 				info.setYValue((int)Math.floor(info.y - (this.h * parentSlider.slideValue)));
-				info.applyToElement(guiElement);
+				info.applyCoordsToElement(guiElement);
 			}
 			
-			if (isCoordSetInsideGUI(info)) {
+//			if (isCoordSetInsideGUI(info)) {
 				if (guiElement instanceof GuiButton) {
 					((GuiButton)guiElement).drawButton(this.mc, x, y);
 				} else if (guiElement instanceof GuiTextField) {
 					((GuiTextField)guiElement).drawTextBox();
+				} else if (guiElement instanceof GuiText) {
+					((GuiText)guiElement).draw();
 				}
-			}
+//			}
 		}
 		
 		lastSlideValue = parentSlider.slideValue;

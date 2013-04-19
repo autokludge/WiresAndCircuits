@@ -10,6 +10,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 
 public class GuiVerticalSlideControl extends GuiSlideControl {
 
+	//TODO Make sure scrolling (and slider) values limit themselves based on element mapping length
 	public GuiVerticalSlideControl(int id, int x, int y, int height, float initialValue, float minValue, float maxValue) {
 		super(id, x, y, 20, height, initialValue, minValue, maxValue);
 	}

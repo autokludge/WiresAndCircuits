@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import com.dmillerw.wac.core.helper.LogHelper;
 
+//TODO Make sure each option has a getGuiElement method
 public abstract class Option {
 
 	public Object data;
