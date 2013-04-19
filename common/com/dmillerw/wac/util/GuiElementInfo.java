@@ -11,21 +11,20 @@ import com.dmillerw.wac.client.gui.controls.GuiText;
 
 public class GuiElementInfo {
 
-	public int xOrig;
-	public int yOrig;
-	public int wOrig;
-	public int hOrig;
-	
 	public int x;
 	public int y;
 	public int w;
 	public int h;
 	
+	public GuiElementInfo() {
+		
+	}
+	
 	public GuiElementInfo(int x, int y, int w, int h) {
-		this.x = this.xOrig = x;
-		this.y = this.yOrig = y;
-		this.w = this.wOrig = w;
-		this.h = this.hOrig = h;
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
 	}
 	
 	public GuiElementInfo(Gui gui) {
@@ -44,19 +43,19 @@ public class GuiElementInfo {
 	
 	@SuppressWarnings("rawtypes")
 	public void getFromGUIElement(GuiButton button) {
-		this.x = this.xOrig = button.xPosition;
-		this.y = this.yOrig = button.yPosition;
+		this.x = button.xPosition;
+		this.y = button.yPosition;
 
 		try {
 			Class clazz = button.getClass();
-			Field wF = clazz.getField("width");
-			Field hF = clazz.getField("height");
+			Field wF = clazz.getDeclaredField("width");
+			Field hF = clazz.getDeclaredField("height");
 			
 			wF.setAccessible(true);
 			hF.setAccessible(true);
 			
-			this.w = this.wOrig = wF.getInt(clazz);
-			this.h = this.hOrig = hF.getInt(clazz);
+			this.w = wF.getInt(clazz);
+			this.h = hF.getInt(clazz);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -66,30 +65,30 @@ public class GuiElementInfo {
 	public void getFromGUIElement(GuiTextField text) {
 		try {
 			Class clazz = text.getClass();
-			Field xF = clazz.getField("xPos");
-			Field yF = clazz.getField("yPos");
-			Field wF = clazz.getField("width");
-			Field hF = clazz.getField("height");
+			Field xF = clazz.getDeclaredField("xPos");
+			Field yF = clazz.getDeclaredField("yPos");
+			Field wF = clazz.getDeclaredField("width");
+			Field hF = clazz.getDeclaredField("height");
 			
 			xF.setAccessible(true);
 			yF.setAccessible(true);
 			wF.setAccessible(true);
 			hF.setAccessible(true);
 			
-			this.x = this.xOrig = xF.getInt(clazz);
-			this.y = this.yOrig = yF.getInt(clazz);
-			this.w = this.wOrig = wF.getInt(clazz);
-			this.h = this.hOrig = hF.getInt(clazz);
+			this.x = xF.getInt(clazz);
+			this.y = yF.getInt(clazz);
+			this.w = wF.getInt(clazz);
+			this.h = hF.getInt(clazz);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void getFromGUIElement(GuiText text) {
-		this.x = this.xOrig = text.x;
-		this.y = this.yOrig = text.y;
-		this.w = this.wOrig = text.font.getStringWidth(text.display);
-		this.h = this.hOrig = text.font.FONT_HEIGHT;
+		this.x = text.x;
+		this.y = text.y;
+		this.w = text.font.getStringWidth(text.display);
+		this.h = text.font.FONT_HEIGHT;
 	}
 	
 	public GuiElementInfo setXValue(int x) {
@@ -102,7 +101,17 @@ public class GuiElementInfo {
 		return this;
 	}
 	
-	public void applyCoordsToElement(Gui gui) {
+	public GuiElementInfo setWValue(int w) {
+		this.w = w;
+		return this;
+	}
+	
+	public GuiElementInfo setHValue(int h) {
+		this.h = h;
+		return this;
+	}
+	
+	public void applyInfoToElement(Gui gui) {
 		if (gui instanceof GuiButton) {
 			applyCoordsToButton(((GuiButton)gui));
 		} else if (gui instanceof GuiTextField) {
@@ -112,11 +121,27 @@ public class GuiElementInfo {
 		}
 	}
 	
-	public void reset() {
-		this.x = xOrig;
-		this.y = yOrig;
-		this.w = wOrig;
-		this.h = hOrig;
+	public GuiElementInfo copy() {
+		return new GuiElementInfo(x, y, w, h);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public void applyWidth(Gui gui) {
+		if (gui instanceof GuiButton) {
+			try {
+				Class clazz = ((GuiButton)gui).getClass();
+				setFinalCoord(gui, clazz.getDeclaredField("width"), w);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		} else if (gui instanceof GuiTextField) {
+			try {
+				Class clazz = ((GuiTextField)gui).getClass();
+				setFinalCoord(gui, clazz.getDeclaredField("width"), w);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private void applyCoordsToButton(GuiButton button) {
@@ -128,8 +153,8 @@ public class GuiElementInfo {
 	private void applyCoordsToTextField(GuiTextField text) {
 		try {
 			Class clazz = text.getClass();
-			setFinalCoord(clazz, clazz.getField("xPos"), x);
-			setFinalCoord(clazz, clazz.getField("yPos"), y);
+			setFinalCoord(text, clazz.getDeclaredField("xPos"), x);
+			setFinalCoord(text, clazz.getDeclaredField("yPos"), y);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -140,8 +165,7 @@ public class GuiElementInfo {
 		text.y = y;
 	}
 	
-	@SuppressWarnings("rawtypes")
-	private void setFinalCoord(Class parentClass, Field field, int value) {
+	private void setFinalCoord(Gui gui, Field field, int value) {
 		try {
 			field.setAccessible(true);
 			
@@ -149,7 +173,7 @@ public class GuiElementInfo {
 			modifiers.setAccessible(true);
 			modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
 			
-			field.setInt(parentClass, value);
+			field.setInt(gui, value);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -39,7 +39,7 @@ public class GuiVerticalSlideControl extends GuiSlideControl {
 	
     @Override
     public void slide(int amount) {
-    	float slideAmount = (float) (((amount - (this.yPosition + 4)) / (float) (this.height / 2)) / 8);
+    	float slideAmount = (float)(amount - (this.yPosition + 4)) / (float)(this.height - 8);
     	
     	if (amount == -1) {
     		this.slideValue += slideAmount;

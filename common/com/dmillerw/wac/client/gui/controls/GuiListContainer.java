@@ -6,35 +6,33 @@ import java.util.Map.Entry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
+import com.dmillerw.wac.interfaces.IGuiInfo;
 import com.dmillerw.wac.util.GuiElementInfo;
 
 public class GuiListContainer extends Gui {
 
 	public Minecraft mc;
 	
-	public static final int X_MARGIN = 10;
-	public static final int Y_MARGIN = 10;
+	public static final int X_MARGIN = 5;
+	public static final int Y_MARGIN = 5;
+	public static final int BACKGROUND_COLOR = 0xFFFFFF;
 	
-	public float lastSlideValue = 0.0F;
+	public float lastSlideValue = 1.0F;
 	
 	public int x;
 	public int y;
 	public int w;
 	public int h;
 	
-	public int xSize;
-	public int ySize;
-	
 	public HashMap<Gui, GuiElementInfo> elements = new HashMap<Gui, GuiElementInfo>();
 	
-	public GuiScreen parentGui;
+	public IGuiInfo guiInfo;
 	
 	public GuiSlideControl parentSlider;
 	
-	public GuiListContainer(Minecraft mc, int x, int y, int w, int h, GuiScreen parentGui, GuiSlideControl parentSlider) {
+	public GuiListContainer(Minecraft mc, int x, int y, int w, int h, IGuiInfo guiInfo, GuiSlideControl parentSlider) {
 		this.mc = mc;
 		
 		this.x = x;
@@ -42,20 +40,24 @@ public class GuiListContainer extends Gui {
 		this.w = w;
 		this.h = h;
 		
-		this.parentGui = parentGui;
+		this.guiInfo = guiInfo;
 		
 		this.parentSlider = parentSlider;
 	}
 	
 	/** Registers an element to display in the container. Coords are relative to the container coords */
+	@SuppressWarnings("static-access")
 	public void registerGuiElement(Gui gui) {
 		GuiElementInfo info = new GuiElementInfo(gui);
 		info.setXValue(info.x + (this.x + X_MARGIN));
 		info.setYValue(info.y + (this.y + Y_MARGIN));
+		//TODO get width adjustment working
+		if (info.w > (this.w - (this.X_MARGIN * 2))) {
+			info.setWValue(this.w - (this.X_MARGIN * 2));
+		}
 		elements.put(gui, info);
 	}
 	
-	//TODO Fix element drawing (they're currently really... off)
 	public void drawScreen(int x, int y, float f) {
 		if (elements.size() == 0) {
 			parentSlider.enabled = false;
@@ -63,19 +65,16 @@ public class GuiListContainer extends Gui {
 		
 		for (Entry<Gui, GuiElementInfo> entry : elements.entrySet()) {
 			Gui guiElement = entry.getKey();
-			GuiElementInfo info = entry.getValue();
-			info.reset();
+			GuiElementInfo info = entry.getValue().copy();
 
-			if (lastSlideValue != parentSlider.slideValue) {
-				if (parentSlider.slideValue == 0.0F) {
-					info.setYValue(info.y + (this.h + Y_MARGIN));
-				}
-				
-				info.setYValue((int)Math.floor(info.y - (this.h * parentSlider.slideValue)));
-				info.applyCoordsToElement(guiElement);
+			info.setYValue((int)Math.floor(info.y - (this.h * parentSlider.slideValue)));
+			info.applyInfoToElement(guiElement);
+			//TODO get width adjustment working
+			if (info.w > (this.w - (this.X_MARGIN * 2))) {
+				info.applyWidth(guiElement);
 			}
 			
-//			if (isCoordSetInsideGUI(info)) {
+			if (isElementInsideContainer(info)) {
 				if (guiElement instanceof GuiButton) {
 					((GuiButton)guiElement).drawButton(this.mc, x, y);
 				} else if (guiElement instanceof GuiTextField) {
@@ -83,23 +82,19 @@ public class GuiListContainer extends Gui {
 				} else if (guiElement instanceof GuiText) {
 					((GuiText)guiElement).draw();
 				}
-//			}
+			}
 		}
 		
 		lastSlideValue = parentSlider.slideValue;
 	}
 	
-	public boolean isCoordSetInsideGUI(GuiElementInfo info) {
-		return isInside(info.x, info.y, info.x + info.w, info.y + info.h);
+	public boolean isElementInsideContainer(GuiElementInfo info) {
+		return isInside(info.y, info.y + info.h);
 	}
 	
-	public boolean isInside(int x1, int y1, int x2, int y2) {
-		int guiX1 = (parentGui.width - this.xSize) / 2;
-		int guiY1 = (parentGui.height - this.ySize) / 2;
-		int guiX2 = guiX1 + this.xSize;
-		int guiY2 = guiY1 + this.ySize;
-		
-		return (x1 >= guiX1) && (y1 >= guiY1) && (x2 <= guiX2) && (y2 <= guiY2);
+	//TODO Temporary. Needs better logic to ensure a nice graphical look
+	public boolean isInside(int y1, int y2) {
+		return (y1 >= this.y + Y_MARGIN) && (y2 <= (this.y + (this.h - Y_MARGIN)));
 	}
 	
 }

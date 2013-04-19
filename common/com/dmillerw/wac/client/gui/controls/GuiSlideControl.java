@@ -55,7 +55,6 @@ public class GuiSlideControl extends GuiSpecialButton {
         if (super.mousePressed(par1Minecraft, par2, par3)) {
         	slide(par2);
 	        applyScrollLimits();
-
             this.dragging = true;
             return true;
         } else {
@@ -80,7 +79,7 @@ public class GuiSlideControl extends GuiSpecialButton {
     }
     
     public void slide(int amount) {
-    	float slideAmount = (float) (((amount - (this.yPosition + 4)) / (float) (this.width / 2)) / 8);
+    	float slideAmount = (float)(amount - (this.xPosition + 4)) / (float)(this.width - 8);
     	
     	if (amount == -1) {
     		this.slideValue += slideAmount;

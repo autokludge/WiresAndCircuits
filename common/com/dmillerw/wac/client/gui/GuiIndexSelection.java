@@ -3,6 +3,7 @@ package com.dmillerw.wac.client.gui;
 import java.util.ArrayList;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -12,13 +13,14 @@ import com.dmillerw.wac.client.gui.controls.GuiSlideControl;
 import com.dmillerw.wac.client.gui.controls.GuiText;
 import com.dmillerw.wac.client.gui.controls.GuiVerticalSlideControl;
 import com.dmillerw.wac.gates.IOData;
+import com.dmillerw.wac.interfaces.IGuiInfo;
 import com.dmillerw.wac.lib.ModInfo;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiIndexSelection extends GuiScreen {
+public class GuiIndexSelection extends GuiScreen implements IGuiInfo {
 
 	public int xSize = 134;
 	public int ySize = 136;
@@ -37,10 +39,8 @@ public class GuiIndexSelection extends GuiScreen {
 		this.buttonList.add(slider = new GuiVerticalSlideControl(0, ((this.width - this.xSize) / 2) + 114, ((this.height - this.ySize) / 2) + 18, 110, 0F, 0F, 100F).setDrawBackground(false));
 		
 		container = new GuiListContainer(this.mc, ((this.width - this.xSize) / 2) + 9, ((this.height - this.ySize) / 2) + 18, 100, 110, this, slider);
-		container.xSize = this.xSize;
-		container.ySize = this.ySize;
 		
-		container.registerGuiElement(new GuiText(this.mc.fontRenderer, "Test String", 0, 0, 0xFFFFFF));
+		container.registerGuiElement(new GuiTextField(this.mc.fontRenderer, 0, 0, 200, 20));
 	}
 
 	@Override
@@ -70,6 +70,11 @@ public class GuiIndexSelection extends GuiScreen {
 		}
 		
 		container.drawScreen(x, y, f);
+	}
+
+	@Override
+	public int[] getGuiDimensions() {
+		return new int[] {this.width, this.height, this.xSize, this.ySize, ((this.width - this.xSize) / 2), ((this.height - this.ySize) / 2)};
 	}
 
 }
