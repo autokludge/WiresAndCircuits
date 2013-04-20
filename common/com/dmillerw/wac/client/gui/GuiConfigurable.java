@@ -86,7 +86,7 @@ public class GuiConfigurable extends GuiScreen implements IClickHandler {
 		int l = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
 		
-		this.fontRenderer.drawString(categories.get(activeCategory), k + 8, l + 6, 0x8b8b8b);
+		this.fontRenderer.drawString(categories.get(activeCategory), k + 8, l + 6, 0x000000);
 		
 		bm.draw();
 		bm.handleMouse(x, y);

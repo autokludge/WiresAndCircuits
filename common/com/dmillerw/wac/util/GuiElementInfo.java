@@ -7,6 +7,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 
+import com.dmillerw.wac.client.gui.controls.GuiSpecialButton;
 import com.dmillerw.wac.client.gui.controls.GuiText;
 
 public class GuiElementInfo {
@@ -38,27 +39,21 @@ public class GuiElementInfo {
 			getFromGUIElement(((GuiTextField)gui));
 		} else if (gui instanceof GuiText) {
 			getFromGUIElement(((GuiText)gui));
+		} else if (gui instanceof GuiSpecialButton) {
+			getFromGUIElement(((GuiSpecialButton)gui));
 		}
 	}
 	
-	@SuppressWarnings("rawtypes")
 	public void getFromGUIElement(GuiButton button) {
 		this.x = button.xPosition;
 		this.y = button.yPosition;
-
-		try {
-			Class clazz = button.getClass();
-			Field wF = clazz.getDeclaredField("width");
-			Field hF = clazz.getDeclaredField("height");
-			
-			wF.setAccessible(true);
-			hF.setAccessible(true);
-			
-			this.w = wF.getInt(clazz);
-			this.h = hF.getInt(clazz);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+	}
+	
+	public void getFromGUIElement(GuiSpecialButton button) {
+		this.x = button.xPosition;
+		this.y = button.yPosition;
+		this.w = button.getWidth();
+		this.h = button.getHeight();
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -67,18 +62,12 @@ public class GuiElementInfo {
 			Class clazz = text.getClass();
 			Field xF = clazz.getDeclaredField("xPos");
 			Field yF = clazz.getDeclaredField("yPos");
-			Field wF = clazz.getDeclaredField("width");
-			Field hF = clazz.getDeclaredField("height");
 			
 			xF.setAccessible(true);
 			yF.setAccessible(true);
-			wF.setAccessible(true);
-			hF.setAccessible(true);
 			
 			this.x = xF.getInt(clazz);
 			this.y = yF.getInt(clazz);
-			this.w = wF.getInt(clazz);
-			this.h = hF.getInt(clazz);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -87,8 +76,6 @@ public class GuiElementInfo {
 	public void getFromGUIElement(GuiText text) {
 		this.x = text.x;
 		this.y = text.y;
-		this.w = text.font.getStringWidth(text.display);
-		this.h = text.font.FONT_HEIGHT;
 	}
 	
 	public GuiElementInfo setXValue(int x) {
@@ -98,16 +85,6 @@ public class GuiElementInfo {
 	
 	public GuiElementInfo setYValue(int y) {
 		this.y = y;
-		return this;
-	}
-	
-	public GuiElementInfo setWValue(int w) {
-		this.w = w;
-		return this;
-	}
-	
-	public GuiElementInfo setHValue(int h) {
-		this.h = h;
 		return this;
 	}
 	
@@ -123,25 +100,6 @@ public class GuiElementInfo {
 	
 	public GuiElementInfo copy() {
 		return new GuiElementInfo(x, y, w, h);
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public void applyWidth(Gui gui) {
-		if (gui instanceof GuiButton) {
-			try {
-				Class clazz = ((GuiButton)gui).getClass();
-				setFinalCoord(gui, clazz.getDeclaredField("width"), w);
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		} else if (gui instanceof GuiTextField) {
-			try {
-				Class clazz = ((GuiTextField)gui).getClass();
-				setFinalCoord(gui, clazz.getDeclaredField("width"), w);
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	
 	private void applyCoordsToButton(GuiButton button) {

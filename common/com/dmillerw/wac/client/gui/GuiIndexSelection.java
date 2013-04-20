@@ -2,16 +2,16 @@ package com.dmillerw.wac.client.gui;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.dmillerw.wac.client.gui.controls.GuiListContainer;
 import com.dmillerw.wac.client.gui.controls.GuiSlideControl;
+import com.dmillerw.wac.client.gui.controls.GuiSpecialButton;
 import com.dmillerw.wac.client.gui.controls.GuiVerticalSlideControl;
+import com.dmillerw.wac.gates.DataType;
 import com.dmillerw.wac.gates.IOData;
 import com.dmillerw.wac.interfaces.IGuiInfo;
 import com.dmillerw.wac.lib.ModInfo;
@@ -25,23 +25,36 @@ public class GuiIndexSelection extends GuiScreen implements IGuiInfo {
 	public int xSize = 134;
 	public int ySize = 136;
 	
+	public static final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	public String title;
+	
 	public ArrayList<IOData> indexes = new ArrayList<IOData>();
 
 	public GuiSlideControl slider;
 	
 	public GuiListContainer container;
 	
+	public GuiIndexSelection(DataType[] io, byte type) {
+		for (int i=0; i<io.length; i++) {
+			indexes.add(new IOData(alphabet.charAt(i), type, io[i]));
+		}
+		title = type == 1 ? "Output" : "Input";
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui() {
 		super.initGui();
 		
-		this.buttonList.add(slider = new GuiVerticalSlideControl(0, ((this.width - this.xSize) / 2) + 114, ((this.height - this.ySize) / 2) + 18, 110, 0F, 0F, 100F).setDrawBackground(false));
-		
 		container = new GuiListContainer(this.mc, ((this.width - this.xSize) / 2) + 9, ((this.height - this.ySize) / 2) + 18, 100, 110, this, slider);
 		
-		container.registerGuiElement(new GuiTextField(this.mc.fontRenderer, 0, 0, container.w - (GuiListContainer.X_MARGIN * 2), 20));
-		container.registerGuiElement(new GuiButton(1, 0, 0 + 20 + GuiListContainer.Y_MARGIN, container.w - (GuiListContainer.X_MARGIN * 2), 20, "It's a button"));
+		for (int i=0; i<indexes.size(); i++) {
+			IOData data = indexes.get(i);
+			container.registerGuiElement(new GuiSpecialButton(i, 0, 0 + (20 * i) + (GuiListContainer.Y_MARGIN * i), (container.w - (GuiListContainer.X_MARGIN * 2)), 20, data.indexChar+": "+data.type.toString()));
+		}
+		
+		this.buttonList.add(slider = new GuiVerticalSlideControl(indexes.size(), ((this.width - this.xSize) / 2) + 114, ((this.height - this.ySize) / 2) + 18, 110, 0F, 0F, 100F).setDrawBackground(false));
+		container.parentSlider = slider;
 	}
 
 	@Override
@@ -52,6 +65,8 @@ public class GuiIndexSelection extends GuiScreen implements IGuiInfo {
 		int l = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
 
+		this.fontRenderer.drawString(title, k + 8, l + 6, 0x000000);
+		
 		if (slider.enabled) {
 			int scroll = Mouse.getDWheel();
 

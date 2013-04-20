@@ -6,6 +6,7 @@ import net.minecraft.world.World;
 
 import com.dmillerw.wac.client.gui.GuiAmalgamFurnace;
 import com.dmillerw.wac.client.gui.GuiIndexSelection;
+import com.dmillerw.wac.gates.DataType;
 import com.dmillerw.wac.inventory.ContainerAmalgamFurnace;
 import com.dmillerw.wac.lib.ModInfo;
 import com.dmillerw.wac.tileentity.TileEntityAmalgamFurnace;
@@ -34,7 +35,7 @@ public class GuiHandler implements IGuiHandler {
 //			}
 //		}
 //		
-		return side == Side.CLIENT ? new GuiIndexSelection() : null;
+		return side == Side.CLIENT ? new GuiIndexSelection(new DataType[] {DataType.NUMBER, DataType.NUMBER, DataType.STRING}, (byte) 0) : null;
 		
 //		return null;
 	}
