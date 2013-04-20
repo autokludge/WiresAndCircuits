@@ -35,16 +35,16 @@ public class GateIncrement extends Gate {
 		double B = 0;
 		double C = 0;
 		
-		if (chip.inputs[0] != null) A = (double) chip.inputs[0];
-		if (chip.inputs[1] != null) B = (double) chip.inputs[1];
-		if (chip.inputs[2] != null) C = (double) chip.inputs[2];
+		if (inputs[0] != null) A = (double) inputs[0];
+		if (inputs[1] != null) B = (double) inputs[1];
+		if (inputs[2] != null) C = (double) inputs[2];
 		
 		if (C > 0) {
-			chip.outputs[0] = 0;
+			outputs[0] = 0;
 		}
 		
 		if (B > 0) {
-			chip.outputs[0] = (double)chip.outputs[0] + A;
+			outputs[0] = (double)outputs[0] + A;
 		}
 	}
 

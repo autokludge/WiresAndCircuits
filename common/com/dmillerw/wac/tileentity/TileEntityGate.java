@@ -31,11 +31,6 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 	
 	private Gate gate;
 	
-	public Object[] inputs;
-	public Object[] outputs;
-	
-	public List<DataConnection>[] connectedOutputs;
-	
 	public boolean dirty = true;
 	
 	@Override
@@ -43,11 +38,11 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 		if (dirty) {
 			gate.logic(this);
 			
-			for (int i=0; i<connectedOutputs.length; i++) {
-				for (DataConnection connection : connectedOutputs[i]) {
+			for (int i=0; i<gate.connectedOutputs.length; i++) {
+				for (DataConnection connection : gate.connectedOutputs[i]) {
 					IConnectable container = (IConnectable) worldObj.getBlockTileEntity(connection.gateLocation.x, connection.gateLocation.y, connection.gateLocation.z);
 					if (container != null) {
-						container.receiveInput(connection.gateIndex, outputs[i]);
+						container.receiveInput(connection.gateIndex, gate.outputs[i]);
 					}
 					//TODO remove dead outputs
 				}
@@ -68,7 +63,7 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 		setGate(nbt.getInteger("gateID"));
 		
 		NBTTagList connections = nbt.getTagList("connections");
-		connectedOutputs = new ArrayList[connections.tagCount()];
+		gate.connectedOutputs = new ArrayList[connections.tagCount()];
 		for (int i=0; i<connections.tagCount(); i++) {
 			NBTTagList connections2 = (NBTTagList) connections.tagAt(i);
 			List<DataConnection> list = new ArrayList<DataConnection>();
@@ -77,7 +72,7 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 				list.add(new DataConnection((NBTTagCompound) connections2.tagAt(j)));
 			}
 			
-			connectedOutputs[i] = list;
+			gate.connectedOutputs[i] = list;
 		}
 		
 		if (gate instanceof ISavableGate) {
@@ -93,7 +88,7 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 		nbt.setInteger("gateID", gateID);
 		
 		NBTTagList connections = new NBTTagList();
-		for (List<DataConnection> list : connectedOutputs) {
+		for (List<DataConnection> list : gate.connectedOutputs) {
 			NBTTagList connections2 = new NBTTagList();
 			
 			for (DataConnection connect : list) {
@@ -149,13 +144,13 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 		gateID = id;
 		gate = GateManager.createGate(id);
 		if (gate.getInputDataTypes() != null) {
-			inputs = GateManager.generateBlankInputArray(gate);
+			gate.inputs = GateManager.generateBlankInputArray(gate);
 		}
 		if (gate.getOutputDataTypes() != null) {
-			outputs = GateManager.generateBlankOutputArray(gate);
-			connectedOutputs = new List[outputs.length];
-			for (int i=0; i<connectedOutputs.length; i++) {
-				connectedOutputs[i] = new ArrayList<DataConnection>();
+			gate.outputs = GateManager.generateBlankOutputArray(gate);
+			gate.connectedOutputs = new List[gate.outputs.length];
+			for (int i=0; i<gate.connectedOutputs.length; i++) {
+				gate.connectedOutputs[i] = new ArrayList<DataConnection>();
 			}
 		}
 		
@@ -167,11 +162,11 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 	}
 	
 	public Object[] getOutputs() {
-		return outputs;
+		return gate.outputs;
 	}
 	
 	public Object[] getInputs() {
-		return inputs;
+		return gate.inputs;
 	}
 	
 	public Gate getGate() {
@@ -179,13 +174,13 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 	}
 	
 	public void linkOutput(int index, DataConnection end) {
-		connectedOutputs[index].add(end);
+		gate.connectedOutputs[index].add(end);
 		dirty = true;
 	}
 	
 	public void receiveInput(int index, Object value) {
 		//TODO type checking
-		inputs[index] = value;
+		gate.inputs[index] = value;
 		dirty = true;
 	}
 	
@@ -196,9 +191,9 @@ public class TileEntityGate extends TileEntity implements ISideAttachment, IGate
 	}
 	
 	public boolean hasInputs() {
-		if (inputs == null) return false;
+		if (gate.inputs == null) return false;
 		
-		for (Object obj : inputs) {
+		for (Object obj : gate.inputs) {
 			if (obj != null) {
 				return true;
 			}

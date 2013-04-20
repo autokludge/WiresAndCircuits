@@ -33,11 +33,11 @@ public class GateAndAdd extends Gate {
 		double A = 0;
 		double B = 0;
 		
-		if (chip.inputs[0] != null) A = (double) chip.inputs[0];
-		if (chip.inputs[1] != null) B = (double) chip.inputs[1];
+		if (inputs[0] != null) A = (double) inputs[0];
+		if (inputs[1] != null) B = (double) inputs[1];
 		
 		if (A > 0 && B > 0) {
-			chip.outputs[0] = A + B;
+			outputs[0] = A + B;
 		}
 	}
 	

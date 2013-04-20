@@ -33,9 +33,9 @@ public class GateNegate extends Gate {
 	public void logic(TileEntityGate chip) {
 		double A = 0;
 		
-		if (chip.inputs[0] != null) A = (double) chip.inputs[0];
+		if (inputs[0] != null) A = (double) inputs[0];
 		
-		chip.outputs[0] = -A;
+		outputs[0] = -A;
 	}
 
 }

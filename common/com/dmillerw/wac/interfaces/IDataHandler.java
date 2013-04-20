@@ -4,8 +4,8 @@ import com.dmillerw.wac.gates.DataType;
 
 public interface IDataHandler {
 
-	public abstract DataType[] getInputDataTypes();
+	public DataType[] getInputDataTypes();
 	
-	public abstract DataType[] getOutputDataTypes();
+	public DataType[] getOutputDataTypes();
 	
 }

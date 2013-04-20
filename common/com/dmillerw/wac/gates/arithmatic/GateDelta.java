@@ -33,10 +33,10 @@ public class GateDelta extends Gate {
 
 	@Override
 	public void logic(TileEntityGate chip) {
-		double output = (double) chip.inputs[0];
+		double output = (double) inputs[0];
 		output -= currA;
 		currA = output;
-		chip.outputs[0] = output;
+		outputs[0] = output;
 	}
 
 }

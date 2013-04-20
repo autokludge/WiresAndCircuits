@@ -36,21 +36,21 @@ public class GateIncDec extends Gate {
 		double C = 0;
 		double D = 0;
 		
-		if (chip.inputs[0] != null) A = (double) chip.inputs[0];
-		if (chip.inputs[1] != null) B = (double) chip.inputs[1];
-		if (chip.inputs[2] != null) C = (double) chip.inputs[2];
-		if (chip.inputs[3] != null) D = (double) chip.inputs[3];
+		if (inputs[0] != null) A = (double) inputs[0];
+		if (inputs[1] != null) B = (double) inputs[1];
+		if (inputs[2] != null) C = (double) inputs[2];
+		if (inputs[3] != null) D = (double) inputs[3];
 
 		if (D > 0) {
-			chip.outputs[0] = 0;
+			outputs[0] = 0;
 		}
 		
 		if (B > 0) {
-			chip.outputs[0] = (int)chip.outputs[0] + A;
+			outputs[0] = (int)outputs[0] + A;
 		}
 		
 		if (C > 0) {
-			chip.outputs[0] = (int)chip.outputs[0] - A;
+			outputs[0] = (int)outputs[0] - A;
 		}
 	}
 

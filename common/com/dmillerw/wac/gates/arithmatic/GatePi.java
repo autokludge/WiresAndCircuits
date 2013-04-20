@@ -31,7 +31,7 @@ public class GatePi extends Gate {
 
 	@Override
 	public void logic(TileEntityGate chip) {
-		chip.outputs[0] = Math.PI;
+		outputs[0] = Math.PI;
 	}
 
 }
