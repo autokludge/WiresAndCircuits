@@ -2,6 +2,7 @@ package com.dmillerw.wac.client.gui;
 
 import java.util.ArrayList;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
@@ -10,7 +11,6 @@ import org.lwjgl.opengl.GL11;
 
 import com.dmillerw.wac.client.gui.controls.GuiListContainer;
 import com.dmillerw.wac.client.gui.controls.GuiSlideControl;
-import com.dmillerw.wac.client.gui.controls.GuiText;
 import com.dmillerw.wac.client.gui.controls.GuiVerticalSlideControl;
 import com.dmillerw.wac.gates.IOData;
 import com.dmillerw.wac.interfaces.IGuiInfo;
@@ -40,7 +40,8 @@ public class GuiIndexSelection extends GuiScreen implements IGuiInfo {
 		
 		container = new GuiListContainer(this.mc, ((this.width - this.xSize) / 2) + 9, ((this.height - this.ySize) / 2) + 18, 100, 110, this, slider);
 		
-		container.registerGuiElement(new GuiTextField(this.mc.fontRenderer, 0, 0, 200, 20));
+		container.registerGuiElement(new GuiTextField(this.mc.fontRenderer, 0, 0, container.w - (GuiListContainer.X_MARGIN * 2), 20));
+		container.registerGuiElement(new GuiButton(1, 0, 0 + 20 + GuiListContainer.Y_MARGIN, container.w - (GuiListContainer.X_MARGIN * 2), 20, "It's a button"));
 	}
 
 	@Override
@@ -72,6 +73,16 @@ public class GuiIndexSelection extends GuiScreen implements IGuiInfo {
 		container.drawScreen(x, y, f);
 	}
 
+	public void keyTyped(char par1, int par2) {
+		super.keyTyped(par1, par2);
+		container.keyTyped(par1, par2);
+	}
+	
+	public void mouseClicked(int par1, int par2, int par3) {
+		super.mouseClicked(par1, par2, par3);
+		container.mouseClicked(par1, par2, par3);
+	}
+	
 	@Override
 	public int[] getGuiDimensions() {
 		return new int[] {this.width, this.height, this.xSize, this.ySize, ((this.width - this.xSize) / 2), ((this.height - this.ySize) / 2)};

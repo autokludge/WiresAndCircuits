@@ -17,7 +17,6 @@ public class GuiListContainer extends Gui {
 	
 	public static final int X_MARGIN = 5;
 	public static final int Y_MARGIN = 5;
-	public static final int BACKGROUND_COLOR = 0xFFFFFF;
 	
 	public float lastSlideValue = 1.0F;
 	
@@ -46,15 +45,10 @@ public class GuiListContainer extends Gui {
 	}
 	
 	/** Registers an element to display in the container. Coords are relative to the container coords */
-	@SuppressWarnings("static-access")
 	public void registerGuiElement(Gui gui) {
 		GuiElementInfo info = new GuiElementInfo(gui);
 		info.setXValue(info.x + (this.x + X_MARGIN));
 		info.setYValue(info.y + (this.y + Y_MARGIN));
-		//TODO get width adjustment working
-		if (info.w > (this.w - (this.X_MARGIN * 2))) {
-			info.setWValue(this.w - (this.X_MARGIN * 2));
-		}
 		elements.put(gui, info);
 	}
 	
@@ -69,10 +63,6 @@ public class GuiListContainer extends Gui {
 
 			info.setYValue((int)Math.floor(info.y - (this.h * parentSlider.slideValue)));
 			info.applyInfoToElement(guiElement);
-			//TODO get width adjustment working
-			if (info.w > (this.w - (this.X_MARGIN * 2))) {
-				info.applyWidth(guiElement);
-			}
 			
 			if (isElementInsideContainer(info)) {
 				if (guiElement instanceof GuiButton) {
@@ -86,6 +76,47 @@ public class GuiListContainer extends Gui {
 		}
 		
 		lastSlideValue = parentSlider.slideValue;
+	}
+	
+	public void keyTyped(char par1, int par2) {
+		for (Entry<Gui, GuiElementInfo> entry : elements.entrySet()) {
+			Gui guiElement = entry.getKey();
+			GuiElementInfo info = entry.getValue().copy();
+			
+			if (isElementInsideContainer(info)) {
+				if (guiElement instanceof GuiTextField) {
+					((GuiTextField)guiElement).textboxKeyTyped(par1, par2);
+				}
+			}
+		}
+    }
+	
+	public void mouseClicked(int par1, int par2, int par3) {
+		//If standard left click
+		if (par3 == 0) {
+			for (Entry<Gui, GuiElementInfo> entry : elements.entrySet()) {
+				Gui guiElement = entry.getKey();
+				GuiElementInfo info = entry.getValue().copy();
+				
+				if (isElementInsideContainer(info)) {
+					if (guiElement instanceof GuiTextField) {
+						((GuiTextField)guiElement).mouseClicked(par1, par2, par3);
+					} else if (guiElement instanceof GuiButton) {
+						//TODO actually interpret button presses
+						if (((GuiButton)guiElement).mousePressed(this.mc, par1, par2)) {
+							GuiButton selectedButton = ((GuiButton)guiElement);
+		                    this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+		                    this.actionPerformed(selectedButton);
+						}
+					}
+				}
+			}
+		}
+    }
+	
+	public void actionPerformed(GuiButton button) {
+		//TODO Implement somehow
+		System.out.println(button.id);
 	}
 	
 	public boolean isElementInsideContainer(GuiElementInfo info) {
