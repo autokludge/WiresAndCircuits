@@ -11,20 +11,11 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 import com.dmillerw.wac.WACMain;
-import com.dmillerw.wac.interfaces.IConnectable;
 import com.dmillerw.wac.lib.ModInfo;
-import com.dmillerw.wac.util.BlockCoord;
-import com.dmillerw.wac.util.DataConnection;
 
 public class ItemWireSpool extends Item {
 
 	private Icon[] textures;
-	
-	public BlockCoord startGate;
-	public BlockCoord endGate;
-	
-	public int startIndex;
-	public int endIndex;
 	
 	private static String[] itemSubNames = new String[] {"emptySpool", "wireSpool"};
 	public static String[] itemNames = new String[] {"Empty Spool", "Wire Spool"};
@@ -41,36 +32,6 @@ public class ItemWireSpool extends Item {
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float f1, float f2, float f3) {
 		if (world.isRemote) return false;
 		if (stack.getItemDamage() != 1) return false;
-		if (!(world.getBlockTileEntity(x, y, z) instanceof IConnectable)) return false;
-		
-		//TODO REWRITE!
-//		//TODO so much type checking
-		if (startGate == null) {
-			startGate = new BlockCoord(x, y, z);
-			//Temp
-			startIndex = 0;
-			player.addChatMessage("Link started");
-			return true;
-		} else if (endGate == null) {
-			endGate = new BlockCoord(x, y, z);
-			if (startGate == endGate) {
-				endGate = null;
-				return false;
-			}
-			//Temp
-			endIndex = 0;
-			
-			//Might be temp
-			IConnectable connectable = (IConnectable) world.getBlockTileEntity(startGate.x, startGate.y, startGate.z);
-			connectable.linkOutput(startIndex, new DataConnection(endGate, endIndex));
-			
-			//End
-			startGate = null;
-			endGate = null;
-			
-			player.addChatMessage("Link ended");
-			return true;
-		}
 		
 		return true;
 	}

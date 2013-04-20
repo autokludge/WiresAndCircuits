@@ -3,7 +3,6 @@ package com.dmillerw.wac.util;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class DataConnection {
-
 	public BlockCoord gateLocation;
 	
 	public int gateIndex;

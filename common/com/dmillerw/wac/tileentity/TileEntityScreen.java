@@ -11,12 +11,10 @@ import com.dmillerw.wac.core.options.Configurable;
 import com.dmillerw.wac.core.options.OptionNumber;
 import com.dmillerw.wac.gates.DataType;
 import com.dmillerw.wac.interfaces.IConfigurable;
-import com.dmillerw.wac.interfaces.IConnectable;
 import com.dmillerw.wac.interfaces.IDataHandler;
 import com.dmillerw.wac.interfaces.ISideAttachment;
-import com.dmillerw.wac.util.DataConnection;
 
-public class TileEntityScreen extends TileEntity implements ISideAttachment, IDataHandler, IConnectable, IConfigurable {
+public class TileEntityScreen extends TileEntity implements ISideAttachment, IDataHandler, IConfigurable {
 
 	private ForgeDirection attached;
 	
@@ -77,15 +75,6 @@ public class TileEntityScreen extends TileEntity implements ISideAttachment, IDa
 	@Override
 	public DataType[] getOutputDataTypes() {
 		return null;
-	}
-
-	/* ICONNECTABLE */
-	@Override
-	public void linkOutput(int index, DataConnection end) {}
-
-	@Override
-	public void receiveInput(int index, Object value) {
-		input = ((Double)value).doubleValue();
 	}
 
 	@Override
